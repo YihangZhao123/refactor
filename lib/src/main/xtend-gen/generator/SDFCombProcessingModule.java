@@ -6,8 +6,9 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
-import org.eclipse.xtext.xbase.lib.InputOutput;
 import template.templateInterface.ActorTemplate;
+import utils.Name;
+import utils.Save;
 
 @SuppressWarnings("all")
 public class SDFCombProcessingModule implements ModuleInterface {
@@ -23,7 +24,6 @@ public class SDFCombProcessingModule implements ModuleInterface {
   }
   
   public void create() {
-    InputOutput.<String>println("1");
     final Predicate<Vertex> _function = new Predicate<Vertex>() {
       public boolean test(final Vertex v) {
         return (SDFComb.conforms(v)).booleanValue();
@@ -40,8 +40,10 @@ public class SDFCombProcessingModule implements ModuleInterface {
   public void process(final Vertex v) {
     final Consumer<ActorTemplate> _function = new Consumer<ActorTemplate>() {
       public void accept(final ActorTemplate t) {
-        InputOutput.<String>println(t.create(v));
-        InputOutput.<String>println("=======================");
+        String _name = Name.name(v);
+        String _plus = ((Generator.root + "/src/sdfcomb_") + _name);
+        String _plus_1 = (_plus + ".c");
+        Save.save(_plus_1, t.create(v));
       }
     };
     this.templates.stream().forEach(_function);

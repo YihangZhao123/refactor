@@ -1,0 +1,5 @@
+package fileAnnotation
+
+annotation srcFile {
+	
+}

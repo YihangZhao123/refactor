@@ -13,8 +13,10 @@ public class demo1 {
     final String path = "forsyde-io\\complete-mapped-sobel-model.forsyde.xmi";
     final String path2 = "forsyde-io\\sobel-application.fiodl";
     final String root = "generateCode\\c\\single";
-    ForSyDeSystemGraph model = Load.load(path2);
-    Generator gen = new Generator(model, root);
+    ForSyDeSystemGraph model1 = Load.load(path);
+    ForSyDeSystemGraph model2 = Load.load(path2);
+    model1.mergeInPlace(model2);
+    Generator gen = new Generator(model1, root);
     SDFCombProcessingModule actorModule = new SDFCombProcessingModule();
     SDFCombTemplateSrc _sDFCombTemplateSrc = new SDFCombTemplateSrc();
     actorModule.add(_sDFCombTemplateSrc);

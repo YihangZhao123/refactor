@@ -6,6 +6,7 @@ import java.util.Set
 import template.templateInterface.ActorTemplate
 import java.util.HashSet
 import utils.Save
+import utils.Name
 
 class SDFCombProcessingModule  implements ModuleInterface{
 	Set<ActorTemplate> templates
@@ -16,14 +17,13 @@ class SDFCombProcessingModule  implements ModuleInterface{
 	}
 	
 	override create() {
-		println("1")
+
 		Generator.model.vertexSet().stream().filter([v|SDFComb::conforms(v)]).forEach([v|process(v)])
 	}
 	
 	def void process(Vertex v){
 		templates.stream().forEach( [t| 
-			 println(t.create(v)) 
-			 println("=======================")
+			 Save.save(Generator.root+"/src/sdfcomb_"+Name.name(v)+".c",t.create(v))
 		] )
 	}
 	

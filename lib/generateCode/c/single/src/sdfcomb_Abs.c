@@ -1,6 +1,18 @@
+/* Includes-------------------------- */
 #include "../inc/datatype_definition.h"
+/*
+========================================
+	Declare Extern Channal Variables
+========================================
+*/
+
+/*
+========================================
+	Actor Function
+========================================
+*/			
 inline void actor_Abs(){
-	//initilize the memory
+	/* Initilize Memory      */
 	UInt16  offsetX;
 	Double  gx;
 	Double  gy;
@@ -8,15 +20,13 @@ inline void actor_Abs(){
 	  dims;
 	ArrayXOfArrayXOfDoubleType  system_img_sink_address;
 	
-	//read from the input port
+	/* Read From Input Port  */
 	read_nonblocking(offsetXIn_channel);
 	read_nonblocking(offsetYIn_channel);
-	read_nonblocking(resy_channel);
-	read_nonblocking(resx_channel);
 	for(int i=0;i<2;++i){
 		read_nonblocking(dimsIn_channel);
 	}
-	//inline code
+	/* Inline Code           */
 	//in combFunction AbsImpl
 	if(gx<0.0)gx=-gx;
 	if(gy<0.0)gy=-gy;
@@ -25,7 +35,7 @@ inline void actor_Abs(){
 	}if(offsetY>=dims[1]-2){offsetY=0;
 	}system_img_sink_address[offsetX][offsetY]=gx+gy;
 
-	//write to the output port
+	/* Write To Output Ports */
 	write(offsetYOut_channel);
 	write(offsetXOut_channel);
 }

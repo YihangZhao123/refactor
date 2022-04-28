@@ -1,5 +1,7 @@
 package template.baremetal;
 
+import fileAnnotation.FileType;
+import fileAnnotation.FileTypeAnno;
 import forsyde.io.java.core.Vertex;
 import forsyde.io.java.core.VertexAcessor;
 import forsyde.io.java.core.VertexProperty;
@@ -14,7 +16,8 @@ import template.templateInterface.ActorTemplate;
 import utils.Name;
 import utils.Query;
 
-/* @srcFile */@SuppressWarnings("all")
+@FileTypeAnno(type = FileType.C_SOURCE)
+@SuppressWarnings("all")
 public class SDFCombTemplateSrc implements ActorTemplate {
   private Set<Vertex> implActorSet;
   
@@ -24,16 +27,41 @@ public class SDFCombTemplateSrc implements ActorTemplate {
       this.implActorSet = VertexAcessor.getMultipleNamedPort(Generator.model, vertex, "combFunctions", 
         VertexTrait.IMPL_ANSICBLACKBOXEXECUTABLE, VertexAcessor.VertexPortDirection.OUTGOING);
       StringConcatenation _builder = new StringConcatenation();
+      _builder.append("/* Includes-------------------------- */");
+      _builder.newLine();
       _builder.append("#include \"../inc/datatype_definition.h\"");
       _builder.newLine();
       String name = Name.name(vertex);
       _builder.newLineIfNotEmpty();
+      _builder.append("/*");
+      _builder.newLine();
+      _builder.append("========================================");
+      _builder.newLine();
+      _builder.append("\t");
+      _builder.append("Declare Extern Channal Variables");
+      _builder.newLine();
+      _builder.append("========================================");
+      _builder.newLine();
+      _builder.append("*/");
+      _builder.newLine();
+      _builder.newLine();
+      _builder.append("/*");
+      _builder.newLine();
+      _builder.append("========================================");
+      _builder.newLine();
+      _builder.append("\t");
+      _builder.append("Actor Function");
+      _builder.newLine();
+      _builder.append("========================================");
+      _builder.newLine();
+      _builder.append("*/\t\t\t");
+      _builder.newLine();
       _builder.append("inline void actor_");
       _builder.append(name);
       _builder.append("(){");
       _builder.newLineIfNotEmpty();
       _builder.append("\t");
-      _builder.append("//initilize the memory");
+      _builder.append("/* Initilize Memory      */");
       _builder.newLine();
       _builder.append("\t");
       String _initMemory = this.initMemory();
@@ -42,14 +70,14 @@ public class SDFCombTemplateSrc implements ActorTemplate {
       _builder.append("\t");
       _builder.newLine();
       _builder.append("\t");
-      _builder.append("//read from the input port");
+      _builder.append("/* Read From Input Port  */");
       _builder.newLine();
       _builder.append("\t");
       String _read = this.read(vertex);
       _builder.append(_read, "\t");
       _builder.newLineIfNotEmpty();
       _builder.append("\t");
-      _builder.append("//inline code");
+      _builder.append("/* Inline Code           */");
       _builder.newLine();
       _builder.append("\t");
       String _inlineCode = this.getInlineCode();
@@ -57,7 +85,7 @@ public class SDFCombTemplateSrc implements ActorTemplate {
       _builder.newLineIfNotEmpty();
       _builder.newLine();
       _builder.append("\t");
-      _builder.append("//write to the output port");
+      _builder.append("/* Write To Output Ports */");
       _builder.newLine();
       _builder.append("\t");
       String _write = this.write(vertex);

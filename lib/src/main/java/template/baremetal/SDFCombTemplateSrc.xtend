@@ -1,19 +1,22 @@
 package template.baremetal
 
-import template.templateInterface.ActorTemplate
+import fileAnnotation.FileType
+
+import fileAnnotation.FileTypeAnno
 import forsyde.io.java.core.Vertex
-import forsyde.io.java.core.VertexTrait
 import forsyde.io.java.core.VertexAcessor
-import generator.Generator
-import utils.Query
-import utils.Name
-import java.util.HashMap
-import java.util.Set
 import forsyde.io.java.core.VertexAcessor.VertexPortDirection
-import java.util.List
-import java.util.HashSet
+import forsyde.io.java.core.VertexTrait
+import generator.Generator
 import java.util.ArrayList
-@srcFile
+import java.util.HashMap
+import java.util.HashSet
+import java.util.Set
+import template.templateInterface.ActorTemplate
+import utils.Name
+import utils.Query
+
+@FileTypeAnno(type=FileType.C_SOURCE)
 class SDFCombTemplateSrc implements ActorTemplate {
 	Set<Vertex> implActorSet
 
@@ -21,18 +24,30 @@ class SDFCombTemplateSrc implements ActorTemplate {
 		implActorSet = VertexAcessor.getMultipleNamedPort(Generator.model, vertex, "combFunctions",
 			VertexTrait.IMPL_ANSICBLACKBOXEXECUTABLE, VertexPortDirection.OUTGOING)
 		'''
+			/* Includes-------------------------- */
 			#include "../inc/datatype_definition.h"
 			«var name = Name.name(vertex)»
+			/*
+			========================================
+				Declare Extern Channal Variables
+			========================================
+			*/
+			
+			/*
+			========================================
+				Actor Function
+			========================================
+			*/			
 			inline void actor_«name»(){
-				//initilize the memory
+				/* Initilize Memory      */
 				«initMemory()»
 				
-				//read from the input port
+				/* Read From Input Port  */
 				«read(vertex)»
-				//inline code
+				/* Inline Code           */
 				«getInlineCode()»
 			
-				//write to the output port
+				/* Write To Output Ports */
 				«write(vertex)»
 			}
 		'''

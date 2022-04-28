@@ -24,13 +24,8 @@ systemgraph {
         "numberOfBits": 16_i
     }
 
-    vertex Array2OfUInt16 [typing::datatypes::Array] (innerType) {
-        "maximumElems": 2_i
-    }
-
     edge [typing::datatypes::DataDefinition] from Array6OfDoubleType port innerType to DoubleType
     edge [typing::datatypes::DataDefinition] from ArrayXOfDoubleType port innerType to DoubleType
-    edge [typing::datatypes::DataDefinition] from Array2OfUInt16 port innerType to UInt16
 
     vertex system_img_source [impl::TokenizableDataBlock, typing::TypedDataBlock] (dataType) {
         "maxSizeInBits": 172000000_l,
@@ -114,11 +109,19 @@ systemgraph {
             if (offsetY >= dimY - 2) {
                 offsetY = 0;
             }
-            dimsOut[0] = dimX;
+             [0] = dimX;
             dimsOut[1] = dimY;
         ",
         "inputPorts": ["system_img_source_address", "dimX", "dimY", "offsetX", "offsetY"],
         "outputPorts": ["gray", "offsetX", "offsetY", "dimsOut"],
+        "portToTypeName": {
+            "system_img_source_address": "ArrayXOfArrayXOfDoubleType",
+            "dimX": "UInt16",
+            "dimY": "UInt16",
+            "offsetX": "UInt16",
+            "offsetY": "UInt16",
+            "gray": "Array6OfDoubleType"
+        },
         "operationRequirements": {
             "default": {
                 "assign": 8_i,
@@ -129,17 +132,6 @@ systemgraph {
         },
         "sizeInBits": 100_l
     }
-
-    edge [typing::datatypes::DataDefinition] from GrayScaleImpl port system_img_source_address to ArrayXOfArrayXOfDoubleType
-    edge [typing::datatypes::DataDefinition] from GrayScaleImpl port dimX to UInt16
-    edge [typing::datatypes::DataDefinition] from GrayScaleImpl port dimY to UInt16
-    edge [typing::datatypes::DataDefinition] from GrayScaleImpl port offsetX to UInt16
-    edge [typing::datatypes::DataDefinition] from GrayScaleImpl port offsetY to UInt16
-    edge [typing::datatypes::DataDefinition] from GrayScaleImpl port gray to Array6OfDoubleType
-    edge [typing::datatypes::DataDefinition] from GrayScaleImpl port dimsOut to Array2OfUInt16
-    edge [typing::datatypes::DataDefinition] from GrayScaleImpl port portTypes to UInt16
-    edge [typing::datatypes::DataDefinition] from GrayScaleImpl port portTypes to Array6OfDoubleType
-    edge [typing::datatypes::DataDefinition] from GrayScaleImpl port portTypes to Array2OfUInt16
 
     vertex GrayScaleX [moc::sdf::SDFChannel] (producer, consumer, initialTokenValues) {
         "tokenSizeInBits": 16_i,
@@ -211,6 +203,10 @@ systemgraph {
         ",
         "inputPorts": ["gray"],
         "outputPorts": ["imgBlockX"],
+        "portToTypeName": {
+            "gray": "Array6OfDoubleType",
+            "imgBlockX": "Array6OfDoubleType"
+        },
         "operationRequirements": {
             "default": {
                 "assign": 6_i
@@ -220,8 +216,6 @@ systemgraph {
     }
 
     edge [typing::datatypes::DataDefinition] from getPxImpl1 port portTypes to Array6OfDoubleType
-    edge [typing::datatypes::DataDefinition] from getPxImpl1 port gray to  Array6OfDoubleType
-    edge [typing::datatypes::DataDefinition] from getPxImpl1 port imgBlockX to  Array6OfDoubleType
 
     edge [] from getPx port gray to getPxImpl1 port gray
     edge [] from getPxImpl1 port imgBlockX to getPx port copyX
@@ -240,6 +234,10 @@ systemgraph {
         ",
         "inputPorts": ["gray"],
         "outputPorts": ["imgBlockY"],
+        "portToTypeName": {
+            "gray": "Array6OfDoubleType",
+            "imgBlockY": "Array6OfDoubleType"
+        },
         "operationRequirements": {
             "default": {
                 "assign": 6_i
@@ -252,9 +250,6 @@ systemgraph {
     edge [] from getPxImpl2 port imgBlockY to getPx port copyY
 
     edge [typing::datatypes::DataDefinition] from getPxImpl2 port portTypes to Array6OfDoubleType
-    edge [typing::datatypes::DataDefinition] from getPxImpl2 port gray to  Array6OfDoubleType
-    edge [typing::datatypes::DataDefinition] from getPxImpl2 port imgBlockY to  Array6OfDoubleType
-
 
     edge [] from getPx port combFunctions to getPxImpl1
     edge [] from getPx port combFunctions to getPxImpl2
@@ -290,8 +285,6 @@ systemgraph {
 
     edge [typing::datatypes::DataDefinition] from GxImpl port portTypes to Array6OfDoubleType
     edge [typing::datatypes::DataDefinition] from GxImpl port portTypes to DoubleType
-    edge [typing::datatypes::DataDefinition] from GxImpl port gx to Double
-    edge [typing::datatypes::DataDefinition] from GxImpl port imgBlockX to Array6OfDoubleType
 
     edge [] from Gx port combFunctions to GxImpl
 
@@ -315,8 +308,8 @@ systemgraph {
         "inputPorts": ["imgBlockY"],
         "outputPorts": ["gy"],
         "portToTypeName": {
-            "gy": "Double",
-            "imgBlockY": "Array6OfDoubleType"
+            "gx": "Double",
+            "imgBlockX": "Array6OfDoubleType"
         },
         "operationRequirements": {
             "default": {
@@ -329,15 +322,10 @@ systemgraph {
 
     edge [typing::datatypes::DataDefinition] from GyImpl port portTypes to Array6OfDoubleType
     edge [typing::datatypes::DataDefinition] from GyImpl port portTypes to DoubleType
-    edge [typing::datatypes::DataDefinition] from GyImpl port imgBlockY to Array6OfDoubleType
-    edge [typing::datatypes::DataDefinition] from GyImpl port gy to DoubleType
-
-    edge [] from Gy port imgBlockX to GyImpl port imgBlockY
-    edge [] from GyImpl port gy to Gy port gy
 
     edge [] from Gy port combFunctions to GyImpl
 
-    vertex Abs [moc::sdf::SDFComb, moc::MoCSink] (combFunctions, system_img_sink, dimsIn, resx, resy, offsetXIn, offsetYIn, offsetXOut, offsetYOut) {
+    vertex Abs [moc::sdf::SDFComb, moc::MoCSink] (combFunctions, system_img_sink, dimsIn, gx, gy, offsetXIn, offsetYIn, offsetXOut, offsetYOut) {
         "dataWritenPerExecution": {
             "system_img_sink": 64_l
         },
@@ -381,13 +369,13 @@ systemgraph {
 
     vertex AbsImpl
     [impl::ANSICBlackBoxExecutable, typing::TypedOperation, impl::InstrumentedExecutable] 
-    (portTypes, system_img_sink_address, resx, resy, offsetXIn, offsetXOut, offsetYIn, offsetYOut, dims)
+    (portTypes, system_img_sink_address, gx, gy, offsetX, offsetY, dims)
     {
         "inlinedCode": "
-            if (resx < 0.0)
-                resx = -resx;
-            if (resy < 0.0)
-                resy = -resy;
+            if (gx < 0.0)
+                gx = -gx;
+            if (gy < 0.0)
+                gy = -gy;
             if (offsetX >= dims[0] - 2) {
                 offsetY += 1;
                 offsetX = 0;
@@ -395,10 +383,20 @@ systemgraph {
             if (offsetY >= dims[1] - 2) {
                 offsetY = 0;
             }
-            system_img_sink_address[offsetX][offsetY] = resx + resy;
+            system_img_sink_address[offsetX][offsetY] = gx + gy;
         ",
-        "inputPorts": ["system_img_sink_address", "resx", "resy", "dims", "offsetXIn", "offsetYIn"],
-        "outputPorts": ["offsetXOut", "offsetYOut"],
+        "inputPorts": ["system_img_sink_address", "gx", "gy", "dims", "offsetX", "offsetY"],
+        "outputPorts": ["offsetX", "offsetY"],
+        "portToTypeName": {
+            "system_img_sink_address": "ArrayXOfArrayXOfDoubleType",
+            "dimX": "UInt16",
+            "dimY": "UInt16",
+            "offsetX": "UInt16",
+            "offsetY": "UInt16",
+            "gx": "Double",
+            "gy": "Double",
+            "norm": "Double"
+        },
         "operationRequirements": {
             "default": {
                 "assign": 5_i,
@@ -413,23 +411,12 @@ systemgraph {
     edge [typing::datatypes::DataDefinition] from AbsImpl port portTypes to DoubleType
     edge [typing::datatypes::DataDefinition] from AbsImpl port portTypes to ArrayXOfArrayXOfDoubleType
     edge [typing::datatypes::DataDefinition] from AbsImpl port portTypes to UInt16
-    edge [typing::datatypes::DataDefinition] from AbsImpl port system_img_sink_address to ArrayXOfArrayXOfDoubleType
-    edge [typing::datatypes::DataDefinition] from AbsImpl port dims to Array2OfUInt16
-    edge [typing::datatypes::DataDefinition] from AbsImpl port offsetXIn to UInt16
-    edge [typing::datatypes::DataDefinition] from AbsImpl port offsetYIn to UInt16
-    edge [typing::datatypes::DataDefinition] from AbsImpl port offsetXOut to UInt16
-    edge [typing::datatypes::DataDefinition] from AbsImpl port offsetYOut to UInt16
-    edge [typing::datatypes::DataDefinition] from AbsImpl port resx to Double
-    edge [typing::datatypes::DataDefinition] from AbsImpl port resy to Double
-    edge [typing::datatypes::DataDefinition] from AbsImpl port norm to Double
 
     edge [] from Abs port combFunctions to AbsImpl
-    edge [] from Abs port offsetXIn to AbsImpl port offsetXIn
-    edge [] from AbsImpl port offsetXOut to AbsImpl port offsetXOut
+    edge [] from Abs port offsetXIn to AbsImpl port offsetX
     edge [] from Abs port system_img_sink to AbsImpl port system_img_sink_address
     edge [] from Abs port dimsIn to AbsImpl port dims
-    edge [] from AbsImpl port offsetXIn to Abs port offsetXIn
-    edge [] from AbsImpl port offsetXOut to Abs port offsetXOut
+    edge [] from AbsImpl port offsetX to Abs port offsetXOut
     edge [] from Abs port offsetYIn to AbsImpl port offsetY
     edge [] from AbsImpl port offsetY to Abs port offsetYOut
 

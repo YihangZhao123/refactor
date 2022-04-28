@@ -1,14 +1,23 @@
+/* Includes-------------------------- */
 #include "../inc/datatype_definition.h"
+/*
+========================================
+	Declare Extern Channal Variables
+========================================
+*/
+
+/*
+========================================
+	Actor Function
+========================================
+*/			
 inline void actor_Gy(){
-	//initilize the memory
+	/* Initilize Memory      */
 	  gy;
 	  imgBlockY;
 	
-	//read from the input port
-	for(int i=0;i<6;++i){
-		read_nonblocking(gy_channel);
-	}
-	//inline code
+	/* Read From Input Port  */
+	/* Inline Code           */
 	//in combFunction GyImpl
 	gy=gy+imgBlockY[0];
 	gy=gy+2.0*imgBlockY[1];
@@ -17,6 +26,5 @@ inline void actor_Gy(){
 	gy=gy-2.0*imgBlockY[4];
 	gy=gy-imgBlockY[5];
 
-	//write to the output port
-	write(resy_channel);
+	/* Write To Output Ports */
 }

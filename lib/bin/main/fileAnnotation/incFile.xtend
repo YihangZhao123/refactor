@@ -1,5 +1,0 @@
-package fileAnnotation
-
-interface incFile {
-	
-}

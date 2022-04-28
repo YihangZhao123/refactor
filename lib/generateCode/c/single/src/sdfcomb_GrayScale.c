@@ -1,6 +1,18 @@
+/* Includes-------------------------- */
 #include "../inc/datatype_definition.h"
+/*
+========================================
+	Declare Extern Channal Variables
+========================================
+*/
+
+/*
+========================================
+	Actor Function
+========================================
+*/			
 inline void actor_GrayScale(){
-	//initilize the memory
+	/* Initilize Memory      */
 	UInt16  offsetX;
 	  dimsOut;
 	UInt16  offsetY;
@@ -9,10 +21,10 @@ inline void actor_GrayScale(){
 	UInt16  dimY;
 	UInt16  dimX;
 	
-	//read from the input port
+	/* Read From Input Port  */
 	read_nonblocking(offsetXIn_channel);
 	read_nonblocking(offsetYIn_channel);
-	//inline code
+	/* Inline Code           */
 	//in combFunction GrayScaleImpl
 	gray[0]=0.3125*system_img_source_address[offsetY+0][offsetX+0]+0.5625*system_img_source_address[offsetY+0][offsetX+1]+0.125*system_img_source_address[offsetY+0][offsetX+2];
 	gray[1]=0.3125*system_img_source_address[offsetY+0][offsetX+2]+0.5625*system_img_source_address[offsetY+0][offsetX+3]+0.125*system_img_source_address[offsetY+0][offsetX+4];
@@ -23,10 +35,10 @@ inline void actor_GrayScale(){
 	if(offsetX>=dimX-2){offsetY+=1;
 	offsetX=0;
 	}if(offsetY>=dimY-2){offsetY=0;
-	}dimsOut[0]=dimX;
+	}[0]=dimX;
 	dimsOut[1]=dimY;
 
-	//write to the output port
+	/* Write To Output Ports */
 	for(int i=0;i<2;++i){
 		write(dimsOut_channel);
 	}

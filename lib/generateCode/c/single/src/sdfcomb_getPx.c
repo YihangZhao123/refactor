@@ -1,15 +1,27 @@
+/* Includes-------------------------- */
 #include "../inc/datatype_definition.h"
+/*
+========================================
+	Declare Extern Channal Variables
+========================================
+*/
+
+/*
+========================================
+	Actor Function
+========================================
+*/			
 inline void actor_getPx(){
-	//initilize the memory
+	/* Initilize Memory      */
 	Array6OfDoubleType  gray;
 	Array6OfDoubleType  imgBlockX;
 	Array6OfDoubleType  imgBlockY;
 	
-	//read from the input port
+	/* Read From Input Port  */
 	for(int i=0;i<6;++i){
 		read_nonblocking(gray_channel);
 	}
-	//inline code
+	/* Inline Code           */
 	//in combFunction getPxImpl1
 	imgBlockX[0]=gray[0];
 	imgBlockX[1]=gray[1];
@@ -25,13 +37,7 @@ inline void actor_getPx(){
 	imgBlockY[4]=gray[4];
 	imgBlockY[5]=gray[5];
 
-	//write to the output port
-	for(int i=0;i<6;++i){
-		write(gx_channel);
-	}
-	for(int i=0;i<6;++i){
-		write(gy_channel);
-	}
+	/* Write To Output Ports */
 	for(int i=0;i<6;++i){
 		write(copyY_channel);
 	}

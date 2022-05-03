@@ -79,4 +79,76 @@ int read_blocking_UInt32(circular_fifo_UInt32* ptr,UInt32* dst,spinlock *lock);
 int write_non_blocking_UInt32(circular_fifo_UInt32* ptr,UInt32* src );
 int write_blocking_UInt32(circular_fifo_UInt32* ptr,UInt32* src,spinlock *lock);	
 	
+	/*
+	=============================================================
+					Array1000OfArrayOfDouble Prototype
+	=============================================================
+	*/
+	typedef struct 
+	{
+	    Array1000OfArrayOfDouble* buffer;
+	    size_t front;
+	    size_t rear;
+		size_t size;	    
+	}circular_fifo_Array1000OfArrayOfDouble;
+	
+	void init_channel_Array1000OfArrayOfDouble(circular_fifo_Array1000OfArrayOfDouble *channel ,Array1000OfArrayOfDouble* buffer, size_t size);
+	int read_non_blocking_Array1000OfArrayOfDouble(circular_fifo_Array1000OfArrayOfDouble* channel,Array1000OfArrayOfDouble* dst );
+	int read_blocking_Array1000OfArrayOfDouble(circular_fifo_Array1000OfArrayOfDouble* ptr,Array1000OfArrayOfDouble* dst,spinlock *lock);
+	int write_non_blocking_Array1000OfArrayOfDouble(circular_fifo_Array1000OfArrayOfDouble* ptr,Array1000OfArrayOfDouble* src );
+	int write_blocking_Array1000OfArrayOfDouble(circular_fifo_Array1000OfArrayOfDouble* ptr,Array1000OfArrayOfDouble* src,spinlock *lock);				
+	/*
+	=============================================================
+					Array6OfDoubleType Prototype
+	=============================================================
+	*/
+	typedef struct 
+	{
+	    Array6OfDoubleType* buffer;
+	    size_t front;
+	    size_t rear;
+		size_t size;	    
+	}circular_fifo_Array6OfDoubleType;
+	
+	void init_channel_Array6OfDoubleType(circular_fifo_Array6OfDoubleType *channel ,Array6OfDoubleType* buffer, size_t size);
+	int read_non_blocking_Array6OfDoubleType(circular_fifo_Array6OfDoubleType* channel,Array6OfDoubleType* dst );
+	int read_blocking_Array6OfDoubleType(circular_fifo_Array6OfDoubleType* ptr,Array6OfDoubleType* dst,spinlock *lock);
+	int write_non_blocking_Array6OfDoubleType(circular_fifo_Array6OfDoubleType* ptr,Array6OfDoubleType* src );
+	int write_blocking_Array6OfDoubleType(circular_fifo_Array6OfDoubleType* ptr,Array6OfDoubleType* src,spinlock *lock);				
+	/*
+	=============================================================
+					Array2OfUInt16 Prototype
+	=============================================================
+	*/
+	typedef struct 
+	{
+	    Array2OfUInt16* buffer;
+	    size_t front;
+	    size_t rear;
+		size_t size;	    
+	}circular_fifo_Array2OfUInt16;
+	
+	void init_channel_Array2OfUInt16(circular_fifo_Array2OfUInt16 *channel ,Array2OfUInt16* buffer, size_t size);
+	int read_non_blocking_Array2OfUInt16(circular_fifo_Array2OfUInt16* channel,Array2OfUInt16* dst );
+	int read_blocking_Array2OfUInt16(circular_fifo_Array2OfUInt16* ptr,Array2OfUInt16* dst,spinlock *lock);
+	int write_non_blocking_Array2OfUInt16(circular_fifo_Array2OfUInt16* ptr,Array2OfUInt16* src );
+	int write_blocking_Array2OfUInt16(circular_fifo_Array2OfUInt16* ptr,Array2OfUInt16* src,spinlock *lock);				
+	/*
+	=============================================================
+					Array1000OfDouble Prototype
+	=============================================================
+	*/
+	typedef struct 
+	{
+	    Array1000OfDouble* buffer;
+	    size_t front;
+	    size_t rear;
+		size_t size;	    
+	}circular_fifo_Array1000OfDouble;
+	
+	void init_channel_Array1000OfDouble(circular_fifo_Array1000OfDouble *channel ,Array1000OfDouble* buffer, size_t size);
+	int read_non_blocking_Array1000OfDouble(circular_fifo_Array1000OfDouble* channel,Array1000OfDouble* dst );
+	int read_blocking_Array1000OfDouble(circular_fifo_Array1000OfDouble* ptr,Array1000OfDouble* dst,spinlock *lock);
+	int write_non_blocking_Array1000OfDouble(circular_fifo_Array1000OfDouble* ptr,Array1000OfDouble* src );
+	int write_blocking_Array1000OfDouble(circular_fifo_Array1000OfDouble* ptr,Array1000OfDouble* src,spinlock *lock);				
 #endif

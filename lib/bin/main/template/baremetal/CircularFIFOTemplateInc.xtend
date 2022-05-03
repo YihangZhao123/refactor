@@ -16,7 +16,7 @@ import utils.Query
 
 @FileTypeAnno(type=FileType.C_INCLUDE)
 class CircularFIFOTemplateInc implements InitTemplate {
-	private Set<VertexTrait> primitiveTraitSet
+
 	Set<Vertex> typeVertexSet
 	new() {		
 		val model = Generator.model
@@ -55,33 +55,10 @@ class CircularFIFOTemplateInc implements InitTemplate {
 	def String foo(Vertex v){
 		'''
 		«val type=v.getIdentifier()»
-		«IF !v.hasTrait(VertexTrait.TYPING_DATATYPES_ARRAY)»
+«««		«IF ! forsyde.io.java.typed.viewers.typing.datatypes.Array.conforms(v)»
 			/*
 			=============================================================
-							«type» Prototype
-			=============================================================
-			*/
-			typedef struct 
-			{
-			    «type»* buffer;
-			    size_t front;
-			    size_t rear;
-			size_t size;	    
-			}circular_fifo_«type»;
-			
-			void init_channel_«type»(circular_fifo_«type» *channel ,«type»* buffer, size_t size);
-			int read_non_blocking_«type»(circular_fifo_«type»* channel,«type»* dst );
-			int read_blocking_«type»(circular_fifo_«type»* ptr,«type»* dst,spinlock *lock);
-			int write_non_blocking_«type»(circular_fifo_«type»* ptr,«type»* src );
-			int write_blocking_«type»(circular_fifo_«type»* ptr,«type»* src,spinlock *lock);	
-						
-		«ELSE»
-			«var maximumElems =help(v)»
-				«IF maximumElems>0»
-			«var innerType = Query.getInnerType(Generator.model,v)»
-			/*
-			=============================================================
-							«type» Prototype
+						If Token type is «type» 
 			=============================================================
 			*/
 			typedef struct 
@@ -96,13 +73,36 @@ class CircularFIFOTemplateInc implements InitTemplate {
 			int read_non_blocking_«type»(circular_fifo_«type»* channel,«type»* dst );
 			int read_blocking_«type»(circular_fifo_«type»* ptr,«type»* dst,spinlock *lock);
 			int write_non_blocking_«type»(circular_fifo_«type»* ptr,«type»* src );
-			int write_blocking_«type»(circular_fifo_«type»* ptr,«type»* src,spinlock *lock);				
-				«ENDIF»				
-		«ENDIF»
+			int write_blocking_«type»(circular_fifo_«type»* ptr,«type»* src,spinlock *lock);	
+						
+«««		«ELSE»
+«««			«var maximumElems =getMaximumElems(v)»
+«««				«IF maximumElems>0»
+««««««			«var innerType = Query.getInnerType(Generator.model,v)»
+«««			/*
+«««			=============================================================
+«««							If Token type is «type» 
+«««			=============================================================
+«««			*/
+«««			typedef struct 
+«««			{
+«««			    «type»* buffer;
+«««			    size_t front;
+«««			    size_t rear;
+«««				size_t size;	    
+«««			}circular_fifo_«type»;
+«««			
+«««			void init_channel_«type»(circular_fifo_«type» *channel ,«type»* buffer, size_t size);
+«««			int read_non_blocking_«type»(circular_fifo_«type»* channel,«type»* dst );
+«««			int read_blocking_«type»(circular_fifo_«type»* ptr,«type»* dst,spinlock *lock);
+«««			int write_non_blocking_«type»(circular_fifo_«type»* ptr,«type»* src );
+«««			int write_blocking_«type»(circular_fifo_«type»* ptr,«type»* src,spinlock *lock);				
+«««				«ENDIF»				
+«««		«ENDIF»
 		'''
 	}
 	
-	private def help(Vertex typeVertex) {
+	private def getMaximumElems(Vertex typeVertex) {
 		var maximumElems = 0
 		if (typeVertex.getProperties().get("maximumElems") !== null) {
 			maximumElems = (typeVertex.getProperties().get("maximumElems").unwrap() as Integer)

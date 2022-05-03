@@ -14,8 +14,12 @@ import forsyde.io.java.core.Vertex;
 import forsyde.io.java.core.VertexAcessor;
 import forsyde.io.java.core.VertexProperty;
 import forsyde.io.java.core.VertexTrait;
+import forsyde.io.java.core.VertexViewer;
+import forsyde.io.java.typed.viewers.impl.ANSICBlackBoxExecutableViewer;
+import forsyde.io.java.typed.viewers.impl.Executable;
 import forsyde.io.java.typed.viewers.moc.sdf.SDFChannel;
 import forsyde.io.java.typed.viewers.moc.sdf.SDFComb;
+import forsyde.io.java.typed.viewers.moc.sdf.SDFCombViewer;
 import generator.Generator;
 
 import java.lang.Math;
@@ -91,6 +95,7 @@ public class Query {
 	 */
 	public static String findActorPortConnectedToImplInputPort(ForSyDeSystemGraph model, Vertex actor, Vertex impl,
 			String implPort) {
+		
 		try {
 			var actorPort = model.edgeSet().stream().filter(e -> e.getSource().equals(actor.getIdentifier()))
 					.filter(e -> e.getTarget().equals(impl.getIdentifier())).filter(e -> e.getTargetPort().isPresent())
@@ -99,7 +104,10 @@ public class Query {
 		} catch (Exception e) {
 			return null;
 		}
+		
 	}
+
+	
 
 	/**
 	 * Assuming there is an edge from impl port implPort to actor port actorPort,

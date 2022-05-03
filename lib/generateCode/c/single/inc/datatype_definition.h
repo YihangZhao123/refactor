@@ -20,8 +20,8 @@ typedef double Double;
 		TYPING_DATATYPES_INTEGER
 ==============================================================
 */
-typedef unsigned short UInt16;
 typedef unsigned int UInt32;
+typedef unsigned short UInt16;
 
 /*
 ==============================================================
@@ -30,10 +30,10 @@ typedef unsigned int UInt32;
 */
 typedef Double Array1000OfDouble[1000];
 typedef Array1000OfDouble Array1000OfArrayOfDouble[1000];
-typedef DoubleType Array6OfDoubleType[6];
-typedef UInt16 Array2OfUInt16[2];
 typedef DoubleType *ArrayXOfDoubleType;
 typedef ArrayXOfDoubleType *ArrayXOfArrayXOfDoubleType;
+typedef DoubleType Array6OfDoubleType[6];
+typedef UInt16 Array2OfUInt16[2];
 
 /*
 ==============================================================

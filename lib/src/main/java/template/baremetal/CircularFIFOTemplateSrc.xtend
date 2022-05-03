@@ -14,43 +14,44 @@ import forsyde.io.java.core.Vertex
 
 @FileTypeAnno(type=FileType.C_SOURCE)
 class CircularFIFOTemplateSrc implements InitTemplate {
-	private Set<VertexTrait> primitiveTraitSet
-	Set<Vertex> a
+	Set<Vertex> typeVertexSet
 	new() {
-		primitiveTraitSet = new HashSet
 		val model = Generator.model
-		a=model.vertexSet().stream()
+		typeVertexSet=model.vertexSet().stream()
 			.filter([v|SDFChannel.conforms(v)])
 			.map([v|Query.findSDFChannelDataType(model,v)])
 			.map([s|Query.findVertexByName(model,s)])
 			.collect(Collectors.toSet())
-
-//		primitiveTraitSet.add(VertexTrait.TYPING_DATATYPES_FLOAT)
-//		primitiveTraitSet.add(VertexTrait.TYPING_DATATYPES_DOUBLE)
-//		primitiveTraitSet.add(VertexTrait.TYPING_DATATYPES_INTEGER)
-//		primitiveTraitSet.add(VertexTrait.TYPING_DATATYPES_ARRAY)
 	}
 
 	override create() {
 		'''
-			#include "../inc/datatype_definition.h"
-			#include "../inc/circular_fifo_lib.h"
 			/*
 			*******************************************************
-				
+				This file contains the function definition for 
+				token types: «FOR typeVertex : typeVertexSet SEPARATOR ", " AFTER ""»«typeVertex.getIdentifier()»«ENDFOR»
+				For each token type, there are five functions:
+				init_channel_typeName(...)
+				read_non_blocking_typeName(...)
+				read_blocking_typeName(...)
+				write_non_blocking_typeName(...)
+				write_blocking_typeName(...)
 			*******************************************************
 			*/
-			«FOR primitiveTrait : primitiveTraitSet SEPARATOR"" AFTER""»
-			«primitiveChannelDefinition(primitiveTrait)»	
-			«ENDFOR»			
+			#include "../inc/datatype_definition.h"
+			#include "../inc/circular_fifo_lib.h"
+
+			«FOR typeVertex : typeVertexSet SEPARATOR "" AFTER ""»
+			«produce(typeVertex )»	
+			«ENDFOR»
+		
 		'''
 	}
 
-	def primitiveChannelDefinition(VertexTrait trait) {
+	def produce(Vertex typeVertex ) {
 		
 		'''
-			«var typeVertexSet=Generator.model.vertexSet().stream().filter([v|v.hasTrait(trait)]).collect(Collectors.toSet())»
-			«FOR typeVertex : typeVertexSet SEPARATOR "" AFTER ""»
+
 				«val type = typeVertex.getIdentifier()»
 				«IF ! typeVertex.hasTrait(VertexTrait.TYPING_DATATYPES_ARRAY)»
 				/*
@@ -135,7 +136,7 @@ class CircularFIFOTemplateSrc implements InitTemplate {
 					       return 0;
 					   }				
 				}
-				«ELSEIF help1(typeVertex)&&Query.getMaximumElems(typeVertex)>0»
+				«ELSEIF isOneDimension(typeVertex)&&Query.getMaximumElems(typeVertex)>0»
 				/*
 				=============================================================
 								«type» Channel Definition
@@ -227,16 +228,91 @@ class CircularFIFOTemplateSrc implements InitTemplate {
 					       return 0;
 					   }				
 				}
-				«ELSE»			
+				«ELSEIF isOneDimension(typeVertex)&&Query.getMaximumElems(typeVertex)<0»
+				/*
+				=============================================================
+								«type» Channel Definition
+				=============================================================
+				*/				
+				void init_channel_«type»(circular_fifo_«type» *channel ,«type»* buffer, size_t size){
+				    channel->buffer = buffer;
+				    channel->size=size;
+				    channel->front = 0;
+				    channel->rear = 0;			
+				}
+			
+				int read_non_blocking_«type»(circular_fifo_«type» *channel, «type» *data){
+					if(channel->front==channel->rear){
+					    	//empty 
+					    	return -1;
+					    			
+					   }else{
+					    	*data = channel->buffer[channel->front];
+					    	channel->front= (channel->front+1)%channel->size;
+					    	return 0;
+					    }
+				}
+				int read_blocking_«type»(circular_fifo_«type»* channel,«type»* data,spinlock* lock){
+					spinlock_get(lock);
+					if(channel->front==channel->rear){
+					    	//empty 
+					    	spinlock_release(lock);
+					    	return -1;
+					    			
+					   }else{
+					    	*data = channel->buffer[channel->front];
+					    	//printf("buffer «type»: before read, front: %d, rear %d size:%d\n",channel->front,channel->rear,channel->size);
+					    	channel->front= (channel->front+1)%channel->size;
+					    	//printf("buffer «type»: after read, front: %d, rear %d size:%d\n",channel->front,channel->rear,channel->size);
+					    	spinlock_release(lock);
+					    	return 0;
+					    }
+				}				
+			
+				int write_non_blocking_«type»(circular_fifo_«type»* channel, «type» value){
+				    /*if the buffer is full*/
+				    if((channel->rear+1)%channel->size == channel->front){
+				        //full!
+				        //discard the data
+				        return -1;
+				     }else{
+				        channel->buffer[channel->rear] = value;
+				       //printf("buffer «type»:before write, front: %d, rear %d size:%d\n",channel->front,channel->rear,channel->size);
+				        channel->rear= (channel->rear+1)%channel->size;
+				        //printf("buffer «type»:after write, front: %d, rear %d size:%d\n",channel->front,channel->rear,channel->size);
+				        return 0;
+				    }			
+				
+				}	
+			
+				int write_blocking_«type»(circular_fifo_«type»* channel, «type» value,spinlock* lock){
+					spinlock_get(lock);
+					
+					   /*if the buffer is full*/
+					   if((channel->rear+1)%channel->size == channel->front){
+					       //full!
+					       //discard the data
+					       //printf("buffer full error\n!");
+					       spinlock_release(lock);
+					       return -1;
+					    }else{
+					       channel->buffer[channel->rear] = value;
+					      //printf("buffer «type»:before write, front: %d, rear %d size:%d\n",channel->front,channel->rear,channel->size);
+					       channel->rear= (channel->rear+1)%channel->size;
+					       //printf("buffer «type»:after write, front: %d, rear %d size:%d\n",channel->front,channel->rear,channel->size);
+					       spinlock_release(lock);
+					       return 0;
+					   }				
+				}		
 				«ENDIF»
-			«ENDFOR»		
+	
 		'''
 	}
 
 	override getFileName() {
 		return "circular_fifo_lib"
 	}
-	def help1(Vertex v){
+	def isOneDimension(Vertex v){
 		var inner =Query.getInnerType(Generator.model,v)
 		var innerVertex = Query.findVertexByName(Generator.model,inner)
 		if(innerVertex.hasTrait(VertexTrait.TYPING_DATATYPES_ARRAY)){

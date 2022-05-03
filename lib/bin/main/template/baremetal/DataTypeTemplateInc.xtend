@@ -35,7 +35,9 @@ class DataTypeTemplateInc implements InitTemplate {
 
 	override create() {
 		var model = Generator.model
-
+		var outset = model.vertexSet().stream().filter([ v |
+			!v.hasTrait(VertexTrait.MOC_SDF_SDFCHANNEL) && v.hasTrait(VertexTrait.TYPING_TYPEDDATABLOCK)
+		]).collect(Collectors.toSet())
 		'''
 			#ifndef DATATYPE_DEFINITION_
 			#define DATATYPE_DEFINITION_
@@ -68,8 +70,15 @@ class DataTypeTemplateInc implements InitTemplate {
 			*/
 			«arrayTypeDef()»
 			
-			
-			
+			/*
+			==============================================================
+					Outside Source and Sink Extern
+			==============================================================			
+			*/
+			«FOR v : outset SEPARATOR "" AFTER ""»
+				extern «help2(v)»  «v.getIdentifier()»;
+			«ENDFOR»
+					
 			#endif
 		'''
 	}
@@ -139,7 +148,7 @@ class DataTypeTemplateInc implements InitTemplate {
 					typedef «innerType» *«arrayVertex.getIdentifier()»;
 				«ENDIF»	
 				«var tmp = this.record.add(arrayVertex.getIdentifier())»
-			«ELSEIF record.contains(innerType)&& record.contains(arrayVertex.getIdentifier()) »
+			«ELSEIF record.contains(innerType)&& record.contains(arrayVertex.getIdentifier())»
 			«ELSE»
 				«help1(Query.findVertexByName(Generator.model,innerType))»
 				«var maximumElems=getMaximumElems(arrayVertex)»
@@ -170,5 +179,13 @@ class DataTypeTemplateInc implements InitTemplate {
 			maximumElems = (typeVertex.getProperties().get("production").unwrap() as Integer)
 		}
 		return maximumElems
+	}
+
+	def String help2(Vertex v) {
+		var model = Generator.model
+		var type = model.edgeSet().stream().filter(e|e.hasTrait(EdgeTrait.TYPING_DATATYPES_DATADEFINITION)).filter([ e |
+			e.getSource() == v.getIdentifier() && e.getSourcePort().get() == "dataType"
+		]).findAny().get().getTarget()
+		return type
 	}
 }

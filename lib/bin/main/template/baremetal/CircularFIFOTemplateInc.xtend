@@ -18,14 +18,7 @@ import utils.Query
 class CircularFIFOTemplateInc implements InitTemplate {
 	private Set<VertexTrait> primitiveTraitSet
 	Set<Vertex> typeVertexSet
-	new() {
-//		primitiveTraitSet = new HashSet
-//		primitiveTraitSet.add(VertexTrait.TYPING_DATATYPES_FLOAT)
-//		primitiveTraitSet.add(VertexTrait.TYPING_DATATYPES_DOUBLE)
-//		primitiveTraitSet.add(VertexTrait.TYPING_DATATYPES_INTEGER)
-//		primitiveTraitSet.add(VertexTrait.TYPING_DATATYPES_ARRAY)
-		
-		
+	new() {		
 		val model = Generator.model
 		typeVertexSet=model.vertexSet().stream()
 			.filter([v|SDFChannel.conforms(v)])

@@ -47,17 +47,17 @@
         <traits>visualization::Visualizable</traits>
         <traits>moc::sdf::SDFComb</traits>
         <traits>decision::sdf::PASSedSDFComb</traits>
-        <ports>gx</ports>
+        <ports>imgBlockX</ports>
         <ports>combinator</ports>
-        <ports>resx</ports>
+        <ports>gx</ports>
         <propertiesValues xsi:type="forsyde.io.eclipse.systemgraph:StringMapVertexProperty">
             <values intValue="1" xsi:type="forsyde.io.eclipse.systemgraph:IntVertexProperty"/>
-            <indexes>resx</indexes>
+            <indexes>gx</indexes>
         </propertiesValues>
         <propertiesNames>production</propertiesNames>
         <propertiesValues xsi:type="forsyde.io.eclipse.systemgraph:StringMapVertexProperty">
             <values intValue="6" xsi:type="forsyde.io.eclipse.systemgraph:IntVertexProperty"/>
-            <indexes>gx</indexes>
+            <indexes>imgBlockX</indexes>
         </propertiesValues>
         <propertiesNames>consumption</propertiesNames>
         <propertiesValues xsi:type="forsyde.io.eclipse.systemgraph:ArrayVertexProperty">
@@ -70,16 +70,16 @@
         <traits>moc::sdf::SDFComb</traits>
         <traits>decision::sdf::PASSedSDFComb</traits>
         <ports>combinator</ports>
+        <ports>imgBlockY</ports>
         <ports>gy</ports>
-        <ports>resy</ports>
         <propertiesValues xsi:type="forsyde.io.eclipse.systemgraph:StringMapVertexProperty">
             <values intValue="1" xsi:type="forsyde.io.eclipse.systemgraph:IntVertexProperty"/>
-            <indexes>resy</indexes>
+            <indexes>gy</indexes>
         </propertiesValues>
         <propertiesNames>production</propertiesNames>
         <propertiesValues xsi:type="forsyde.io.eclipse.systemgraph:StringMapVertexProperty">
             <values intValue="6" xsi:type="forsyde.io.eclipse.systemgraph:IntVertexProperty"/>
-            <indexes>gy</indexes>
+            <indexes>imgBlockY</indexes>
         </propertiesValues>
         <propertiesNames>consumption</propertiesNames>
         <propertiesValues xsi:type="forsyde.io.eclipse.systemgraph:ArrayVertexProperty">
@@ -372,19 +372,19 @@
         <traits>moc::sdf::SDFDataEdge</traits>
         <traits>visualization::VisualConnection</traits>
     </edges>
-    <edges source="Gx" sourceport="resx" target="absxsig" targetport="producer">
+    <edges source="Gx" sourceport="gx" target="absxsig" targetport="producer">
         <traits>moc::sdf::SDFDataEdge</traits>
         <traits>visualization::VisualConnection</traits>
     </edges>
-    <edges source="Gy" sourceport="resy" target="absysig" targetport="producer">
+    <edges source="Gy" sourceport="gy" target="absysig" targetport="producer">
         <traits>moc::sdf::SDFDataEdge</traits>
         <traits>visualization::VisualConnection</traits>
     </edges>
-    <edges source="gxsig" sourceport="consumer" target="Gx" targetport="gx">
+    <edges source="gxsig" sourceport="consumer" target="Gx" targetport="imgBlockX">
         <traits>moc::sdf::SDFDataEdge</traits>
         <traits>visualization::VisualConnection</traits>
     </edges>
-    <edges source="gysig" sourceport="consumer" target="Gy" targetport="gy">
+    <edges source="gysig" sourceport="consumer" target="Gy" targetport="imgBlockY">
         <traits>moc::sdf::SDFDataEdge</traits>
         <traits>visualization::VisualConnection</traits>
     </edges>

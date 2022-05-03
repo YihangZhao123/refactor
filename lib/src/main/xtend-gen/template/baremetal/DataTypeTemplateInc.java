@@ -34,6 +34,12 @@ public class DataTypeTemplateInc implements InitTemplate {
     String _xblockexpression = null;
     {
       ForSyDeSystemGraph model = Generator.model;
+      final Predicate<Vertex> _function = new Predicate<Vertex>() {
+        public boolean test(final Vertex v) {
+          return ((!(v.hasTrait(VertexTrait.MOC_SDF_SDFCHANNEL)).booleanValue()) && (v.hasTrait(VertexTrait.TYPING_TYPEDDATABLOCK)).booleanValue());
+        }
+      };
+      Set<Vertex> outset = model.vertexSet().stream().filter(_function).collect(Collectors.<Vertex>toSet());
       StringConcatenation _builder = new StringConcatenation();
       _builder.append("#ifndef DATATYPE_DEFINITION_");
       _builder.newLine();
@@ -101,7 +107,39 @@ public class DataTypeTemplateInc implements InitTemplate {
       _builder.append(_arrayTypeDef);
       _builder.newLineIfNotEmpty();
       _builder.newLine();
+      _builder.append("/*");
       _builder.newLine();
+      _builder.append("==============================================================");
+      _builder.newLine();
+      _builder.append("\t\t");
+      _builder.append("Outside Source and Sink Extern");
+      _builder.newLine();
+      _builder.append("==============================================================\t\t\t");
+      _builder.newLine();
+      _builder.append("*/");
+      _builder.newLine();
+      {
+        boolean _hasElements = false;
+        for(final Vertex v : outset) {
+          if (!_hasElements) {
+            _hasElements = true;
+          } else {
+            _builder.appendImmediate("", "");
+          }
+          _builder.append("extern ");
+          String _help2 = this.help2(v);
+          _builder.append(_help2);
+          _builder.append("  ");
+          String _identifier = v.getIdentifier();
+          _builder.append(_identifier);
+          _builder.append(";");
+          _builder.newLineIfNotEmpty();
+        }
+        if (_hasElements) {
+          _builder.append("");
+        }
+      }
+      _builder.append("\t\t");
       _builder.newLine();
       _builder.append("#endif");
       _builder.newLine();
@@ -378,5 +416,21 @@ public class DataTypeTemplateInc implements InitTemplate {
       maximumElems = (((Integer) _unwrap_1)).intValue();
     }
     return maximumElems;
+  }
+  
+  public String help2(final Vertex v) {
+    ForSyDeSystemGraph model = Generator.model;
+    final Predicate<EdgeInfo> _function = new Predicate<EdgeInfo>() {
+      public boolean test(final EdgeInfo e) {
+        return e.hasTrait(EdgeTrait.TYPING_DATATYPES_DATADEFINITION);
+      }
+    };
+    final Predicate<EdgeInfo> _function_1 = new Predicate<EdgeInfo>() {
+      public boolean test(final EdgeInfo e) {
+        return (Objects.equal(e.getSource(), v.getIdentifier()) && Objects.equal(e.getSourcePort().get(), "dataType"));
+      }
+    };
+    String type = model.edgeSet().stream().filter(_function).filter(_function_1).findAny().get().getTarget();
+    return type;
   }
 }

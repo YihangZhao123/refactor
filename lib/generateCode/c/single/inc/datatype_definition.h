@@ -35,6 +35,14 @@ typedef UInt16 Array2OfUInt16[2];
 typedef DoubleType *ArrayXOfDoubleType;
 typedef ArrayXOfDoubleType *ArrayXOfArrayXOfDoubleType;
 
-
-
+/*
+==============================================================
+		Outside Source and Sink Extern
+==============================================================			
+*/
+extern UInt16  dimX;
+extern ArrayXOfArrayXOfDoubleType  system_img_sink;
+extern ArrayXOfArrayXOfDoubleType  system_img_source;
+extern UInt16  dimY;
+		
 #endif

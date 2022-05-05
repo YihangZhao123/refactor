@@ -454,7 +454,7 @@ systemgraph {
     (consumer, producer, initialTokenValues)
     {
         "numOfInitialTokens": 0_i
-    }
+    } 
 
     edge [moc::sdf::SDFDataEdge] from GrayScale port gray to GrayScaleToGetPx port producer
     edge [moc::sdf::SDFDataEdge] from GrayScaleToGetPx port consumer to getPx port gray

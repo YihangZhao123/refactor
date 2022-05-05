@@ -370,8 +370,6 @@ public class SDFCombTemplateSrc implements ActorTemplate {
               _builder.append(sdfchannelName);
               _builder.append(",&");
               _builder.append(port);
-              _builder.append(",&spinlock_");
-              _builder.append(sdfchannelName);
               _builder.append(");");
               _builder.newLineIfNotEmpty();
               _builder.append("#else");

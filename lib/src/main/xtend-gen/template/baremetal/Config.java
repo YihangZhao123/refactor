@@ -55,7 +55,7 @@ public class Config implements InitTemplate {
           _builder.append("#define ");
           String _upperCase = c.getIdentifier().toUpperCase();
           _builder.append(_upperCase);
-          _builder.append("_BLOCKING 1");
+          _builder.append("_BLOCKING 0");
           _builder.newLineIfNotEmpty();
         }
       }

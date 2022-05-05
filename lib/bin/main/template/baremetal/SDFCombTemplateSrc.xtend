@@ -177,7 +177,7 @@ class SDFCombTemplateSrc implements ActorTemplate {
 					if (consumption == 1) {
 						ret += '''
 							#if «sdfchannelName.toUpperCase()»_BLOCKING==0
-							read_non_blocking_«datatype»(&fifo_«sdfchannelName»,&«port»,&spinlock_«sdfchannelName»);
+							read_non_blocking_«datatype»(&fifo_«sdfchannelName»,&«port»);
 							#else
 							read_blocking_«datatype»(&fifo_«sdfchannelName»,&«port»,&spinlock_«sdfchannelName»);
 							#endif

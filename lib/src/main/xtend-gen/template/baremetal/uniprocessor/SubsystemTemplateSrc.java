@@ -158,24 +158,21 @@ public class SubsystemTemplateSrc implements SubsystemTemplate {
         _builder.newLineIfNotEmpty();
         {
           if (((sdfchannel.getNumOfInitialTokens() != null) && ((sdfchannel.getNumOfInitialTokens()).intValue() > 0))) {
-            _builder.newLine();
-            _builder.append("\t");
             Object _unwrap = sdfchannel.getProperties().get("__initialTokenValues_ordering__").unwrap();
             HashMap<String, Integer> b = ((HashMap<String, Integer>) _unwrap);
             _builder.newLineIfNotEmpty();
             {
               Set<String> _keySet = b.keySet();
               for(final String k : _keySet) {
-                _builder.append("\t");
-                _builder.append("buffer_");
+                _builder.append("write_non_blocking_");
+                String _findSDFChannelDataType_1 = Query.findSDFChannelDataType(Generator.model, channel_1);
+                _builder.append(_findSDFChannelDataType_1);
+                _builder.append("(&fifo_");
                 String _identifier = sdfchannel.getIdentifier();
-                _builder.append(_identifier, "\t");
-                _builder.append("[");
-                Integer _get = b.get(k);
-                _builder.append(_get, "\t");
-                _builder.append("]=");
-                _builder.append(k, "\t");
-                _builder.append(";");
+                _builder.append(_identifier);
+                _builder.append(",");
+                _builder.append(k);
+                _builder.append(");");
                 _builder.newLineIfNotEmpty();
               }
             }

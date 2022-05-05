@@ -1,8 +1,8 @@
 #include "./single/inc/circular_fifo_lib.h"
 #include "./single/inc/config.h"
 #include "./single/inc/subsystem.h"
-#define X 5
-#define Y 5
+#define X 10
+#define Y 10
 UInt16 dimX_global=X;
 UInt16 dimY_global=Y;
 double a[Y][X];
@@ -16,11 +16,7 @@ int main(){
     initChannels();
     for(int i=0;i<Y;++i){
         for(int j=0;j<X;++j){
-            if(i%3!=0){
-                a[i][j]=10;
-            }else{
-                a[i][j]=1;
-            }
+            a[i][j]=j;
             
             c[i][j]=0;
         }

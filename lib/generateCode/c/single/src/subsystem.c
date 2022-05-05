@@ -23,9 +23,8 @@
 //				initChannels();
 				
 				/*    SDFdelay        */
-				int i=0;
+//				int i=0;
 //				while(1){
-					printf("in loop %d===============\n",i);
 					printf("%s\n","enter GrayScale");
 						actor_GrayScale();
 					printf("%s\n","enter getPx");

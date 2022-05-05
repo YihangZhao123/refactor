@@ -42,12 +42,13 @@ class SubsystemTemplateSrc implements SubsystemTemplate {
 //				initChannels();
 				
 				/*    SDFdelay        */
-				int i=0;
+//				int i=0;
 //				while(1){
-					printf("in loop %d===============\n",i);
 					«FOR set : Generator.uniprocessorSchedule.entrySet() SEPARATOR "" AFTER ""»
 					printf("%s\n","enter «set.getValue().getIdentifier()»");
+						«IF Generator.TESTING==1&&Generator.PC==1»
 						actor_«set.getValue().getIdentifier()»();
+						«ENDIF»
 					«ENDFOR»	
 					
 //				}

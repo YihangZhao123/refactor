@@ -1,5 +1,6 @@
 package template.baremetal;
 
+import com.google.common.base.Objects;
 import fileAnnotation.FileType;
 import fileAnnotation.FileTypeAnno;
 import forsyde.io.java.core.ForSyDeSystemGraph;
@@ -100,9 +101,13 @@ public class SDFCombTemplateSrc implements ActorTemplate {
       _builder.append("\t");
       _builder.append("/* Read From Input Port  */");
       _builder.newLine();
-      _builder.append("\t");
-      _builder.append("printf(\"%s\\n\",\"read\");");
-      _builder.newLine();
+      {
+        if (((Generator.TESTING == 1) && (Generator.PC == 1))) {
+          _builder.append("\t");
+          _builder.append("printf(\"%s\\n\",\"read\");");
+          _builder.newLine();
+        }
+      }
       _builder.append("\t");
       _builder.append("int ret=0;");
       _builder.newLine();
@@ -113,9 +118,13 @@ public class SDFCombTemplateSrc implements ActorTemplate {
       _builder.append("\t");
       _builder.append("/* Inline Code           */");
       _builder.newLine();
-      _builder.append("\t");
-      _builder.append("printf(\"%s\\n\",\"inline code\");");
-      _builder.newLine();
+      {
+        if (((Generator.TESTING == 1) && (Generator.PC == 1))) {
+          _builder.append("\t");
+          _builder.append("printf(\"%s\\n\",\"inline code\");");
+          _builder.newLine();
+        }
+      }
       _builder.append("\t");
       String _inlineCode = this.getInlineCode();
       _builder.append(_inlineCode, "\t");
@@ -124,13 +133,62 @@ public class SDFCombTemplateSrc implements ActorTemplate {
       _builder.append("\t");
       _builder.append("/* Write To Output Ports */");
       _builder.newLine();
-      _builder.append("\t");
-      _builder.append("printf(\"%s\\n\",\"write\");");
-      _builder.newLine();
+      {
+        if (((Generator.TESTING == 1) && (Generator.PC == 1))) {
+          _builder.append("\t");
+          _builder.append("printf(\"%s\\n\",\"write\");");
+          _builder.newLine();
+        }
+      }
       _builder.append("\t");
       String _write = this.write(actor);
       _builder.append(_write, "\t");
       _builder.newLineIfNotEmpty();
+      {
+        if (((Generator.TESTING == 1) && (Generator.NUCLEO == 1))) {
+          {
+            boolean _equals = Objects.equal(name, "GrayScale");
+            if (_equals) {
+              _builder.append("HAL_Delay(1000);");
+              _builder.newLine();
+              _builder.append("HAL_GPIO_WritePin(GPIOA,GPIO_PIN_5,0);");
+              _builder.newLine();
+            } else {
+              boolean _equals_1 = Objects.equal(name, "getPx");
+              if (_equals_1) {
+                _builder.append("HAL_Delay(1000);");
+                _builder.newLine();
+                _builder.append("HAL_GPIO_WritePin(GPIOC,GPIO_PIN_9,0);\t\t\t\t\t");
+                _builder.newLine();
+              } else {
+                boolean _equals_2 = Objects.equal(name, "Gx");
+                if (_equals_2) {
+                  _builder.append("HAL_Delay(1000);");
+                  _builder.newLine();
+                  _builder.append("HAL_GPIO_WritePin(GPIOC,GPIO_PIN_8,0);\t");
+                  _builder.newLine();
+                } else {
+                  boolean _equals_3 = Objects.equal(name, "Gy");
+                  if (_equals_3) {
+                    _builder.append("HAL_Delay(1000);");
+                    _builder.newLine();
+                    _builder.append("HAL_GPIO_WritePin(GPIOC,GPIO_PIN_6,0);\t\t");
+                    _builder.newLine();
+                  } else {
+                    boolean _equals_4 = Objects.equal(name, "Abs");
+                    if (_equals_4) {
+                      _builder.append("HAL_Delay(1000);");
+                      _builder.newLine();
+                      _builder.append("HAL_GPIO_WritePin(GPIOA,GPIO_PIN_5,0);");
+                      _builder.newLine();
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
       _builder.append("}");
       _builder.newLine();
       _xblockexpression = _builder.toString();

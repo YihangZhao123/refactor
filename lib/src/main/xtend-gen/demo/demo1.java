@@ -28,8 +28,8 @@ import utils.Load;
 public class demo1 {
   public static void main(final String[] args) {
     try {
-      final String path = "forsyde-io/test/complete-mapped-sobel-model.forsyde.xmi";
-      final String path2 = "forsyde-io/test/sobel-application.fiodl";
+      final String path = "forsyde-io/modified1/complete-mapped-sobel-model.forsyde.xmi";
+      final String path2 = "forsyde-io/modified1/sobel-application.fiodl";
       final String root = "generateCode/c/single";
       final String root2 = "D:\\Users\\LEGION\\Desktop\\Master Thesis\\code\\stm32-nucleo\\uniprocessor_test1\\Core\\mycode";
       ForSyDeSystemGraph model1 = Load.load(path);

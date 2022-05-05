@@ -27,8 +27,8 @@ import java.util.stream.Collectors
 
 class demo1 {
 	def static void main(String[] args) {
-		val path="forsyde-io/test/complete-mapped-sobel-model.forsyde.xmi";
-		val path2="forsyde-io/test/sobel-application.fiodl"
+		val path="forsyde-io/modified1/complete-mapped-sobel-model.forsyde.xmi";
+		val path2="forsyde-io/modified1/sobel-application.fiodl"
 		val root="generateCode/c/single"
 		val root2 = "D:\\Users\\LEGION\\Desktop\\Master Thesis\\code\\stm32-nucleo\\uniprocessor_test1\\Core\\mycode"
 		var model1 = Load.load(path)

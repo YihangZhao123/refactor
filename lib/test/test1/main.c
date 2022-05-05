@@ -1,8 +1,8 @@
 #include "./single/inc/circular_fifo_lib.h"
 #include "./single/inc/config.h"
 #include "./single/inc/subsystem.h"
-#define X 100
-#define Y 100
+#define X 5
+#define Y 5
 UInt16 dimX_global=X;
 UInt16 dimY_global=Y;
 double a[Y][X];
@@ -16,13 +16,13 @@ int main(){
     initChannels();
     for(int i=0;i<Y;++i){
         for(int j=0;j<X;++j){
-            if(i%4!=0){
-                a[i][j]=0;
-            }else{
+            if(i%3!=0){
                 a[i][j]=10;
+            }else{
+                a[i][j]=1;
             }
             
-            c[i][j]=100;
+            c[i][j]=0;
         }
     }
 
@@ -37,9 +37,9 @@ int main(){
 
 
     system_img_sink_global=d;
-    // for(int i=0;i <10;++i){
+    //  for(int i=0;i <10;++i){
         subsystem_single_uniprocessor();
-    //}
+    // }
     
     printf("\n");
     for(int i=0;i<Y;++i){

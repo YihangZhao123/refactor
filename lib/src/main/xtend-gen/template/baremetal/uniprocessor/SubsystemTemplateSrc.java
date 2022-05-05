@@ -97,13 +97,9 @@ public class SubsystemTemplateSrc implements SubsystemTemplate {
       _builder.append("\t\t\t\t");
       _builder.append("/*    SDFdelay        */");
       _builder.newLine();
-      _builder.append("\t\t\t\t");
-      _builder.append("int i=0;");
+      _builder.append("//\t\t\t\tint i=0;");
       _builder.newLine();
       _builder.append("//\t\t\t\twhile(1){");
-      _builder.newLine();
-      _builder.append("\t\t\t\t\t");
-      _builder.append("printf(\"in loop %d===============\\n\",i);");
       _builder.newLine();
       {
         Set<Map.Entry<Integer, Vertex>> _entrySet = Generator.uniprocessorSchedule.entrySet();
@@ -120,13 +116,17 @@ public class SubsystemTemplateSrc implements SubsystemTemplate {
           _builder.append(_identifier_1, "\t\t\t\t\t");
           _builder.append("\");");
           _builder.newLineIfNotEmpty();
-          _builder.append("\t\t\t\t\t");
-          _builder.append("\t");
-          _builder.append("actor_");
-          String _identifier_2 = set.getValue().getIdentifier();
-          _builder.append(_identifier_2, "\t\t\t\t\t\t");
-          _builder.append("();");
-          _builder.newLineIfNotEmpty();
+          {
+            if (((Generator.TESTING == 1) && (Generator.PC == 1))) {
+              _builder.append("\t\t\t\t\t");
+              _builder.append("\t");
+              _builder.append("actor_");
+              String _identifier_2 = set.getValue().getIdentifier();
+              _builder.append(_identifier_2, "\t\t\t\t\t\t");
+              _builder.append("();");
+              _builder.newLineIfNotEmpty();
+            }
+          }
         }
         if (_hasElements) {
           _builder.append("", "\t\t\t\t\t");

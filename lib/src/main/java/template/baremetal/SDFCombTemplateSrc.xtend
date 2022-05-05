@@ -80,32 +80,40 @@ class SDFCombTemplateSrc implements ActorTemplate {
 				/* Initilize Memory      */
 				«initMemory(model,actor)»
 				/* Read From Input Port  */
+				«IF Generator.TESTING==1&&Generator.PC==1»
 				printf("%s\n","read");
+				«ENDIF»
 				int ret=0;
 				«read(model,actor)»
 				/* Inline Code           */
+				«IF Generator.TESTING==1&&Generator.PC==1»
 				printf("%s\n","inline code");
+				«ENDIF»
 				«getInlineCode()»
 			
 				/* Write To Output Ports */
+				«IF Generator.TESTING==1&&Generator.PC==1»
 				printf("%s\n","write");
+				«ENDIF»
 				«write(actor)»
-«««			«IF name=="GrayScale"»
-«««			HAL_Delay(1000);
-«««			HAL_GPIO_WritePin(GPIOA,GPIO_PIN_5,0);
-«««			«ELSEIF name=="getPx" »
-«««			HAL_Delay(1000);
-«««			HAL_GPIO_WritePin(GPIOC,GPIO_PIN_9,0);					
-«««			«ELSEIF name=="Gx" »
-«««			HAL_Delay(1000);
-«««			HAL_GPIO_WritePin(GPIOC,GPIO_PIN_8,0);	
-«««			«ELSEIF name=="Gy" »
-«««			HAL_Delay(1000);
-«««			HAL_GPIO_WritePin(GPIOC,GPIO_PIN_6,0);		
-«««			«ELSEIF name=="Abs" »	
-«««			HAL_Delay(1000);
-«««			HAL_GPIO_WritePin(GPIOA,GPIO_PIN_5,0);
-«««			«ENDIF»	
+				«IF Generator.TESTING==1&&Generator.NUCLEO==1»
+			«IF name=="GrayScale"»
+			HAL_Delay(1000);
+			HAL_GPIO_WritePin(GPIOA,GPIO_PIN_5,0);
+			«ELSEIF name=="getPx" »
+			HAL_Delay(1000);
+			HAL_GPIO_WritePin(GPIOC,GPIO_PIN_9,0);					
+			«ELSEIF name=="Gx" »
+			HAL_Delay(1000);
+			HAL_GPIO_WritePin(GPIOC,GPIO_PIN_8,0);	
+			«ELSEIF name=="Gy" »
+			HAL_Delay(1000);
+			HAL_GPIO_WritePin(GPIOC,GPIO_PIN_6,0);		
+			«ELSEIF name=="Abs" »	
+			HAL_Delay(1000);
+			HAL_GPIO_WritePin(GPIOA,GPIO_PIN_5,0);
+			«ENDIF»	
+			«ENDIF»
 			}
 		'''
 	}

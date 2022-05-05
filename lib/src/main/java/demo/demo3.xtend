@@ -27,7 +27,7 @@ class demo3 {
 		var subsystem = new SubsystemUniprocessorModule
 		
 		/* init module */
-		initModule.add(new Config)
+		initModule.add(new ConfigRTOSInc)
 		initModule.add(new SoftTimerTemplateSrc)
 		initModule.add(new Channel)
 		initModule.add(new StartTaskTemplateSrcRTOS)

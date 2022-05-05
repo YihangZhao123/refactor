@@ -41,31 +41,31 @@ systemgraph {
 
 
 
-    vertex system_img_source [impl::TokenizableDataBlock, typing::TypedDataBlock] (dataType) {
+    vertex system_img_source_global [impl::TokenizableDataBlock, typing::TypedDataBlock] (dataType) {
         "maxSizeInBits": 172000000_l,
         "tokenSizeInBits": 64_l
     }
 
-    edge [typing::datatypes::DataDefinition] from system_img_source port dataType to ArrayXOfArrayXOfDoubleType
+    edge [typing::datatypes::DataDefinition] from system_img_source_global port dataType to ArrayXOfArrayXOfDoubleType
 
-    vertex system_img_sink [impl::TokenizableDataBlock, typing::TypedDataBlock] (dataType) {
+    vertex system_img_sink_global [impl::TokenizableDataBlock, typing::TypedDataBlock] (dataType) {
         "maxSizeInBits": 172000000_l,
         "tokenSizeInBits": 64_l
     }
 
-    edge [typing::datatypes::DataDefinition] from system_img_sink port dataType to ArrayXOfArrayXOfDoubleType
+    edge [typing::datatypes::DataDefinition] from system_img_sink_global port dataType to ArrayXOfArrayXOfDoubleType
 
-    vertex dimX [impl::DataBlock, typing::TypedDataBlock] (dataType) {
+    vertex dimX_global [impl::DataBlock, typing::TypedDataBlock] (dataType) {
         "maxSizeInBits": 16_l
     }
 
-    edge [typing::datatypes::DataDefinition] from dimX port dataType to UInt16
+    edge [typing::datatypes::DataDefinition] from dimX_global port dataType to UInt16
 
-    vertex dimY [impl::DataBlock, typing::TypedDataBlock] (dataType) {
+    vertex dimY_global [impl::DataBlock, typing::TypedDataBlock] (dataType) {
         "maxSizeInBits": 16_l
     }
 
-    edge [typing::datatypes::DataDefinition] from dimY port dataType to UInt16
+    edge [typing::datatypes::DataDefinition] from dimY_global port dataType to UInt16
 
     vertex GrayScale [moc::sdf::SDFComb, moc::ContinousMoCSource, decision::sdf::PASSedSDFComb] 
     (combFunctions, system_img_source, dimX, dimY, dimsOut, offsetXIn, offsetYIn, offsetXOut, offsetYOut, gray) {
@@ -173,9 +173,9 @@ systemgraph {
     edge [moc::sdf::SDFDataEdge] from GrayScaleX port consumer to GrayScale port offsetXIn
     edge [moc::sdf::SDFDataEdge] from GrayScaleY port consumer to GrayScale port offsetYIn
 
-    edge [impl::DataMovement] from system_img_source to GrayScale port system_img_source 
-    edge [impl::DataMovement] from dimX to GrayScale port dimX
-    edge [impl::DataMovement] from dimY to GrayScale port dimY
+    edge [impl::DataMovement] from system_img_source_global to GrayScale port system_img_source 
+    edge [impl::DataMovement] from dimX_global to GrayScale port dimX
+    edge [impl::DataMovement] from dimY_global to GrayScale port dimY
 
     edge [] from GrayScale port combFunctions to GrayScaleImpl
     edge [] from GrayScale port offsetXIn to GrayScaleImpl port offsetX
@@ -365,7 +365,7 @@ systemgraph {
         }
     }
     
-    edge [impl::DataMovement] from Abs port system_img_sink to system_img_sink
+    edge [impl::DataMovement] from Abs port system_img_sink to system_img_sink_global
 
     vertex AbsX [moc::sdf::SDFChannel] (producer, consumer, initialTokenValues) {
         "tokenSizeInBits": 16_i,

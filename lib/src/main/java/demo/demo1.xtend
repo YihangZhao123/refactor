@@ -35,7 +35,7 @@ class demo1 {
 		
 		model2.mergeInPlace(model1)
 		
-		var Generator gen = new Generator(model2,root2)
+		var Generator gen = new Generator(model2,root)
 		
 		
 		var sdfchannelModule = new SDFChannelProcessingModule

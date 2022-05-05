@@ -24,6 +24,9 @@ import forsyde.io.java.core.ForSyDeSystemGraph
 import forsyde.io.java.typed.viewers.moc.sdf.SDFCombViewer
 import forsyde.io.java.typed.viewers.impl.Executable
 import forsyde.io.java.typed.viewers.typing.TypedOperation
+import java.util.TreeSet
+import java.util.List
+import java.util.Collections
 
 @FileTypeAnno(type=FileType.C_SOURCE)
 class SDFCombTemplateSrc implements ActorTemplate {
@@ -263,6 +266,27 @@ class SDFCombTemplateSrc implements ActorTemplate {
 			«ENDFOR»		
 		'''
 
+	}
+	
+	def String actorParameter(ForSyDeSystemGraph model  ,Vertex actor){
+		var Set<String> portSet =   new HashSet(actor.getPorts())
+		portSet.remove("combFunctions")
+		portSet.remove("combinator")
+		var List<String> portList = new ArrayList(portSet)
+		Collections.sort(portList)
+		
+		var String ret=""
+		for(var int i=0;i<portList.size();i=i+1){
+			if(i==0){
+				ret+="   "+portList.get(i)+"_port"
+			}else{
+				ret+=","+portList.get(i)+"_port"
+			}
+		}
+		
+		
+		return ret
+		
 	}
 
 

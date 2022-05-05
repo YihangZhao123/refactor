@@ -35,7 +35,7 @@ public class demo1 {
       ForSyDeSystemGraph model1 = Load.load(path);
       ForSyDeSystemGraph model2 = new ForSyDeFiodlHandler().loadModel(path2);
       model2.mergeInPlace(model1);
-      Generator gen = new Generator(model2, root2);
+      Generator gen = new Generator(model2, root);
       SDFChannelProcessingModule sdfchannelModule = new SDFChannelProcessingModule();
       SDFChannelTemplateSrc _sDFChannelTemplateSrc = new SDFChannelTemplateSrc();
       sdfchannelModule.add(_sDFChannelTemplateSrc);

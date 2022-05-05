@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "config.h": "c",
+        "circular_fifo_lib.h": "c",
+        "datatype_definition.h": "c"
+    }
+}

@@ -11,6 +11,8 @@ import forsyde.io.java.typed.viewers.impl.Executable;
 import forsyde.io.java.typed.viewers.moc.sdf.SDFComb;
 import forsyde.io.java.typed.viewers.typing.TypedOperation;
 import generator.Generator;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -580,5 +582,31 @@ public class SDFCombTemplateSrc implements ActorTemplate {
       }
     }
     return _builder.toString();
+  }
+  
+  public String actorParameter(final ForSyDeSystemGraph model, final Vertex actor) {
+    Set<String> _ports = actor.getPorts();
+    Set<String> portSet = new HashSet<String>(_ports);
+    portSet.remove("combFunctions");
+    portSet.remove("combinator");
+    List<String> portList = new ArrayList<String>(portSet);
+    Collections.<String>sort(portList);
+    String ret = "";
+    for (int i = 0; (i < portList.size()); i = (i + 1)) {
+      if ((i == 0)) {
+        String _ret = ret;
+        String _get = portList.get(i);
+        String _plus = ("   " + _get);
+        String _plus_1 = (_plus + "_port");
+        ret = (_ret + _plus_1);
+      } else {
+        String _ret_1 = ret;
+        String _get_1 = portList.get(i);
+        String _plus_2 = ("," + _get_1);
+        String _plus_3 = (_plus_2 + "_port");
+        ret = (_ret_1 + _plus_3);
+      }
+    }
+    return ret;
   }
 }

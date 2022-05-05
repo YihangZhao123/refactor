@@ -9,6 +9,7 @@ import template.templateInterface.SubsystemTemplate;
 @FileTypeAnno(type = FileType.C_INCLUDE)
 @SuppressWarnings("all")
 public class SubsystemTemplateInc implements SubsystemTemplate {
+  @Override
   public String create(final Schedule s) {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("#ifndef SUBSYSTEM_");
@@ -28,11 +29,14 @@ public class SubsystemTemplateInc implements SubsystemTemplate {
     _builder.newLine();
     _builder.append("int subsystem_single_uniprocessor();");
     _builder.newLine();
+    _builder.append("void initChannels();");
+    _builder.newLine();
     _builder.append("#endif");
     _builder.newLine();
     return _builder.toString();
   }
   
+  @Override
   public String getFileName() {
     return "subsystem";
   }

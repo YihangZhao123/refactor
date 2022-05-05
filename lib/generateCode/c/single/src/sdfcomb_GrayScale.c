@@ -27,9 +27,6 @@ extern spinlock spinlock_GrayScaleToGetPx;
 ========================================
 */			
 void actor_GrayScale(){
-	#if defined(TESTING)
-	HAL_GPIO_WritePin(GPIOA,GPIO_PIN_5,1);
-	#endif
 	
 	/* Initilize Memory      */
 	UInt16 offsetX; 
@@ -40,19 +37,30 @@ void actor_GrayScale(){
 	UInt16 dimY = dimY_global; 
 	UInt16 dimX = dimX_global; 
 	/* Read From Input Port  */
+	printf("%s\n","read");
+	int ret=0;
 	#if GRAYSCALEX_BLOCKING==0
-	read_non_blocking_UInt16(&fifo_GrayScaleX,&offsetX);
+	ret=read_non_blocking_UInt16(&fifo_GrayScaleX,&offsetX);
+	if(ret==-1){
+		printf("fifo_GrayScaleX read error\n");
+	}
+	
 	#else
 	read_blocking_UInt16(&fifo_GrayScaleX,&offsetX,&spinlock_GrayScaleX);
 	#endif
 	
 	#if GRAYSCALEY_BLOCKING==0
-	read_non_blocking_UInt16(&fifo_GrayScaleY,&offsetY);
+	ret=read_non_blocking_UInt16(&fifo_GrayScaleY,&offsetY);
+	if(ret==-1){
+		printf("fifo_GrayScaleY read error\n");
+	}
+	
 	#else
 	read_blocking_UInt16(&fifo_GrayScaleY,&offsetY,&spinlock_GrayScaleY);
 	#endif
 	
 	/* Inline Code           */
+	printf("%s\n","inline code");
 	/* in combFunction GrayScaleImpl */
 	gray[0]=0.3125*system_img_source_address[offsetY+0][offsetX+0]+0.5625*system_img_source_address[offsetY+0][offsetX+1]+0.125*system_img_source_address[offsetY+0][offsetX+2];
 	gray[1]=0.3125*system_img_source_address[offsetY+0][offsetX+2]+0.5625*system_img_source_address[offsetY+0][offsetX+3]+0.125*system_img_source_address[offsetY+0][offsetX+4];
@@ -71,6 +79,7 @@ void actor_GrayScale(){
 	dimsOut[1]=dimY;
 
 	/* Write To Output Ports */
+	printf("%s\n","write");
 	for(int i=0;i<6;++i){
 		#if GRAYSCALETOGETPX_BLOCKING==0
 		write_non_blocking_DoubleType(&fifo_GrayScaleToGetPx,gray[i]);
@@ -99,6 +108,4 @@ void actor_GrayScale(){
 		#endif
 	}
 	
-HAL_Delay(1000);
-HAL_GPIO_WritePin(GPIOA,GPIO_PIN_5,0);
 }

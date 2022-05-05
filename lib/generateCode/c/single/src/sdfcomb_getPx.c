@@ -25,24 +25,28 @@ extern spinlock spinlock_gxsig;
 ========================================
 */			
 void actor_getPx(){
-	#if defined(TESTING)
-	HAL_GPIO_WritePin(GPIOC,GPIO_PIN_9,1);
-	#endif
 	
 	/* Initilize Memory      */
 	Array6OfDoubleType gray; 
 	Array6OfDoubleType imgBlockY; 
 	Array6OfDoubleType imgBlockX; 
 	/* Read From Input Port  */
+	printf("%s\n","read");
+	int ret=0;
 	for(int i=0;i<6;++i){
+		
 		#if GRAYSCALETOGETPX_BLOCKING==0
-		read_non_blocking_DoubleType(&fifo_GrayScaleToGetPx,&gray[i]);
+		ret=read_non_blocking_DoubleType(&fifo_GrayScaleToGetPx,&gray[i]);
+		if(ret==-1){
+			printf("fifo_GrayScaleToGetPx read error\n");
+		}
 		#else
 		read_blocking_DoubleType(&fifo_GrayScaleToGetPx,&gray[i],&spinlock_GrayScaleToGetPx);
 		#endif
 	}
 	
 	/* Inline Code           */
+	printf("%s\n","inline code");
 	/* in combFunction getPxImpl1 */
 	imgBlockX[0]=gray[0];
 	imgBlockX[1]=gray[1];
@@ -59,6 +63,7 @@ void actor_getPx(){
 	imgBlockY[5]=gray[5];
 
 	/* Write To Output Ports */
+	printf("%s\n","write");
 	for(int i=0;i<6;++i){
 		#if GYSIG_BLOCKING==0
 		write_non_blocking_DoubleType(&fifo_gysig,imgBlockY[i]);
@@ -75,6 +80,4 @@ void actor_getPx(){
 		#endif
 	}
 	
-HAL_Delay(1000);
-HAL_GPIO_WritePin(GPIOC,GPIO_PIN_9,0);					
 }

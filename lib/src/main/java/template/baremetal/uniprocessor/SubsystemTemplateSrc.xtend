@@ -39,16 +39,18 @@ class SubsystemTemplateSrc implements SubsystemTemplate {
 			int subsystem_single_uniprocessor(){
 				
 				/* Initilize Channels */
-				initChannels();
+//				initChannels();
 				
 				/*    SDFdelay        */
-				
-				while(1){
+				int i=0;
+//				while(1){
+					printf("in loop %d===============\n",i);
 					«FOR set : Generator.uniprocessorSchedule.entrySet() SEPARATOR "" AFTER ""»
+					printf("%s\n","enter «set.getValue().getIdentifier()»");
 						actor_«set.getValue().getIdentifier()»();
 					«ENDFOR»	
 					
-				}
+//				}
 			}
 			
 			void initChannels(){

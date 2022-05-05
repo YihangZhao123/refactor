@@ -203,6 +203,24 @@
         <propertiesValues longValue="8" xsi:type="forsyde.io.eclipse.systemgraph:LongVertexProperty"/>
         <propertiesNames>maxSizeInBits</propertiesNames>
     </nodes>
+
+
+    <!-- <nodes identifier="GrayScaleToGetPx ">
+        <traits>visualization::Visualizable</traits>
+        <traits>moc::sdf::SDFChannel</traits>
+        <traits>decision::sdf::BoundedSDFChannel</traits>
+        <traits>impl::TokenizableDataBlock</traits>
+        <traits>impl::TypedDataBlock</traits>
+        <ports>dataType</ports>
+        <ports>producer</ports>
+        <ports>consumer</ports>
+        <propertiesValues longValue="8" xsi:type="forsyde.io.eclipse.systemgraph:LongVertexProperty"/>
+        <propertiesNames>tokenSizeInBits</propertiesNames>
+        <propertiesValues intValue="6" xsi:type="forsyde.io.eclipse.systemgraph:IntVertexProperty"/>
+        <propertiesNames>maximumTokens</propertiesNames>
+        <propertiesValues longValue="8" xsi:type="forsyde.io.eclipse.systemgraph:LongVertexProperty"/>
+        <propertiesNames>maxSizeInBits</propertiesNames>
+    </nodes> -->
     <nodes identifier="order_1">
         <traits>visualization::GreyBox</traits>
         <traits>platform::runtime::TimeTriggeredScheduler</traits>

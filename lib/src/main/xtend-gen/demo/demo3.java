@@ -27,9 +27,9 @@ import utils.Load;
 public class demo3 {
   public static void main(final String[] args) {
     try {
-      final String path = "forsyde-io\\test\\complete-mapped-sobel-model.forsyde.xmi";
-      final String path2 = "forsyde-io\\test\\sobel-application.fiodl";
-      final String root = "generateCode\\c\\rtos";
+      final String path = "forsyde-io/test/complete-mapped-sobel-model.forsyde.xmi";
+      final String path2 = "forsyde-io/test/sobel-application.fiodl";
+      final String root = "generateCode/c/rtos";
       final String roottest = "D:\\Users\\LEGION\\Desktop\\Master Thesis\\code\\stm32-nucleo\\freertos_test1\\Core\\mycode";
       ForSyDeSystemGraph model1 = Load.load(path);
       ForSyDeSystemGraph model2 = new ForSyDeFiodlHandler().loadModel(path2);

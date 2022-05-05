@@ -23,18 +23,20 @@ import generator.SDFCombProcessingModule
 import generator.SubsystemUniprocessorModule
 import template.baremetal.DataDefinitionSrc
 import template.baremetal.Config
+import java.util.stream.Collectors
 
 class demo1 {
 	def static void main(String[] args) {
-		val path="forsyde-io\\test\\complete-mapped-sobel-model.forsyde.xmi";
-		val path2="forsyde-io\\test\\sobel-application.fiodl"
-		val root="generateCode\\c\\single"
+		val path="forsyde-io/test/complete-mapped-sobel-model.forsyde.xmi";
+		val path2="forsyde-io/test/sobel-application.fiodl"
+		val root="generateCode/c/single"
 		val root2 = "D:\\Users\\LEGION\\Desktop\\Master Thesis\\code\\stm32-nucleo\\uniprocessor_test1\\Core\\mycode"
 		var model1 = Load.load(path)
 		var model2 = (new ForSyDeFiodlHandler()).loadModel(path2)	
 		
 		model2.mergeInPlace(model1)
 		
+
 		var Generator gen = new Generator(model2,root)
 		
 		

@@ -453,7 +453,8 @@ systemgraph {
     vertex GrayScaleToGetPx [moc::sdf::SDFChannel]
     (consumer, producer, initialTokenValues)
     {
-        "numOfInitialTokens": 0_i
+        "numOfInitialTokens": 0_i,
+        "maximumTokens": 6_i 
     } 
 
     edge [moc::sdf::SDFDataEdge] from GrayScale port gray to GrayScaleToGetPx port producer

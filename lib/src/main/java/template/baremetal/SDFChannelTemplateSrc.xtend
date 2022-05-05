@@ -48,6 +48,7 @@ class SDFChannelTemplateSrc implements ChannelTemplate {
 				circular_fifo_«type» fifo_«sdfname»;
 				spinlock spinlock_«sdfname»={.flag=0};
 			«ELSE»
+«««			in GrayScaleToAbs buffer size is 3 and GrayScaleToGetPx the buffer size should be 7
 				volatile «type» buffer_«sdfname»[2];
 				int channel_«sdfname»_size = 1;
 				/*

@@ -63,45 +63,49 @@ class SDFCombTemplateSrc implements ActorTemplate {
 			========================================
 			*/			
 			void actor_«name»(){
-				#if defined(TESTING)
-				«IF name=="GrayScale"»
-				HAL_GPIO_WritePin(GPIOA,GPIO_PIN_5,1);
-				«ELSEIF name=="getPx" »
-				HAL_GPIO_WritePin(GPIOC,GPIO_PIN_9,1);
-				«ELSEIF name=="Gx" »
-				HAL_GPIO_WritePin(GPIOC,GPIO_PIN_8,1);
-				«ELSEIF name=="Gy" »
-				HAL_GPIO_WritePin(GPIOC,GPIO_PIN_6,1);
-				«ELSEIF name=="Abs" »
-				HAL_GPIO_WritePin(GPIOA,GPIO_PIN_5,1);
-				«ENDIF»
-				#endif
+«««				#if defined(TESTING)
+«««				«IF name=="GrayScale"»
+«««				HAL_GPIO_WritePin(GPIOA,GPIO_PIN_5,1);
+«««				«ELSEIF name=="getPx" »
+«««				HAL_GPIO_WritePin(GPIOC,GPIO_PIN_9,1);
+«««				«ELSEIF name=="Gx" »
+«««				HAL_GPIO_WritePin(GPIOC,GPIO_PIN_8,1);
+«««				«ELSEIF name=="Gy" »
+«««				HAL_GPIO_WritePin(GPIOC,GPIO_PIN_6,1);
+«««				«ELSEIF name=="Abs" »
+«««				HAL_GPIO_WritePin(GPIOA,GPIO_PIN_5,1);
+«««				«ENDIF»
+«««				#endif
 				
 				/* Initilize Memory      */
 				«initMemory(model,actor)»
 				/* Read From Input Port  */
+				printf("%s\n","read");
+				int ret=0;
 				«read(model,actor)»
 				/* Inline Code           */
+				printf("%s\n","inline code");
 				«getInlineCode()»
 			
 				/* Write To Output Ports */
+				printf("%s\n","write");
 				«write(actor)»
-			«IF name=="GrayScale"»
-			HAL_Delay(1000);
-			HAL_GPIO_WritePin(GPIOA,GPIO_PIN_5,0);
-			«ELSEIF name=="getPx" »
-			HAL_Delay(1000);
-			HAL_GPIO_WritePin(GPIOC,GPIO_PIN_9,0);					
-			«ELSEIF name=="Gx" »
-			HAL_Delay(1000);
-			HAL_GPIO_WritePin(GPIOC,GPIO_PIN_8,0);	
-			«ELSEIF name=="Gy" »
-			HAL_Delay(1000);
-			HAL_GPIO_WritePin(GPIOC,GPIO_PIN_6,0);		
-			«ELSEIF name=="Abs" »	
-			HAL_Delay(1000);
-			HAL_GPIO_WritePin(GPIOA,GPIO_PIN_5,0);
-			«ENDIF»	
+«««			«IF name=="GrayScale"»
+«««			HAL_Delay(1000);
+«««			HAL_GPIO_WritePin(GPIOA,GPIO_PIN_5,0);
+«««			«ELSEIF name=="getPx" »
+«««			HAL_Delay(1000);
+«««			HAL_GPIO_WritePin(GPIOC,GPIO_PIN_9,0);					
+«««			«ELSEIF name=="Gx" »
+«««			HAL_Delay(1000);
+«««			HAL_GPIO_WritePin(GPIOC,GPIO_PIN_8,0);	
+«««			«ELSEIF name=="Gy" »
+«««			HAL_Delay(1000);
+«««			HAL_GPIO_WritePin(GPIOC,GPIO_PIN_6,0);		
+«««			«ELSEIF name=="Abs" »	
+«««			HAL_Delay(1000);
+«««			HAL_GPIO_WritePin(GPIOA,GPIO_PIN_5,0);
+«««			«ENDIF»	
 			}
 		'''
 	}
@@ -180,7 +184,11 @@ class SDFCombTemplateSrc implements ActorTemplate {
 					if (consumption == 1) {
 						ret += '''
 							#if «sdfchannelName.toUpperCase()»_BLOCKING==0
-							read_non_blocking_«datatype»(&fifo_«sdfchannelName»,&«port»);
+							ret=read_non_blocking_«datatype»(&fifo_«sdfchannelName»,&«port»);
+							if(ret==-1){
+								printf("fifo_«sdfchannelName» read error\n");
+							}
+							
 							#else
 							read_blocking_«datatype»(&fifo_«sdfchannelName»,&«port»,&spinlock_«sdfchannelName»);
 							#endif
@@ -189,8 +197,12 @@ class SDFCombTemplateSrc implements ActorTemplate {
 					} else {
 						ret += '''
 							for(int i=0;i<«consumption»;++i){
+								
 								#if «sdfchannelName.toUpperCase()»_BLOCKING==0
-								read_non_blocking_«datatype»(&fifo_«sdfchannelName»,&«port»[i]);
+								ret=read_non_blocking_«datatype»(&fifo_«sdfchannelName»,&«port»[i]);
+								if(ret==-1){
+									printf("fifo_«sdfchannelName» read error\n");
+								}
 								#else
 								read_blocking_«datatype»(&fifo_«sdfchannelName»,&«port»[i],&spinlock_«sdfchannelName»);
 								#endif

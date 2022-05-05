@@ -23,23 +23,27 @@ extern spinlock spinlock_absysig;
 ========================================
 */			
 void actor_Gy(){
-	#if defined(TESTING)
-	HAL_GPIO_WritePin(GPIOC,GPIO_PIN_6,1);
-	#endif
 	
 	/* Initilize Memory      */
 	DoubleType gy; 
 	Array6OfDoubleType imgBlockY; 
 	/* Read From Input Port  */
+	printf("%s\n","read");
+	int ret=0;
 	for(int i=0;i<6;++i){
+		
 		#if GYSIG_BLOCKING==0
-		read_non_blocking_DoubleType(&fifo_gysig,&imgBlockY[i]);
+		ret=read_non_blocking_DoubleType(&fifo_gysig,&imgBlockY[i]);
+		if(ret==-1){
+			printf("fifo_gysig read error\n");
+		}
 		#else
 		read_blocking_DoubleType(&fifo_gysig,&imgBlockY[i],&spinlock_gysig);
 		#endif
 	}
 	
 	/* Inline Code           */
+	printf("%s\n","inline code");
 	/* in combFunction GyImpl */
 	gy=0;
 	gy=gy+imgBlockY[0];
@@ -50,12 +54,11 @@ void actor_Gy(){
 	gy=gy-imgBlockY[5];
 
 	/* Write To Output Ports */
+	printf("%s\n","write");
 	#if ABSYSIG_BLOCKING==0
 	write_non_blocking_DoubleType(&fifo_absysig,gy);
 	#else
 	write_blocking_DoubleType(&fifo_absysig,gy,&spinlock_absysig);
 	#endif
 							
-HAL_Delay(1000);
-HAL_GPIO_WritePin(GPIOC,GPIO_PIN_6,0);		
 }

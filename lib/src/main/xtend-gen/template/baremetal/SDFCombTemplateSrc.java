@@ -1,6 +1,5 @@
 package template.baremetal;
 
-import com.google.common.base.Objects;
 import fileAnnotation.FileType;
 import fileAnnotation.FileTypeAnno;
 import forsyde.io.java.core.ForSyDeSystemGraph;
@@ -33,6 +32,7 @@ public class SDFCombTemplateSrc implements ActorTemplate {
   
   private Set<Vertex> outputSDFChannelSet;
   
+  @Override
   public String create(final Vertex actor) {
     String _xblockexpression = null;
     {
@@ -89,48 +89,6 @@ public class SDFCombTemplateSrc implements ActorTemplate {
       _builder.append("(){");
       _builder.newLineIfNotEmpty();
       _builder.append("\t");
-      _builder.append("#if defined(TESTING)");
-      _builder.newLine();
-      {
-        boolean _equals = Objects.equal(name, "GrayScale");
-        if (_equals) {
-          _builder.append("\t");
-          _builder.append("HAL_GPIO_WritePin(GPIOA,GPIO_PIN_5,1);");
-          _builder.newLine();
-        } else {
-          boolean _equals_1 = Objects.equal(name, "getPx");
-          if (_equals_1) {
-            _builder.append("\t");
-            _builder.append("HAL_GPIO_WritePin(GPIOC,GPIO_PIN_9,1);");
-            _builder.newLine();
-          } else {
-            boolean _equals_2 = Objects.equal(name, "Gx");
-            if (_equals_2) {
-              _builder.append("\t");
-              _builder.append("HAL_GPIO_WritePin(GPIOC,GPIO_PIN_8,1);");
-              _builder.newLine();
-            } else {
-              boolean _equals_3 = Objects.equal(name, "Gy");
-              if (_equals_3) {
-                _builder.append("\t");
-                _builder.append("HAL_GPIO_WritePin(GPIOC,GPIO_PIN_6,1);");
-                _builder.newLine();
-              } else {
-                boolean _equals_4 = Objects.equal(name, "Abs");
-                if (_equals_4) {
-                  _builder.append("\t");
-                  _builder.append("HAL_GPIO_WritePin(GPIOA,GPIO_PIN_5,1);");
-                  _builder.newLine();
-                }
-              }
-            }
-          }
-        }
-      }
-      _builder.append("\t");
-      _builder.append("#endif");
-      _builder.newLine();
-      _builder.append("\t");
       _builder.newLine();
       _builder.append("\t");
       _builder.append("/* Initilize Memory      */");
@@ -143,11 +101,20 @@ public class SDFCombTemplateSrc implements ActorTemplate {
       _builder.append("/* Read From Input Port  */");
       _builder.newLine();
       _builder.append("\t");
+      _builder.append("printf(\"%s\\n\",\"read\");");
+      _builder.newLine();
+      _builder.append("\t");
+      _builder.append("int ret=0;");
+      _builder.newLine();
+      _builder.append("\t");
       String _read = this.read(model, actor);
       _builder.append(_read, "\t");
       _builder.newLineIfNotEmpty();
       _builder.append("\t");
       _builder.append("/* Inline Code           */");
+      _builder.newLine();
+      _builder.append("\t");
+      _builder.append("printf(\"%s\\n\",\"inline code\");");
       _builder.newLine();
       _builder.append("\t");
       String _inlineCode = this.getInlineCode();
@@ -158,50 +125,12 @@ public class SDFCombTemplateSrc implements ActorTemplate {
       _builder.append("/* Write To Output Ports */");
       _builder.newLine();
       _builder.append("\t");
+      _builder.append("printf(\"%s\\n\",\"write\");");
+      _builder.newLine();
+      _builder.append("\t");
       String _write = this.write(actor);
       _builder.append(_write, "\t");
       _builder.newLineIfNotEmpty();
-      {
-        boolean _equals_5 = Objects.equal(name, "GrayScale");
-        if (_equals_5) {
-          _builder.append("HAL_Delay(1000);");
-          _builder.newLine();
-          _builder.append("HAL_GPIO_WritePin(GPIOA,GPIO_PIN_5,0);");
-          _builder.newLine();
-        } else {
-          boolean _equals_6 = Objects.equal(name, "getPx");
-          if (_equals_6) {
-            _builder.append("HAL_Delay(1000);");
-            _builder.newLine();
-            _builder.append("HAL_GPIO_WritePin(GPIOC,GPIO_PIN_9,0);\t\t\t\t\t");
-            _builder.newLine();
-          } else {
-            boolean _equals_7 = Objects.equal(name, "Gx");
-            if (_equals_7) {
-              _builder.append("HAL_Delay(1000);");
-              _builder.newLine();
-              _builder.append("HAL_GPIO_WritePin(GPIOC,GPIO_PIN_8,0);\t");
-              _builder.newLine();
-            } else {
-              boolean _equals_8 = Objects.equal(name, "Gy");
-              if (_equals_8) {
-                _builder.append("HAL_Delay(1000);");
-                _builder.newLine();
-                _builder.append("HAL_GPIO_WritePin(GPIOC,GPIO_PIN_6,0);\t\t");
-                _builder.newLine();
-              } else {
-                boolean _equals_9 = Objects.equal(name, "Abs");
-                if (_equals_9) {
-                  _builder.append("HAL_Delay(1000);");
-                  _builder.newLine();
-                  _builder.append("HAL_GPIO_WritePin(GPIOA,GPIO_PIN_5,0);");
-                  _builder.newLine();
-                }
-              }
-            }
-          }
-        }
-      }
       _builder.append("}");
       _builder.newLine();
       _xblockexpression = _builder.toString();
@@ -341,10 +270,8 @@ public class SDFCombTemplateSrc implements ActorTemplate {
   }
   
   public String read(final ForSyDeSystemGraph model, final Vertex actor) {
-    final Function<Executable, Vertex> _function = new Function<Executable, Vertex>() {
-      public Vertex apply(final Executable e) {
-        return e.getViewedVertex();
-      }
+    final Function<Executable, Vertex> _function = (Executable e) -> {
+      return e.getViewedVertex();
     };
     Set<Vertex> impls = SDFComb.safeCast(actor).get().getCombFunctionsPort(model).stream().<Vertex>map(_function).collect(Collectors.<Vertex>toSet());
     Set<String> variableNameRecord = new HashSet<String>();
@@ -366,7 +293,7 @@ public class SDFCombTemplateSrc implements ActorTemplate {
               _builder.append(_upperCase);
               _builder.append("_BLOCKING==0");
               _builder.newLineIfNotEmpty();
-              _builder.append("read_non_blocking_");
+              _builder.append("ret=read_non_blocking_");
               _builder.append(datatype);
               _builder.append("(&fifo_");
               _builder.append(sdfchannelName);
@@ -374,6 +301,16 @@ public class SDFCombTemplateSrc implements ActorTemplate {
               _builder.append(port);
               _builder.append(");");
               _builder.newLineIfNotEmpty();
+              _builder.append("if(ret==-1){");
+              _builder.newLine();
+              _builder.append("\t");
+              _builder.append("printf(\"fifo_");
+              _builder.append(sdfchannelName, "\t");
+              _builder.append(" read error\\n\");");
+              _builder.newLineIfNotEmpty();
+              _builder.append("}");
+              _builder.newLine();
+              _builder.newLine();
               _builder.append("#else");
               _builder.newLine();
               _builder.append("read_blocking_");
@@ -398,13 +335,15 @@ public class SDFCombTemplateSrc implements ActorTemplate {
               _builder_1.append(";++i){");
               _builder_1.newLineIfNotEmpty();
               _builder_1.append("\t");
+              _builder_1.newLine();
+              _builder_1.append("\t");
               _builder_1.append("#if ");
               String _upperCase_1 = sdfchannelName.toUpperCase();
               _builder_1.append(_upperCase_1, "\t");
               _builder_1.append("_BLOCKING==0");
               _builder_1.newLineIfNotEmpty();
               _builder_1.append("\t");
-              _builder_1.append("read_non_blocking_");
+              _builder_1.append("ret=read_non_blocking_");
               _builder_1.append(datatype, "\t");
               _builder_1.append("(&fifo_");
               _builder_1.append(sdfchannelName, "\t");
@@ -412,6 +351,17 @@ public class SDFCombTemplateSrc implements ActorTemplate {
               _builder_1.append(port, "\t");
               _builder_1.append("[i]);");
               _builder_1.newLineIfNotEmpty();
+              _builder_1.append("\t");
+              _builder_1.append("if(ret==-1){");
+              _builder_1.newLine();
+              _builder_1.append("\t\t");
+              _builder_1.append("printf(\"fifo_");
+              _builder_1.append(sdfchannelName, "\t\t");
+              _builder_1.append(" read error\\n\");");
+              _builder_1.newLineIfNotEmpty();
+              _builder_1.append("\t");
+              _builder_1.append("}");
+              _builder_1.newLine();
               _builder_1.append("\t");
               _builder_1.append("#else");
               _builder_1.newLine();

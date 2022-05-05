@@ -2,7 +2,7 @@
 #define CONFIG_H_
 #define TESTING
 #if defined(TESTING)
-#include "main.h"
+
 #endif
 
 /*

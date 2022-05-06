@@ -14,8 +14,6 @@ import template.baremetal.CircularFIFOTemplateSrc;
 import template.baremetal.Config;
 import template.baremetal.DataDefinitionSrc;
 import template.baremetal.DataTypeTemplateInc;
-import template.baremetal.ExternalDataBlockInc;
-import template.baremetal.ExternalDataBlockSrc;
 import template.baremetal.SDFChannelTemplateSrc;
 import template.baremetal.SDFCombTemplateInc;
 import template.baremetal.SDFCombTemplateSrc;
@@ -32,7 +30,7 @@ public class demo1 {
     try {
       final String path = "forsyde-io/modified1/complete-mapped-sobel-model.forsyde.xmi";
       final String path2 = "forsyde-io/modified1/sobel-application.fiodl";
-      final String root = "generateCode/c/single";
+      final String root = "generateCode/c/single/single";
       ForSyDeSystemGraph model1 = Load.load(path);
       ForSyDeSystemGraph model2 = new ForSyDeFiodlHandler().loadModel(path2);
       model2.mergeInPlace(model1);
@@ -70,10 +68,6 @@ public class demo1 {
       initModule.add(_spinLockTemplateSrc);
       Config _config = new Config();
       initModule.add(_config);
-      ExternalDataBlockInc _externalDataBlockInc = new ExternalDataBlockInc();
-      initModule.add(_externalDataBlockInc);
-      ExternalDataBlockSrc _externalDataBlockSrc = new ExternalDataBlockSrc();
-      initModule.add(_externalDataBlockSrc);
       gen.add(initModule);
       gen.create();
       InputOutput.<String>println("end!");

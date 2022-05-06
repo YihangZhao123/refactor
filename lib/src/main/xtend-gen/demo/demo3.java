@@ -31,11 +31,11 @@ public class demo3 {
     try {
       final String path = "forsyde-io/modified1/complete-mapped-sobel-model.forsyde.xmi";
       final String path2 = "forsyde-io/modified1/sobel-application.fiodl";
-      final String root = "generateCode/c/rtos";
+      final String roottest = "D:\\Users\\LEGION\\Desktop\\Master Thesis\\code\\stm32-nucleo\\freertos_test1\\Core\\mycode";
       ForSyDeSystemGraph model1 = Load.load(path);
       ForSyDeSystemGraph model2 = new ForSyDeFiodlHandler().loadModel(path2);
       model2.mergeInPlace(model1);
-      Generator gen = new Generator(model2, root);
+      Generator gen = new Generator(model2, roottest);
       InitProcessingModule initModule = new InitProcessingModule();
       SDFCombProcessingModule actorModule = new SDFCombProcessingModule();
       SDFChannelProcessingModule sdfchannelModule = new SDFChannelProcessingModule();

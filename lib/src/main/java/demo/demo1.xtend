@@ -31,7 +31,7 @@ class demo1 {
 	def static void main(String[] args) {
 		val path="forsyde-io/modified1/complete-mapped-sobel-model.forsyde.xmi";
 		val path2="forsyde-io/modified1/sobel-application.fiodl"
-		val root="generateCode/c/single"
+		val root="generateCode/c/single/single"
 		//val root2 = "D:\\Users\\LEGION\\Desktop\\Master Thesis\\code\\stm32-nucleo\\uniprocessor_test1\\Core\\mycode"
 		var model1 = Load.load(path)
 		var model2 = (new ForSyDeFiodlHandler()).loadModel(path2)	
@@ -74,8 +74,8 @@ class demo1 {
 		initModule.add(new SpinLockTemplateSrc)
 		
 		initModule.add(new Config)
-		initModule.add(new ExternalDataBlockInc)
-		initModule.add(new ExternalDataBlockSrc)
+		//initModule.add(new ExternalDataBlockInc)
+		//initModule.add(new ExternalDataBlockSrc)
 		
 		
 		

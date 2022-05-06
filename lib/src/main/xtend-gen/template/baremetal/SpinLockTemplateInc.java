@@ -8,7 +8,6 @@ import template.templateInterface.InitTemplate;
 @FileTypeAnno(type = FileType.C_INCLUDE)
 @SuppressWarnings("all")
 public class SpinLockTemplateInc implements InitTemplate {
-  @Override
   public String create() {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("#ifndef SPINLOCK_H_");
@@ -33,7 +32,6 @@ public class SpinLockTemplateInc implements InitTemplate {
     return _builder.toString();
   }
   
-  @Override
   public String getFileName() {
     return "spinlock";
   }

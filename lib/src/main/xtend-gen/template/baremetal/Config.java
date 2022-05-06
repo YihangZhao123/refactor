@@ -15,13 +15,14 @@ import template.templateInterface.InitTemplate;
 @FileTypeAnno(type = FileType.C_INCLUDE)
 @SuppressWarnings("all")
 public class Config implements InitTemplate {
-  @Override
   public String create() {
     String _xblockexpression = null;
     {
       ForSyDeSystemGraph model = Generator.model;
-      final Predicate<Vertex> _function = (Vertex v) -> {
-        return (SDFChannel.conforms(v)).booleanValue();
+      final Predicate<Vertex> _function = new Predicate<Vertex>() {
+        public boolean test(final Vertex v) {
+          return (SDFChannel.conforms(v)).booleanValue();
+        }
       };
       Set<Vertex> channels = model.vertexSet().stream().filter(_function).collect(Collectors.<Vertex>toSet());
       StringConcatenation _builder = new StringConcatenation();
@@ -64,7 +65,6 @@ public class Config implements InitTemplate {
     return _xblockexpression;
   }
   
-  @Override
   public String getFileName() {
     return "config";
   }

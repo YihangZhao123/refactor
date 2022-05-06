@@ -20,13 +20,14 @@ import utils.Query;
 @FileTypeAnno(type = FileType.C_SOURCE)
 @SuppressWarnings("all")
 public class SubsystemTemplateSrc implements SubsystemTemplate {
-  @Override
   public String create(final Schedule s) {
     String _xblockexpression = null;
     {
       ForSyDeSystemGraph model = Generator.model;
-      final Predicate<Vertex> _function = (Vertex v) -> {
-        return (SDFComb.conforms(v)).booleanValue();
+      final Predicate<Vertex> _function = new Predicate<Vertex>() {
+        public boolean test(final Vertex v) {
+          return (SDFComb.conforms(v)).booleanValue();
+        }
       };
       Set<Vertex> sdfcomb = model.vertexSet().stream().filter(_function).collect(Collectors.<Vertex>toSet());
       StringConcatenation _builder = new StringConcatenation();
@@ -207,7 +208,6 @@ public class SubsystemTemplateSrc implements SubsystemTemplate {
     return _builder.toString();
   }
   
-  @Override
   public String getFileName() {
     return "subsystem";
   }

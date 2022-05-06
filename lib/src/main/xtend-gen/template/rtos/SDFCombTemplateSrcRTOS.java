@@ -31,7 +31,6 @@ public class SDFCombTemplateSrcRTOS implements ActorTemplate {
   
   private Set<Vertex> outputSDFChannelSet;
   
-  @Override
   public String create(final Vertex actor) {
     String _xblockexpression = null;
     {
@@ -419,8 +418,10 @@ public class SDFCombTemplateSrcRTOS implements ActorTemplate {
    * copied and modified from method read in SDFCombTemplateSrc class
    */
   public String read(final ForSyDeSystemGraph model, final Vertex actor) {
-    final Function<Executable, Vertex> _function = (Executable e) -> {
-      return e.getViewedVertex();
+    final Function<Executable, Vertex> _function = new Function<Executable, Vertex>() {
+      public Vertex apply(final Executable e) {
+        return e.getViewedVertex();
+      }
     };
     Set<Vertex> impls = SDFComb.safeCast(actor).get().getCombFunctionsPort(model).stream().<Vertex>map(_function).collect(Collectors.<Vertex>toSet());
     Set<String> variableNameRecord = new HashSet<String>();

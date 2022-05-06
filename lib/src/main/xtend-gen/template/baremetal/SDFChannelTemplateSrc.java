@@ -18,7 +18,6 @@ import utils.Query;
 @FileTypeAnno(type = FileType.C_SOURCE)
 @SuppressWarnings("all")
 public class SDFChannelTemplateSrc implements ChannelTemplate {
-  @Override
   public String create(final Vertex sdfchannel) {
     String _xblockexpression = null;
     {

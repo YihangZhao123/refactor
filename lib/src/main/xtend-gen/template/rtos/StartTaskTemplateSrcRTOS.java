@@ -20,16 +20,19 @@ import utils.Query;
 @FileTypeAnno(type = FileType.C_SOURCE)
 @SuppressWarnings("all")
 public class StartTaskTemplateSrcRTOS implements InitTemplate {
-  @Override
   public String create() {
     String _xblockexpression = null;
     {
       ForSyDeSystemGraph model = Generator.model;
-      final Predicate<Vertex> _function = (Vertex v) -> {
-        return (IntegerValue.conforms(v)).booleanValue();
+      final Predicate<Vertex> _function = new Predicate<Vertex>() {
+        public boolean test(final Vertex v) {
+          return (IntegerValue.conforms(v)).booleanValue();
+        }
       };
-      final Function<Vertex, IntegerValue> _function_1 = (Vertex v) -> {
-        return IntegerValue.safeCast(v).get();
+      final Function<Vertex, IntegerValue> _function_1 = new Function<Vertex, IntegerValue>() {
+        public IntegerValue apply(final Vertex v) {
+          return IntegerValue.safeCast(v).get();
+        }
       };
       Set<IntegerValue> integerValues = model.vertexSet().stream().filter(_function).<IntegerValue>map(_function_1).collect(Collectors.<IntegerValue>toSet());
       StringConcatenation _builder = new StringConcatenation();
@@ -46,8 +49,10 @@ public class StartTaskTemplateSrcRTOS implements InitTemplate {
       _builder.append("#include \"queue.h\"");
       _builder.newLine();
       {
-        final Predicate<Vertex> _function_2 = (Vertex v) -> {
-          return (SDFComb.conforms(v)).booleanValue();
+        final Predicate<Vertex> _function_2 = new Predicate<Vertex>() {
+          public boolean test(final Vertex v) {
+            return (SDFComb.conforms(v)).booleanValue();
+          }
         };
         Set<Vertex> _collect = model.vertexSet().stream().filter(_function_2).collect(Collectors.<Vertex>toSet());
         for(final Vertex actor : _collect) {
@@ -468,7 +473,6 @@ public class StartTaskTemplateSrcRTOS implements InitTemplate {
     return _xblockexpression;
   }
   
-  @Override
   public String getFileName() {
     return "start_task";
   }

@@ -59,12 +59,14 @@ public class Schedule {
     }
     for (final Vertex actor : this.slots) {
       if ((actor != null)) {
-        final Consumer<String> _function = (String p) -> {
-          if (((!Objects.equal(p, "Combinator")) && (!Objects.equal(p, "CombFunction")))) {
-            this.channels.add(
-              VertexAcessor.getNamedPort(Generator.model, actor, p, VertexTrait.MOC_SDF_SDFCHANNEL).orElse(null));
-            this.channels.add(
-              VertexAcessor.getNamedPort(Generator.model, actor, p, VertexTrait.IMPL_TOKENIZABLEDATABLOCK).orElse(null));
+        final Consumer<String> _function = new Consumer<String>() {
+          public void accept(final String p) {
+            if (((!Objects.equal(p, "Combinator")) && (!Objects.equal(p, "CombFunction")))) {
+              Schedule.this.channels.add(
+                VertexAcessor.getNamedPort(Generator.model, actor, p, VertexTrait.MOC_SDF_SDFCHANNEL).orElse(null));
+              Schedule.this.channels.add(
+                VertexAcessor.getNamedPort(Generator.model, actor, p, VertexTrait.IMPL_TOKENIZABLEDATABLOCK).orElse(null));
+            }
           }
         };
         actor.getPorts().stream().forEach(_function);

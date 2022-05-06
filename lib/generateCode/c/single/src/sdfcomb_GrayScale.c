@@ -3,7 +3,7 @@
 #include "../inc/datatype_definition.h"
 #include "../inc/circular_fifo_lib.h"
 #include "../inc/sdfcomb_GrayScale.h"
-
+#include "../inc/extern_datablock.h"
 
 
 /*
@@ -27,8 +27,8 @@ extern spinlock spinlock_GrayScaleToGetPx;
 ========================================
 */			
 void actor_GrayScale(){
-	
-	/* Initilize Memory      */
+				
+	/* Initilize Memory */
 	UInt16 offsetX; 
 	Array2OfUInt16 dimsOut; 
 	UInt16 offsetY; 
@@ -36,47 +36,62 @@ void actor_GrayScale(){
 	ArrayXOfArrayXOfDoubleType system_img_source_address = system_img_source_global; 
 	UInt16 dimY = dimY_global; 
 	UInt16 dimX = dimX_global; 
-	/* Read From Input Port  */
-	printf("%s\n","read");
-	int ret=0;
-	#if GRAYSCALEX_BLOCKING==0
-	ret=read_non_blocking_UInt16(&fifo_GrayScaleX,&offsetX);
-	if(ret==-1){
-		printf("fifo_GrayScaleX read error\n");
-	}
-	
-	#else
-	read_blocking_UInt16(&fifo_GrayScaleX,&offsetX,&spinlock_GrayScaleX);
-	#endif
-	
-	#if GRAYSCALEY_BLOCKING==0
-	ret=read_non_blocking_UInt16(&fifo_GrayScaleY,&offsetY);
-	if(ret==-1){
-		printf("fifo_GrayScaleY read error\n");
-	}
-	
-	#else
-	read_blocking_UInt16(&fifo_GrayScaleY,&offsetY,&spinlock_GrayScaleY);
-	#endif
-	
-	/* Inline Code           */
-	printf("%s\n","inline code");
-	/* in combFunction GrayScaleImpl */
-	gray[0]=0.3125*system_img_source_address[offsetY+0][offsetX+0]+0.5625*system_img_source_address[offsetY+0][offsetX+1]+0.125*system_img_source_address[offsetY+0][offsetX+2];
-	gray[1]=0.3125*system_img_source_address[offsetY+0][offsetX+2]+0.5625*system_img_source_address[offsetY+0][offsetX+3]+0.125*system_img_source_address[offsetY+0][offsetX+4];
-	gray[2]=0.3125*system_img_source_address[offsetY+1][offsetX+0]+0.5625*system_img_source_address[offsetY+1][offsetX+1]+0.125*system_img_source_address[offsetY+1][offsetX+2];
-	gray[3]=0.3125*system_img_source_address[offsetY+1][offsetX+2]+0.5625*system_img_source_address[offsetY+1][offsetX+3]+0.125*system_img_source_address[offsetY+1][offsetX+4];
-	gray[4]=0.3125*system_img_source_address[offsetY+2][offsetX+0]+0.5625*system_img_source_address[offsetY+2][offsetX+1]+0.125*system_img_source_address[offsetY+2][offsetX+2];
-	gray[5]=0.3125*system_img_source_address[offsetY+2][offsetX+2]+0.5625*system_img_source_address[offsetY+2][offsetX+3]+0.125*system_img_source_address[offsetY+2][offsetX+4];
-	if(offsetX>=dimX-2){
-	offsetY+=1;
-	offsetX=0;
-	}
-	if(offsetY>=dimY-2){
-	offsetY=0;
-	}
-	dimsOut[0]=dimX;
-	dimsOut[1]=dimY;
+/* Read From Input Port  */
+printf("%s\n","read");
+int ret=0;
+#if GRAYSCALEX_BLOCKING==0
+ret=read_non_blocking_UInt16(&fifo_GrayScaleX,&offsetX);
+if(ret==-1){
+	printf("fifo_GrayScaleX read error\n");
+}
+
+#else
+read_blocking_UInt16(&fifo_GrayScaleX,&offsetX,&spinlock_GrayScaleX);
+#endif
+
+#if GRAYSCALEY_BLOCKING==0
+ret=read_non_blocking_UInt16(&fifo_GrayScaleY,&offsetY);
+if(ret==-1){
+	printf("fifo_GrayScaleY read error\n");
+}
+
+#else
+read_blocking_UInt16(&fifo_GrayScaleY,&offsetY,&spinlock_GrayScaleY);
+#endif
+
+
+/* Get lock of outside system channel */
+#if SYSTEM_IMG_SOURCE_GLOBAL_BLOCKING==1
+extern spinlock spinlock_system_img_source_global;
+spinlock_get(&spinlock_system_img_source_global);
+#endif
+#if DIMX_GLOBAL_BLOCKING==1
+extern spinlock spinlock_dimX_global;
+spinlock_get(&spinlock_dimX_global);
+#endif
+#if DIMY_GLOBAL_BLOCKING==1
+extern spinlock spinlock_dimY_global;
+spinlock_get(&spinlock_dimY_global);
+#endif
+
+/* Inline Code           */
+printf("%s\n","inline code");
+/* in combFunction GrayScaleImpl */
+gray[0]=0.3125*system_img_source_address[offsetY+0][offsetX+0]+0.5625*system_img_source_address[offsetY+0][offsetX+1]+0.125*system_img_source_address[offsetY+0][offsetX+2];
+gray[1]=0.3125*system_img_source_address[offsetY+0][offsetX+2]+0.5625*system_img_source_address[offsetY+0][offsetX+3]+0.125*system_img_source_address[offsetY+0][offsetX+4];
+gray[2]=0.3125*system_img_source_address[offsetY+1][offsetX+0]+0.5625*system_img_source_address[offsetY+1][offsetX+1]+0.125*system_img_source_address[offsetY+1][offsetX+2];
+gray[3]=0.3125*system_img_source_address[offsetY+1][offsetX+2]+0.5625*system_img_source_address[offsetY+1][offsetX+3]+0.125*system_img_source_address[offsetY+1][offsetX+4];
+gray[4]=0.3125*system_img_source_address[offsetY+2][offsetX+0]+0.5625*system_img_source_address[offsetY+2][offsetX+1]+0.125*system_img_source_address[offsetY+2][offsetX+2];
+gray[5]=0.3125*system_img_source_address[offsetY+2][offsetX+2]+0.5625*system_img_source_address[offsetY+2][offsetX+3]+0.125*system_img_source_address[offsetY+2][offsetX+4];
+if(offsetX>=dimX-2){
+offsetY+=1;
+offsetX=0;
+}
+if(offsetY>=dimY-2){
+offsetY=0;
+}
+dimsOut[0]=dimX;
+dimsOut[1]=dimY;
 
 	/* Write To Output Ports */
 	printf("%s\n","write");
@@ -108,4 +123,13 @@ void actor_GrayScale(){
 		#endif
 	}
 	
+	#if SYSTEM_IMG_SOURCE_GLOBAL_BLOCKING==1
+	spinlock_release(&spinlock_system_img_source_global);
+	#endif
+	#if DIMX_GLOBAL_BLOCKING==1
+	spinlock_release(&spinlock_dimX_global);
+	#endif
+	#if DIMY_GLOBAL_BLOCKING==1
+	spinlock_release(&spinlock_dimY_global);
+	#endif
 }

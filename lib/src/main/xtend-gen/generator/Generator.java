@@ -39,13 +39,17 @@ public class Generator {
   public Generator(final ForSyDeSystemGraph model, final String root) {
     Generator.root = root;
     Generator.model = model;
-    final Predicate<Vertex> _function = (Vertex v) -> {
-      return (SDFChannel.conforms(v)).booleanValue();
+    final Predicate<Vertex> _function = new Predicate<Vertex>() {
+      public boolean test(final Vertex v) {
+        return (SDFChannel.conforms(v)).booleanValue();
+      }
     };
     Generator.sdfchannelSet = Generator.model.vertexSet().stream().filter(_function).collect(
       Collectors.<Vertex>toSet());
-    final Predicate<Vertex> _function_1 = (Vertex v) -> {
-      return (SDFComb.conforms(v)).booleanValue();
+    final Predicate<Vertex> _function_1 = new Predicate<Vertex>() {
+      public boolean test(final Vertex v) {
+        return (SDFComb.conforms(v)).booleanValue();
+      }
     };
     Generator.sdfcombSet = Generator.model.vertexSet().stream().filter(_function_1).collect(
       Collectors.<Vertex>toSet());
@@ -55,8 +59,10 @@ public class Generator {
   }
   
   public void create() {
-    final Consumer<ModuleInterface> _function = (ModuleInterface m) -> {
-      m.create();
+    final Consumer<ModuleInterface> _function = new Consumer<ModuleInterface>() {
+      public void accept(final ModuleInterface m) {
+        m.create();
+      }
     };
     this.modules.stream().forEach(_function);
   }
@@ -68,11 +74,15 @@ public class Generator {
   public Set<Schedule> createMultiprocessorSchedule() {
     Set<Schedule> _xblockexpression = null;
     {
-      final Predicate<Vertex> _function = (Vertex v) -> {
-        return (v.hasTrait("platform::GenericProcessingModule")).booleanValue();
+      final Predicate<Vertex> _function = new Predicate<Vertex>() {
+        public boolean test(final Vertex v) {
+          return (v.hasTrait("platform::GenericProcessingModule")).booleanValue();
+        }
       };
-      final Function<Vertex, Schedule> _function_1 = (Vertex v) -> {
-        return new Schedule(v);
+      final Function<Vertex, Schedule> _function_1 = new Function<Vertex, Schedule>() {
+        public Schedule apply(final Vertex v) {
+          return new Schedule(v);
+        }
       };
       Set<Schedule> schedules = Generator.model.vertexSet().stream().filter(_function).<Schedule>map(_function_1).collect(Collectors.<Schedule>toSet());
       _xblockexpression = Generator.multiProcessorSchedules = schedules;

@@ -1,7 +1,7 @@
 package demo;
 
 import forsyde.io.java.core.ForSyDeSystemGraph;
-import forsyde.io.java.drivers.ForSyDeFiodlHandler;
+import forsyde.io.java.drivers.ForSyDeModelHandler;
 import generator.Generator;
 import generator.InitProcessingModule;
 import generator.SDFChannelProcessingModule;
@@ -22,7 +22,6 @@ import template.baremetal.SpinLockTemplateSrc;
 import template.baremetal.uniprocessor.SubsystemTemplateInc;
 import template.baremetal.uniprocessor.SubsystemTemplateInc2;
 import template.baremetal.uniprocessor.SubsystemTemplateSrc;
-import utils.Load;
 
 @SuppressWarnings("all")
 public class demo1 {
@@ -31,10 +30,10 @@ public class demo1 {
       final String path = "forsyde-io/modified1/complete-mapped-sobel-model.forsyde.xmi";
       final String path2 = "forsyde-io/modified1/sobel-application.fiodl";
       final String root = "generateCode/c/single/single";
-      ForSyDeSystemGraph model1 = Load.load(path);
-      ForSyDeSystemGraph model2 = new ForSyDeFiodlHandler().loadModel(path2);
-      model2.mergeInPlace(model1);
-      Generator gen = new Generator(model2, root);
+      ForSyDeModelHandler loader = new ForSyDeModelHandler();
+      ForSyDeSystemGraph model = loader.loadModel(path);
+      model.mergeInPlace(loader.loadModel(path2));
+      Generator gen = new Generator(model, root);
       SDFChannelProcessingModule sdfchannelModule = new SDFChannelProcessingModule();
       SDFChannelTemplateSrc _sDFChannelTemplateSrc = new SDFChannelTemplateSrc();
       sdfchannelModule.add(_sDFChannelTemplateSrc);

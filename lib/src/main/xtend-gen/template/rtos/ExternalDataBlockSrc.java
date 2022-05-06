@@ -25,6 +25,17 @@ public class ExternalDataBlockSrc implements InitTemplate {
       _builder.newLine();
       _builder.append("#include \"semphr.h\"");
       _builder.newLine();
+      _builder.append("/*");
+      _builder.newLine();
+      _builder.append("=====================================================");
+      _builder.newLine();
+      _builder.append("\t\t");
+      _builder.append("Blocking or Non Blokcing Read Write");
+      _builder.newLine();
+      _builder.append("=====================================================");
+      _builder.newLine();
+      _builder.append("*/");
+      _builder.newLine();
       {
         for(final Vertex data : externDataBlocks) {
           _builder.append("SemaphoreHandle_t datablock_sem_");
@@ -35,10 +46,20 @@ public class ExternalDataBlockSrc implements InitTemplate {
         }
       }
       _builder.newLine();
+      _builder.append("/*");
+      _builder.newLine();
+      _builder.append("=====================================================");
+      _builder.newLine();
+      _builder.append("\t\t");
+      _builder.append("Counting Smeaphore");
+      _builder.newLine();
+      _builder.append("=====================================================");
+      _builder.newLine();
+      _builder.append("*/\t\t\t\t");
       _builder.newLine();
       {
         for(final Vertex data_1 : externDataBlocks) {
-          _builder.append("SemaphoreHandle_t count_datablock_sem_");
+          _builder.append("SemaphoreHandle_t count_sem_");
           String _identifier_1 = data_1.getIdentifier();
           _builder.append(_identifier_1);
           _builder.append(";");

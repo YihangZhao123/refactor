@@ -16,13 +16,22 @@ class ExternalDataBlockSrc implements InitTemplate {
 			#include "../inc/extern_datablock.h"
 			#include "FreeRTOS.h"
 			#include "semphr.h"
+			/*
+			=====================================================
+					Blocking or Non Blokcing Read Write
+			=====================================================
+			*/
 			«FOR data : externDataBlocks»
 				SemaphoreHandle_t datablock_sem_«data.getIdentifier()»;
 			«ENDFOR»
 			
-			
+			/*
+			=====================================================
+					Counting Smeaphore
+			=====================================================
+			*/				
 			«FOR data : externDataBlocks»
-				SemaphoreHandle_t count_datablock_sem_«data.getIdentifier()»;
+				SemaphoreHandle_t count_sem_«data.getIdentifier()»;
 			«ENDFOR»
 		'''
 	}

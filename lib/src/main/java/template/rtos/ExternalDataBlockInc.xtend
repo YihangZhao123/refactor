@@ -16,10 +16,25 @@ class ExternalDataBlockInc implements InitTemplate {
 			#ifndef EXTERNAL_DATABLOCK_H_
 			#define EXTERNAL_DATABLOCK_H_
 			
+			/*
+			=====================================================
+					Blocking or Non Blokcing Read Write
+			=====================================================
+			*/
 			«FOR data : externDataBlocks»
 				#define «data.getIdentifier().toUpperCase()»_BLOCKING 0
-			«ENDFOR»		
+			«ENDFOR»	
 			
+			/*
+			=====================================================
+					Counting Smeaphore
+			=====================================================
+			*/				
+			«FOR data : externDataBlocks»
+				#define count_sem_«data.getIdentifier().toUpperCase()»_max 1
+				#define count_sem_«data.getIdentifier().toUpperCase()»_init 0
+				
+			«ENDFOR»			
 			#endif 
 			
 		'''

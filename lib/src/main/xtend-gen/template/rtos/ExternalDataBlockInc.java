@@ -24,6 +24,17 @@ public class ExternalDataBlockInc implements InitTemplate {
       _builder.append("#define EXTERNAL_DATABLOCK_H_");
       _builder.newLine();
       _builder.newLine();
+      _builder.append("/*");
+      _builder.newLine();
+      _builder.append("=====================================================");
+      _builder.newLine();
+      _builder.append("\t\t");
+      _builder.append("Blocking or Non Blokcing Read Write");
+      _builder.newLine();
+      _builder.append("=====================================================");
+      _builder.newLine();
+      _builder.append("*/");
+      _builder.newLine();
       {
         for(final Vertex data : externDataBlocks) {
           _builder.append("#define ");
@@ -34,6 +45,32 @@ public class ExternalDataBlockInc implements InitTemplate {
         }
       }
       _builder.newLine();
+      _builder.append("/*");
+      _builder.newLine();
+      _builder.append("=====================================================");
+      _builder.newLine();
+      _builder.append("\t\t");
+      _builder.append("Counting Smeaphore");
+      _builder.newLine();
+      _builder.append("=====================================================");
+      _builder.newLine();
+      _builder.append("*/\t\t\t\t");
+      _builder.newLine();
+      {
+        for(final Vertex data_1 : externDataBlocks) {
+          _builder.append("#define count_sem_");
+          String _upperCase_1 = data_1.getIdentifier().toUpperCase();
+          _builder.append(_upperCase_1);
+          _builder.append("_max 1");
+          _builder.newLineIfNotEmpty();
+          _builder.append("#define count_sem_");
+          String _upperCase_2 = data_1.getIdentifier().toUpperCase();
+          _builder.append(_upperCase_2);
+          _builder.append("_init 0");
+          _builder.newLineIfNotEmpty();
+          _builder.newLine();
+        }
+      }
       _builder.append("#endif ");
       _builder.newLine();
       _builder.newLine();

@@ -49,7 +49,7 @@
         <ports>aa</ports>
         <ports>portTypes</ports>
         <propertiesValues string="aa=100;" xsi:type="forsyde.io.eclipse.systemgraph:StringVertexProperty"/>
-        <propertiesNames>inlineCode</propertiesNames>
+        <propertiesNames>inlinedCode</propertiesNames>
         <propertiesValues xsi:type="forsyde.io.eclipse.systemgraph:ArrayVertexProperty">
             <values string="aa" xsi:type="forsyde.io.eclipse.systemgraph:StringVertexProperty"/>
         </propertiesValues>

@@ -38,6 +38,10 @@ public class CircularFIFOTemplateSrc implements InitTemplate {
       }
     };
     this.typeVertexSet = model.vertexSet().stream().filter(_function).<String>map(_function_1).<Vertex>map(_function_2).collect(Collectors.<Vertex>toSet());
+    boolean _contains = this.typeVertexSet.contains(null);
+    if (_contains) {
+      this.typeVertexSet.remove(null);
+    }
   }
   
   public String create() {

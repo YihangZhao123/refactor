@@ -40,45 +40,46 @@ class SDFCombTemplateSrc implements ActorTemplate {
 	override create(Vertex actor) {
 		val model = Generator.model
 
-		implActorSet = VertexAcessor.getMultipleNamedPort(Generator.model, actor, "combFunctions",
-			VertexTrait.IMPL_ANSICBLACKBOXEXECUTABLE, VertexPortDirection.OUTGOING)
-			
+//		implActorSet = VertexAcessor.getMultipleNamedPort(Generator.model, actor, "combFunctions",
+//			VertexTrait.IMPL_ANSICBLACKBOXEXECUTABLE, VertexPortDirection.OUTGOING)
+		implActorSet = SDFComb.safeCast(actor).get().getCombFunctionsPort(model).stream().map([v|v.getViewedVertex()]).
+			collect(Collectors.toSet())
 		this.inputSDFChannelSet = Query.findInputSDFChannels(model, actor)
 		this.outputSDFChannelSet = Query.findOutputSDFChannels(model, actor)
 		var Set<Vertex> datablock
 		datablock = Query.findAllExternalDataBlocks(model, SDFComb.safeCast(actor).get())
 		'''
-			«var name = actor.getIdentifier()»
-			/* Includes-------------------------- */
-			#include "../inc/config.h"
-			#include "../inc/datatype_definition.h"
-			#include "../inc/circular_fifo_lib.h"
-			#include "../inc/sdfcomb_«name».h"
-			
-			
-			
-			/*
-			========================================
+				«var name = actor.getIdentifier()»
+				/* Includes-------------------------- */
+				#include "../inc/config.h"
+				#include "../inc/datatype_definition.h"
+				#include "../inc/circular_fifo_lib.h"
+				#include "../inc/sdfcomb_«name».h"
+				
+				
+				
+				/*
+				========================================
 				Declare Extern Channal Variables
-			========================================
-			*/
-			«extern()»
-			/*
-			========================================
-				Declare Extern Global Variables
-			========================================
-			*/			
-			«FOR d :datablock»
-			extern «findType(model,d)» «d.getIdentifier()»;
-			«ENDFOR»
-			
-			/*
-			========================================
-				Actor Function
-			========================================
-			*/			
+				========================================
+				*/
+				«extern()»
+				/*
+				========================================
+					Declare Extern Global Variables
+				========================================
+				*/			
+				«FOR d : datablock»
+					extern «findType(model,d)» «d.getIdentifier()»;
+				«ENDFOR»
+				
+				/*
+				========================================
+					Actor Function
+				========================================
+				*/			
 			void actor_«name»(){
-			«««				#if defined(TESTING)
+				«««				#if defined(TESTING)
 «««				«IF name=="GrayScale"»
 «««				HAL_GPIO_WritePin(GPIOA,GPIO_PIN_5,1);
 «««				«ELSEIF name=="getPx" »
@@ -90,63 +91,50 @@ class SDFCombTemplateSrc implements ActorTemplate {
 «««				«ELSEIF name=="Abs" »
 «««				HAL_GPIO_WritePin(GPIOA,GPIO_PIN_5,1);
 «««				«ENDIF»
-«««				#endif
+«««				#endi	
+			
+			/*  initialize memory*/
+			«initMemory(model,actor)»
 				
-				/* Initilize Memo
-y */
-				«initMemory(model,actor)»
-			/* Read From Input Port  */
-			«IF Generator.TESTING==1&&Generator.PC==1»
-				printf("%s\n","read");
-			«ENDIF»
-			int ret=0;
-			«read(model,actor)»
+				/* Read From Input Port  */
+				«IF Generator.TESTING==1&&Generator.PC==1»
+					printf("%s\n","read");
+				«ENDIF»
+				int ret=0;
+				«read(model,actor)»
 			
-			«««			«IF datablock.size()!=0»
-«««				/* Get lock of outside system channel */
-«««				«FOR data:datablock»
-«««					#if «data.getIdentifier().toUpperCase()»_BLOCKING==1
-«««					extern spinlock spinlock_«data.getIdentifier()»;
-«««					spinlock_get(&spinlock_«data.getIdentifier()»);
-«««					#endif
-«««				«ENDFOR»
-«««			«ENDIF»
-			
-			/* Inline Code           */
-			«IF Generator.TESTING==1&&Generator.PC==1»
-				printf("%s\n","inline code");
-			«ENDIF»
-			«getInlineCode()»
-			
+				
+				/* Inline Code           */
+				«IF Generator.TESTING==1&&Generator.PC==1»
+					printf("%s\n","inline code");
+				«ENDIF»
+				«getInlineCode()»
+				
 				/* Write To Output Ports */
 				«IF Generator.TESTING==1&&Generator.PC==1»
 					printf("%s\n","write");
 				«ENDIF»
 				«write(actor)»
-			«««				«FOR data : datablock»
-«««					#if «data.getIdentifier().toUpperCase()»_BLOCKING==1
-«««					spinlock_release(&spinlock_«data.getIdentifier()»);
-«««					#endif
-«««				«ENDFOR»
+			
 				«IF Generator.TESTING==1&&Generator.NUCLEO==1»
-				«IF name=="GrayScale"»
-					HAL_Delay(1000);
-					HAL_GPIO_WritePin(GPIOA,GPIO_PIN_5,0);
-				«ELSEIF name=="getPx" »
-					HAL_Delay(1000);
-					HAL_GPIO_WritePin(GPIOC,GPIO_PIN_9,0);					
-				«ELSEIF name=="Gx" »
-					HAL_Delay(1000);
-					HAL_GPIO_WritePin(GPIOC,GPIO_PIN_8,0);	
-				«ELSEIF name=="Gy" »
-					HAL_Delay(1000);
-					HAL_GPIO_WritePin(GPIOC,GPIO_PIN_6,0);		
-				«ELSEIF name=="Abs" »	
-					HAL_Delay(1000);
-					HAL_GPIO_WritePin(GPIOA,GPIO_PIN_5,0);
-				«ENDIF»	
-			«ENDIF»
-			}
+					«IF name=="GrayScale"»
+						HAL_Delay(1000);
+						HAL_GPIO_WritePin(GPIOA,GPIO_PIN_5,0);
+					«ELSEIF name=="getPx" »
+						HAL_Delay(1000);
+						HAL_GPIO_WritePin(GPIOC,GPIO_PIN_9,0);					
+					«ELSEIF name=="Gx" »
+						HAL_Delay(1000);
+						HAL_GPIO_WritePin(GPIOC,GPIO_PIN_8,0);	
+					«ELSEIF name=="Gy" »
+						HAL_Delay(1000);
+						HAL_GPIO_WritePin(GPIOC,GPIO_PIN_6,0);		
+					«ELSEIF name=="Abs" »	
+						HAL_Delay(1000);
+						HAL_GPIO_WritePin(GPIOA,GPIO_PIN_5,0);
+					«ENDIF»	
+				«ENDIF»
+				}
 		'''
 	}
 
@@ -175,29 +163,46 @@ y */
 	def String initMemory(ForSyDeSystemGraph model, Vertex actor) {
 
 		var impls = Query.findCombFuntionVertex(model, actor)
+
 		var Set<String> variableNameRecord = new HashSet
 		var String ret = ""
 
 		for (String impl : impls) {
+			println("-->" + impl)
 			var actorimpl = model.queryVertex(impl).get()
 			var Set<String> ports = new HashSet
-			ports.addAll(Query.findImplInputPorts(actorimpl))
-			ports.addAll(Query.findImplOutputPorts(actorimpl))
-			for (String port : ports) {
-				var datatype = Query.findImplPortDataType(model, actorimpl, port)
-				if (!variableNameRecord.contains(port)) {
-					if (Query.isSystemChannel(model, actorimpl, port) === null) {
-						ret += '''
-							«datatype» «port»; 
-						'''
-					} else {
-						ret += '''
-							«datatype» «port» = «Query.isSystemChannel(model,actorimpl,port)»; 
-						'''
+
+			if (Query.findImplInputPorts(actorimpl) !== null) {
+				ports.addAll(Query.findImplInputPorts(actorimpl))
+			}
+
+			if (Query.findImplOutputPorts(actorimpl) !== null) {
+				ports.addAll(Query.findImplOutputPorts(actorimpl))
+			}
+			println("-->" + ports)
+			if (ports.isEmpty()) {
+				ret+='''
+				The inputPorts or outputPorts Property is not specified in «impl»
+				'''
+			} else {
+				for (String port : ports) {
+					
+					var datatype = Query.findImplPortDataType(model, actorimpl, port)
+					if (!variableNameRecord.contains(port)) {
+						if (Query.isSystemChannel(model, actorimpl, port) === null) {
+							ret += '''
+								«datatype» «port»; 
+							'''
+						} else {
+							ret += '''
+								«datatype» «port» = «Query.isSystemChannel(model,actorimpl,port)»; 
+							'''
+						}
+						variableNameRecord.add(port)
 					}
-					variableNameRecord.add(port)
 				}
 			}
+
 		}
 		return ret
 	}
@@ -211,46 +216,50 @@ y */
 		for (Vertex impl : impls) {
 
 			var inputPorts = TypedOperation.safeCast(impl).get().getInputPorts()
-			for (String port : inputPorts) {
-				if (!variableNameRecord.contains(port) && Query.isSystemChannel(model, impl, port) === null) {
-					// var datatype = Query.findImplPortDataType(model, impl, port)
-					var actorPortName = Query.findActorPortConnectedToImplInputPort(model, actor, impl, port)
-					var sdfchannelName = Query.findInputSDFChannelConnectedToActorPort(model, actor, actorPortName)
-					var datatype = Query.findSDFChannelDataType(model, model.queryVertex(sdfchannelName).get())
-					// println(actor.getIdentifier()+" -->   "+actorPortName)
-					// println(actor)
-					var consumption = SDFComb.safeCast(actor).get().getConsumption().get(actorPortName)
+			if (inputPorts !== null) {
+				for (String port : inputPorts) {
+					if (!variableNameRecord.contains(port) && Query.isSystemChannel(model, impl, port) === null) {
 
-					if (consumption == 1) {
-						ret += '''
-							#if «sdfchannelName.toUpperCase()»_BLOCKING==0
-							ret=read_non_blocking_«datatype»(&fifo_«sdfchannelName»,&«port»);
-							if(ret==-1){
-								printf("fifo_«sdfchannelName» read error\n");
-							}
-							
-							#else
-							read_blocking_«datatype»(&fifo_«sdfchannelName»,&«port»,&spinlock_«sdfchannelName»);
-							#endif
-							
-						'''
-					} else {
-						ret += '''
-							for(int i=0;i<«consumption»;++i){
-								
+						var actorPortName = Query.findActorPortConnectedToImplInputPort(model, actor, impl, port)
+						var sdfchannelName = Query.findInputSDFChannelConnectedToActorPort(model, actor, actorPortName)
+						var datatype = Query.findSDFChannelDataType(model, model.queryVertex(sdfchannelName).get())
+
+						var consumption = SDFComb.safeCast(actor).get().getConsumption().get(actorPortName)
+						if (consumption === null) {
+							ret += '''
+								Consumption in «actor.getIdentifier()» Not Specified!
+							'''
+						} else if (consumption == 1) {
+							ret += '''
 								#if «sdfchannelName.toUpperCase()»_BLOCKING==0
-								ret=read_non_blocking_«datatype»(&fifo_«sdfchannelName»,&«port»[i]);
+								ret=read_non_blocking_«datatype»(&fifo_«sdfchannelName»,&«port»);
 								if(ret==-1){
 									printf("fifo_«sdfchannelName» read error\n");
 								}
+								
 								#else
-								read_blocking_«datatype»(&fifo_«sdfchannelName»,&«port»[i],&spinlock_«sdfchannelName»);
+								read_blocking_«datatype»(&fifo_«sdfchannelName»,&«port»,&spinlock_«sdfchannelName»);
 								#endif
-							}
-							
-						'''
+								
+							'''
+						} else {
+							ret += '''
+								for(int i=0;i<«consumption»;++i){
+									
+									#if «sdfchannelName.toUpperCase()»_BLOCKING==0
+									ret=read_non_blocking_«datatype»(&fifo_«sdfchannelName»,&«port»[i]);
+									if(ret==-1){
+										printf("fifo_«sdfchannelName» read error\n");
+									}
+									#else
+									read_blocking_«datatype»(&fifo_«sdfchannelName»,&«port»[i],&spinlock_«sdfchannelName»);
+									#endif
+								}
+								
+							'''
+						}
+						variableNameRecord.add(port)
 					}
-					variableNameRecord.add(port)
 				}
 			}
 
@@ -269,38 +278,46 @@ y */
 			for (String outport : outputPortSet) {
 
 				if (!variableNameRecord.contains(outport)) {
-					// var datatype = Query.findImplPortDataType(model, actorimpl, outport)
-					var actorPortName = Query.findActorPortConnectedToImplOutputPort(model, actor, actorimpl, outport)
-					var sdfchannelName = Query.findOutputSDFChannelConnectedToActorPort(model, actor, actorPortName)
-					var datatype = Query.findSDFChannelDataType(model, model.queryVertex(sdfchannelName).get())
+					var String actorPortName
+					var String sdfchannelName
+					var String datatype
+
+					actorPortName = Query.findActorPortConnectedToImplOutputPort(model, actor, actorimpl, outport)
+					sdfchannelName = Query.findOutputSDFChannelConnectedToActorPort(model, actor, actorPortName)
 					try {
-						var production = SDFComb.enforce(actor).getProduction().get(actorPortName)
-						if (production == 1) {
-							ret += '''
-								#if «sdfchannelName.toUpperCase()»_BLOCKING==0
-								write_non_blocking_«datatype»(&fifo_«sdfchannelName»,«outport»);
-								#else
-								write_blocking_«datatype»(&fifo_«sdfchannelName»,«outport»,&spinlock_«sdfchannelName»);
-								#endif
-														
-							'''
-						} else {
-							ret += '''
-								for(int i=0;i<«production»;++i){
-									#if «sdfchannelName.toUpperCase()»_BLOCKING==0
-									write_non_blocking_«datatype»(&fifo_«sdfchannelName»,«outport»[i]);
-									#else
-									write_blocking_«datatype»(&fifo_«sdfchannelName»,«outport»[i],&spinlock_«sdfchannelName»);
-									#endif
-								}
-								
-							'''
-						}
-						variableNameRecord.add(outport)
+						datatype = Query.findSDFChannelDataType(model, model.queryVertex(sdfchannelName).get())
 					} catch (Exception e) {
-						println("In actor " + actor.getIdentifier() + " port " + outport + " no production")
-						return "error " + outport + ";"
+						datatype = "<" + sdfchannelName + " DataType Not Found>"
 					}
+
+					var production = SDFComb.enforce(actor).getProduction().get(actorPortName)
+					if (production == null) {
+						ret += '''
+							Production in «actor.getIdentifier()» Is Not Specified!
+						'''
+					} else if (production == 1) {
+						ret += '''
+							#if «sdfchannelName.toUpperCase()»_BLOCKING==0
+							write_non_blocking_«datatype»(&fifo_«sdfchannelName»,«outport»);
+							#else
+							write_blocking_«datatype»(&fifo_«sdfchannelName»,«outport»,&spinlock_«sdfchannelName»);
+							#endif
+													
+						'''
+					} else {
+						ret += '''
+							for(int i=0;i<«production»;++i){
+								#if «sdfchannelName.toUpperCase()»_BLOCKING==0
+								write_non_blocking_«datatype»(&fifo_«sdfchannelName»,«outport»[i]);
+								#else
+								write_blocking_«datatype»(&fifo_«sdfchannelName»,«outport»[i],&spinlock_«sdfchannelName»);
+								#endif
+							}
+							
+						'''
+					}
+
+					variableNameRecord.add(outport)
 
 				}
 			}
@@ -338,11 +355,12 @@ y */
 		return ret
 
 	}
-	private def String findType(ForSyDeSystemGraph model,Vertex datablock) {
-	    var a =(new TypedDataBlockViewer(datablock)).getDataTypePort(model)
-	    if(!a.isPresent()){
-	    	return null
-	    }
+
+	private def String findType(ForSyDeSystemGraph model, Vertex datablock) {
+		var a = (new TypedDataBlockViewer(datablock)).getDataTypePort(model)
+		if (!a.isPresent()) {
+			return null
+		}
 		return a.get().getIdentifier()
 	}
 }

@@ -51,7 +51,7 @@ class test2 {
 ////////Implentation/////////////////////////////////////////////////////////////////
 		val impl_port1 = #{"portTypes", "aa"}
 		val impl_pro1 = #{
-			"inlineCode" -> VertexProperty.create("aa=100;"),
+			"inlinedCode" -> VertexProperty.create("aa=100;"),
 			"outputPorts" -> VertexProperty.create(#["aa"])
 		}
 

@@ -55,7 +55,7 @@ public class test2 {
       model.addVertex(type);
       final Set<String> impl_port1 = Collections.<String>unmodifiableSet(CollectionLiterals.<String>newHashSet("portTypes", "aa"));
       VertexProperty _create_5 = VertexProperty.create("aa=100;");
-      Pair<String, VertexProperty> _mappedTo_7 = Pair.<String, VertexProperty>of("inlineCode", _create_5);
+      Pair<String, VertexProperty> _mappedTo_7 = Pair.<String, VertexProperty>of("inlinedCode", _create_5);
       VertexProperty _create_6 = VertexProperty.create(Collections.<String>unmodifiableList(CollectionLiterals.<String>newArrayList("aa")));
       Pair<String, VertexProperty> _mappedTo_8 = Pair.<String, VertexProperty>of("outputPorts", _create_6);
       final Map<String, VertexProperty> impl_pro1 = Collections.<String, VertexProperty>unmodifiableMap(CollectionLiterals.<String, VertexProperty>newHashMap(_mappedTo_7, _mappedTo_8));

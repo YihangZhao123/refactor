@@ -17,6 +17,7 @@ import forsyde.io.java.core.VertexAcessor;
 import forsyde.io.java.core.VertexProperty;
 import forsyde.io.java.core.VertexTrait;
 import forsyde.io.java.core.VertexViewer;
+import forsyde.io.java.typed.viewers.impl.ANSICBlackBoxExecutable;
 import forsyde.io.java.typed.viewers.impl.ANSICBlackBoxExecutableViewer;
 import forsyde.io.java.typed.viewers.impl.DataBlock;
 import forsyde.io.java.typed.viewers.impl.Executable;
@@ -54,52 +55,63 @@ public class Query {
 				.filter(e -> e.getSource().equals(sdfchannel.getIdentifier())).findAny().orElse(null);
 		EdgeInfo outputedge = model.edgeSet().stream().filter(e -> e.hasTrait(EdgeTrait.MOC_SDF_SDFDATAEDGE))
 				.filter(e -> e.getTarget().equals(sdfchannel.getIdentifier())).findAny().orElse(null);
+		
+		String actorname="";
+		String port;
+		Vertex actor;
+		
+		try {
+			if (inputedge != null) {
+				// actor's input sdf channel
+				actorname = inputedge.getTarget();
+				port = inputedge.getTargetPort().get();
+				actor = model.queryVertex(actorname).get();   //findVertexByName(model, actorname);
+				var impls = Query.findCombFuntionVertex(model, actor);
 
-		if (inputedge != null) {
-			// actor's input sdf channel
-			String actorname = inputedge.getTarget();
-			String port = inputedge.getTargetPort().get();
-			Vertex actor = findVertexByName(model, actorname);
-			var impls = Query.findCombFuntionVertex(model, actor);
 
-			EdgeInfo info = model.outgoingEdgesOf(actor).stream().filter(e -> impls.contains(e.getTarget()))
-					.filter(e -> e.getSourcePort().get().equals(port)).findAny().get();
+				EdgeInfo info = model.outgoingEdgesOf(actor).stream().filter(e -> impls.contains(e.getTarget()))
+						.filter(e -> e.getSourcePort().get().equals(port)).findAny().get();
 
-			String implName = info.getTarget();
-			String implPort = info.getTargetPort().get();
+				String implName = info.getTarget();
+				String implPort = info.getTargetPort().get();
 
-			var implDataType = findImplPortDataType(model, findVertexByName(model, implName), implPort);
-			Vertex datatypeVertex = findVertexByName(model, implDataType);
+				var implDataType = findImplPortDataType(model, findVertexByName(model, implName), implPort);
+				Vertex datatypeVertex = findVertexByName(model, implDataType);
 
-			if (!Array.conforms(datatypeVertex)) {
-				return implDataType;
+				if (!Array.conforms(datatypeVertex)) {
+					return implDataType;
+				} else {
+					return (new ArrayViewer(datatypeVertex)).getInnerTypePort(model).get().getIdentifier();
+				}
+
+			} else if (outputedge != null) {
+				// output sdf channel
+				actorname = outputedge.getSource();
+				port = outputedge.getSourcePort().get();
+				actor = findVertexByName(model, actorname);
+				var impls = Query.findCombFuntionVertex(model, actor);
+
+				EdgeInfo info = model.incomingEdgesOf(actor).stream().filter(e -> impls.contains(e.getSource()))
+						.filter(e -> e.getTargetPort().get().equals(port)).findAny().get();
+
+				String implName = info.getSource();
+				String implPort = info.getSourcePort().get();
+
+				var implDataType = findImplPortDataType(model, findVertexByName(model, implName), implPort);
+				Vertex datatypeVertex = findVertexByName(model, implDataType);
+				if (!Array.conforms(datatypeVertex)) {
+					return implDataType;
+				} else {
+					return (new ArrayViewer(datatypeVertex)).getInnerTypePort(model).get().getIdentifier();
+				}
 			} else {
-				return (new ArrayViewer(datatypeVertex)).getInnerTypePort(model).get().getIdentifier();
-			}
-
-		} else if (outputedge != null) {
-			// output sdf channel
-			String actorname = outputedge.getSource();
-			String port = outputedge.getSourcePort().get();
-			Vertex actor = findVertexByName(model, actorname);
-			var impls = Query.findCombFuntionVertex(model, actor);
-
-			EdgeInfo info = model.incomingEdgesOf(actor).stream().filter(e -> impls.contains(e.getSource()))
-					.filter(e -> e.getTargetPort().get().equals(port)).findAny().get();
-
-			String implName = info.getSource();
-			String implPort = info.getSourcePort().get();
-
-			var implDataType = findImplPortDataType(model, findVertexByName(model, implName), implPort);
-			Vertex datatypeVertex = findVertexByName(model, implDataType);
-			if (!Array.conforms(datatypeVertex)) {
-				return implDataType;
-			} else {
-				return (new ArrayViewer(datatypeVertex)).getInnerTypePort(model).get().getIdentifier();
-			}
-		} else {
-			return "Channel " + sdfchannel.getIdentifier() + " Not Connected To Any Actor!";
+				return "<ERROR! "+actorname+" Not Connected To Any ConbFunctions ! >";
+			}			
+		}catch(Exception e){
+			return "<ERROR! "+actorname+" Not Connected To Any ConbFunctions ! >";
 		}
+		
+
 
 	}
 
@@ -176,7 +188,7 @@ public class Query {
 	 * @return
 	 */
 	public static String findImplPortDataType(ForSyDeSystemGraph model, Vertex impl, String implPort) {
-
+			//System.out.println(impl.getIdentifier()+"  "+implPort);
 		Optional<EdgeInfo> op = model.outgoingEdgesOf(impl).stream()
 				.filter(e -> e.hasTrait(EdgeTrait.TYPING_DATATYPES_DATADEFINITION))
 				.filter(e -> e.getSourcePort().get().equals(implPort)).findAny();
@@ -184,7 +196,7 @@ public class Query {
 			return op.get().getTarget();
 		}
 
-		return "Port Not Connected To Any Type---";
+		return "";
 	}
 
 	public static List<String> findImplInputPorts(Vertex impl) {
@@ -199,12 +211,7 @@ public class Query {
 
 	public static Set<String> findCombFuntionVertex(ForSyDeSystemGraph model, Vertex actor) {
 
-		var a = model.edgeSet().stream().filter(e -> e.getSource().equals(actor.getIdentifier()))
-				.filter(e -> e.getSourcePort().isPresent() && e.getSourcePort().get().equals("combFunctions"))
-				.map(e -> e.getTarget())
-//		.map(name->model.vertexSet().stream().filter(v->v.getIdentifier().equals(name)).findAny().orElse(null) )
-				.collect(Collectors.toSet());
-
+		var a =SDFComb.safeCast(actor).get().getCombFunctionsPort(model).stream().map(v->v.getIdentifier()).collect(Collectors.toSet());
 		return a;
 	}
 
@@ -289,34 +296,40 @@ public class Query {
 	 * @return
 	 */
 	public static String getInlineCode(Vertex impl) {
-
+		
 		Map<String, VertexProperty> properties = impl.getProperties();
-		var tmp = properties.get("inlinedCode").unwrap();
-		String inlineCode = (String) tmp;
 
-		var b = new StringBuilder(inlineCode);
-		var start = 0;
-		var index = 0;
+		var tmp2 = ANSICBlackBoxExecutable.safeCast(impl).get().getInlinedCode();
+		if(properties.get("inlinedCode")!=null) {
+			var tmp = properties.get("inlinedCode").unwrap();
+			String inlineCode = (String) tmp;
+			var b = new StringBuilder(inlineCode);
+			var start = 0;
+			var index = 0;
 
-		while ((index = b.indexOf(";", start)) != -1) {
-			start = index + 1;
-			b.insert(index + 1, "\n");
+			while ((index = b.indexOf(";", start)) != -1) {
+				start = index + 1;
+				b.insert(index + 1, "\n");
+			}
+
+			start = 0;
+			index = 0;
+			while ((index = b.indexOf("}", start)) != -1) {
+				start = index + 1;
+				b.insert(index + 1, "\n");
+			}
+
+			start = 0;
+			index = 0;
+			while ((index = b.indexOf("{", start)) != -1) {
+				start = index + 1;
+				b.insert(index + 1, "\n");
+			}
+			return b.toString();			
+		}else {
+			return "";
 		}
 
-		start = 0;
-		index = 0;
-		while ((index = b.indexOf("}", start)) != -1) {
-			start = index + 1;
-			b.insert(index + 1, "\n");
-		}
-
-		start = 0;
-		index = 0;
-		while ((index = b.indexOf("{", start)) != -1) {
-			start = index + 1;
-			b.insert(index + 1, "\n");
-		}
-		return b.toString();
 	}
 
 	/**

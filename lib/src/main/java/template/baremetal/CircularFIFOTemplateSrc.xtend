@@ -22,6 +22,9 @@ class CircularFIFOTemplateSrc implements InitTemplate {
 			.map([v|Query.findSDFChannelDataType(model,v)])
 			.map([s|Query.findVertexByName(model,s)])
 			.collect(Collectors.toSet())
+		if(typeVertexSet.contains(null)){
+			typeVertexSet.remove(null)
+		}	
 	}
 
 	override create() {

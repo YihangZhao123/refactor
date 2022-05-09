@@ -38,6 +38,10 @@ public class CircularFIFOTemplateInc implements InitTemplate {
       }
     };
     this.typeVertexSet = model.vertexSet().stream().filter(_function).<String>map(_function_1).<Vertex>map(_function_2).collect(Collectors.<Vertex>toSet());
+    boolean _contains = this.typeVertexSet.contains(null);
+    if (_contains) {
+      this.typeVertexSet.remove(null);
+    }
   }
   
   public String create() {
@@ -62,22 +66,28 @@ public class CircularFIFOTemplateInc implements InitTemplate {
     _builder.newLine();
     _builder.append("#include \"datatype_definition.h\"");
     _builder.newLine();
-    _builder.append("#include \"spinlock.h\"\t\t\t");
+    _builder.append("#include \"spinlock.h\"\t");
     _builder.newLine();
     {
-      boolean _hasElements = false;
-      for(final Vertex v : this.typeVertexSet) {
-        if (!_hasElements) {
-          _hasElements = true;
-        } else {
-          _builder.appendImmediate("", "");
+      int _size = this.typeVertexSet.size();
+      boolean _notEquals = (_size != 0);
+      if (_notEquals) {
+        {
+          boolean _hasElements = false;
+          for(final Vertex v : this.typeVertexSet) {
+            if (!_hasElements) {
+              _hasElements = true;
+            } else {
+              _builder.appendImmediate("", "");
+            }
+            String _foo = this.foo(v);
+            _builder.append(_foo);
+            _builder.newLineIfNotEmpty();
+          }
+          if (_hasElements) {
+            _builder.append("");
+          }
         }
-        String _foo = this.foo(v);
-        _builder.append(_foo);
-        _builder.newLineIfNotEmpty();
-      }
-      if (_hasElements) {
-        _builder.append("");
       }
     }
     _builder.append("#endif");

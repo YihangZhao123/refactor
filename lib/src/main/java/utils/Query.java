@@ -32,33 +32,31 @@ import generator.Generator;
 import java.lang.Math;
 
 public class Query {
-	
-	public static Set<Vertex> findAllExternalDataBlocks(ForSyDeSystemGraph model){
-		return model.vertexSet().stream().filter(v->DataBlock.conforms(v)&& !SDFChannel.conforms(v))
+
+	public static Set<Vertex> findAllExternalDataBlocks(ForSyDeSystemGraph model) {
+		return model.vertexSet().stream().filter(v -> DataBlock.conforms(v) && !SDFChannel.conforms(v))
 				.collect(Collectors.toSet());
 	}
-	
-	public static Set<Vertex> findAllExternalDataBlocks(ForSyDeSystemGraph model,SDFComb actor){
-		return model.vertexSet().stream().filter(v->DataBlock.conforms(v)&& !SDFChannel.conforms(v))
-		.filter( data ->
-			model.hasConnection(SDFComb.safeCast(actor).get(), DataBlock.safeCast(data).get())
-			||
-			model.hasConnection( DataBlock.safeCast(data).get(),SDFComb.safeCast(actor).get())
-		).collect(Collectors.toSet());		
+
+	public static Set<Vertex> findAllExternalDataBlocks(ForSyDeSystemGraph model, SDFComb actor) {
+		return model.vertexSet().stream().filter(v -> DataBlock.conforms(v) && !SDFChannel.conforms(v))
+				.filter(data -> model.hasConnection(SDFComb.safeCast(actor).get(), DataBlock.safeCast(data).get())
+						|| model.hasConnection(DataBlock.safeCast(data).get(), SDFComb.safeCast(actor).get()))
+				.collect(Collectors.toSet());
 	}
 
 	public static Vertex findVertexByName(ForSyDeSystemGraph model, String name) {
 		return model.vertexSet().stream().filter(v -> v.getIdentifier().equals(name)).findAny().orElse(null);
 	}
 
-	public static String findSDFChannelDataType(ForSyDeSystemGraph model, Vertex sdf) {
+	public static String findSDFChannelDataType(ForSyDeSystemGraph model, Vertex sdfchannel) {
 		EdgeInfo inputedge = model.edgeSet().stream().filter(e -> e.hasTrait(EdgeTrait.MOC_SDF_SDFDATAEDGE))
-				.filter(e -> e.getSource().equals(sdf.getIdentifier())).findAny().orElse(null);
+				.filter(e -> e.getSource().equals(sdfchannel.getIdentifier())).findAny().orElse(null);
 		EdgeInfo outputedge = model.edgeSet().stream().filter(e -> e.hasTrait(EdgeTrait.MOC_SDF_SDFDATAEDGE))
-				.filter(e -> e.getSource().equals(sdf.getIdentifier())).findAny().orElse(null);
+				.filter(e -> e.getTarget().equals(sdfchannel.getIdentifier())).findAny().orElse(null);
 
 		if (inputedge != null) {
-			// input sdf channel
+			// actor's input sdf channel
 			String actorname = inputedge.getTarget();
 			String port = inputedge.getTargetPort().get();
 			Vertex actor = findVertexByName(model, actorname);
@@ -79,7 +77,7 @@ public class Query {
 				return (new ArrayViewer(datatypeVertex)).getInnerTypePort(model).get().getIdentifier();
 			}
 
-		} else if(outputedge!=null) {
+		} else if (outputedge != null) {
 			// output sdf channel
 			String actorname = outputedge.getSource();
 			String port = outputedge.getSourcePort().get();
@@ -94,16 +92,13 @@ public class Query {
 
 			var implDataType = findImplPortDataType(model, findVertexByName(model, implName), implPort);
 			Vertex datatypeVertex = findVertexByName(model, implDataType);
-			// System.out.println(sdf.getIdentifier()+" --> "+implName+" "+implPort+"-->
-			// "+implDataType);
-			// return implDataType;
 			if (!Array.conforms(datatypeVertex)) {
 				return implDataType;
 			} else {
 				return (new ArrayViewer(datatypeVertex)).getInnerTypePort(model).get().getIdentifier();
 			}
-		}else {
-			return "Channel "+ sdf.getIdentifier()+" Not Connected To Any Actor!";
+		} else {
+			return "Channel " + sdfchannel.getIdentifier() + " Not Connected To Any Actor!";
 		}
 
 	}
@@ -432,13 +427,13 @@ public class Query {
 		String actorName = model.edgeSet().stream().filter(
 				e -> e.getTarget().equals(impl.getIdentifier()) && e.getSourcePort().get().equals("combFunctions"))
 				.findAny().get().getSource();
-		
+
 //		model.vertexSet().stream()
 //				.filter(v->model.hasConnection(SDFComb.safeCast(v).get(), Executable.safeCast(impl).get())
 //						||
 //						model.hasConnection(Executable.safeCast(impl).get(),SDFComb.safeCast(v).get())
 //						).findAny();
-		
+
 		var actor = model.queryVertex(actorName).get();
 		var actorport1 = Query.findActorPortConnectedToImplInputPort(model, actor, impl, implPort);
 

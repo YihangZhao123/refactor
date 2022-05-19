@@ -23,10 +23,10 @@ import template.templateInterface.InitTemplate;
 
 @FileTypeAnno(type = FileType.C_INCLUDE)
 @SuppressWarnings("all")
-public class DataTypeTemplateInc implements InitTemplate {
+public class DataTypeInc implements InitTemplate {
   private Set<String> record = new HashSet<String>();
   
-  public DataTypeTemplateInc() {
+  public DataTypeInc() {
   }
   
   public String getFileName() {

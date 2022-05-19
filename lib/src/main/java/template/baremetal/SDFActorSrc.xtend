@@ -32,7 +32,7 @@ import forsyde.io.java.typed.viewers.moc.sdf.SDFChannel
 import forsyde.io.java.typed.viewers.typing.TypedDataBlockViewer
 
 @FileTypeAnno(type=FileType.C_SOURCE)
-class SDFCombTemplateSrc implements ActorTemplate {
+class SDFActorSrc implements ActorTemplate {
 	Set<Vertex> implActorSet
 	Set<Vertex> inputSDFChannelSet
 	Set<Vertex> outputSDFChannelSet
@@ -53,10 +53,15 @@ class SDFCombTemplateSrc implements ActorTemplate {
 				/* Includes-------------------------- */
 				#include "../inc/config.h"
 				#include "../inc/datatype_definition.h"
+				
+				#if SINGLECORE==1
 				#include "../inc/circular_fifo_lib.h"
+				#endif
+				
+				#if MULTICORE==1
+				#include <cheap.h>
+				#endif
 				#include "../inc/sdfcomb_«name».h"
-				
-				
 				
 				/*
 				========================================
@@ -97,43 +102,43 @@ class SDFCombTemplateSrc implements ActorTemplate {
 			«initMemory(model,actor)»
 				
 				/* Read From Input Port  */
-				«IF Generator.TESTING==1&&Generator.PC==1»
-					printf("%s\n","read");
-				«ENDIF»
+«««				«IF Generator.TESTING==1&&Generator.PC==1»
+«««					printf("%s\n","read");
+«««				«ENDIF»
 				int ret=0;
 				«read(model,actor)»
 			
 				
 				/* Inline Code           */
-				«IF Generator.TESTING==1&&Generator.PC==1»
-					printf("%s\n","inline code");
-				«ENDIF»
+«««				«IF Generator.TESTING==1&&Generator.PC==1»
+«««					printf("%s\n","inline code");
+«««				«ENDIF»
 				«getInlineCode()»
 				
 				/* Write To Output Ports */
-				«IF Generator.TESTING==1&&Generator.PC==1»
-					printf("%s\n","write");
-				«ENDIF»
+«««				«IF Generator.TESTING==1&&Generator.PC==1»
+«««					printf("%s\n","write");
+«««				«ENDIF»
 				«write(actor)»
 			
-				«IF Generator.TESTING==1&&Generator.NUCLEO==1»
-					«IF name=="GrayScale"»
-						HAL_Delay(1000);
-						HAL_GPIO_WritePin(GPIOA,GPIO_PIN_5,0);
-					«ELSEIF name=="getPx" »
-						HAL_Delay(1000);
-						HAL_GPIO_WritePin(GPIOC,GPIO_PIN_9,0);					
-					«ELSEIF name=="Gx" »
-						HAL_Delay(1000);
-						HAL_GPIO_WritePin(GPIOC,GPIO_PIN_8,0);	
-					«ELSEIF name=="Gy" »
-						HAL_Delay(1000);
-						HAL_GPIO_WritePin(GPIOC,GPIO_PIN_6,0);		
-					«ELSEIF name=="Abs" »	
-						HAL_Delay(1000);
-						HAL_GPIO_WritePin(GPIOA,GPIO_PIN_5,0);
-					«ENDIF»	
-				«ENDIF»
+«««				«IF Generator.TESTING==1&&Generator.NUCLEO==1»
+«««					«IF name=="GrayScale"»
+«««						HAL_Delay(1000);
+«««						HAL_GPIO_WritePin(GPIOA,GPIO_PIN_5,0);
+«««					«ELSEIF name=="getPx" »
+«««						HAL_Delay(1000);
+«««						HAL_GPIO_WritePin(GPIOC,GPIO_PIN_9,0);					
+«««					«ELSEIF name=="Gx" »
+«««						HAL_Delay(1000);
+«««						HAL_GPIO_WritePin(GPIOC,GPIO_PIN_8,0);	
+«««					«ELSEIF name=="Gy" »
+«««						HAL_Delay(1000);
+«««						HAL_GPIO_WritePin(GPIOC,GPIO_PIN_6,0);		
+«««					«ELSEIF name=="Abs" »	
+«««						HAL_Delay(1000);
+«««						HAL_GPIO_WritePin(GPIOA,GPIO_PIN_5,0);
+«««					«ENDIF»	
+«««				«ENDIF»
 				}
 		'''
 	}
@@ -144,16 +149,24 @@ class SDFCombTemplateSrc implements ActorTemplate {
 			/* Input FIFO */
 			«FOR sdf : this.inputSDFChannelSet SEPARATOR "" AFTER ""»
 				«IF !record.contains(sdf)»
+				#if SINGLECORE==1
 					extern circular_fifo_«Query.findSDFChannelDataType(Generator.model,sdf)» fifo_«sdf.getIdentifier()»;
 					extern spinlock spinlock_«sdf.getIdentifier()»;
+				#endif
+				#if MULTICORE==1
+					
+				#endif
+				
 					«var tmp=record.add(sdf)»
 				«ENDIF»
 			«ENDFOR»
 			/* Output FIFO */
 			«FOR sdf : this.outputSDFChannelSet SEPARATOR "" AFTER ""»
 				«IF !record.contains(sdf)»
+				#if SINGLECORE==1
 					extern circular_fifo_«Query.findSDFChannelDataType(Generator.model,sdf)» fifo_«sdf.getIdentifier()»;
 					extern spinlock spinlock_«sdf.getIdentifier()»;
+				#endif
 					«var tmp=record.add(sdf)»
 				«ENDIF»
 			«ENDFOR»		
@@ -179,7 +192,7 @@ class SDFCombTemplateSrc implements ActorTemplate {
 			if (Query.findImplOutputPorts(actorimpl) !== null) {
 				ports.addAll(Query.findImplOutputPorts(actorimpl))
 			}
-			println("-->" + ports)
+			//println("-->" + ports)
 			if (ports.isEmpty()) {
 				ret+='''
 				The inputPorts or outputPorts Property is not specified in «impl»

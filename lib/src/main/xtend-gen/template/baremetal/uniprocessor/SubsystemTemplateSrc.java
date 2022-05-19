@@ -33,6 +33,8 @@ public class SubsystemTemplateSrc implements SubsystemTemplate {
       StringConcatenation _builder = new StringConcatenation();
       _builder.append("#include \"../inc/subsystem.h\"");
       _builder.newLine();
+      _builder.append("#include <stdio.h>");
+      _builder.newLine();
       {
         for(final Vertex v : sdfcomb) {
           _builder.append("#include \"../inc/sdfcomb_");

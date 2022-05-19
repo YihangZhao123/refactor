@@ -36,6 +36,8 @@ class CircularFIFOTemplateInc implements InitTemplate {
 		'''
 			#ifndef CIRCULAR_FIFO_LIB_H_
 			#define CIRCULAR_FIFO_LIB_H_
+			#include "config.h"
+			#if SINGLECORE==1
 			/*
 			************************************************************
 			This header file defines all the prototype of token types in
@@ -51,6 +53,8 @@ class CircularFIFOTemplateInc implements InitTemplate {
 			«foo(v)»
 			«ENDFOR»
 			«ENDIF»
+			#endif
+			
 			#endif
 		'''
 	}

@@ -15,7 +15,7 @@ import template.templateInterface.InitTemplate;
 
 @FileTypeAnno(type = FileType.C_SOURCE)
 @SuppressWarnings("all")
-public class DataDefinitionSrc implements InitTemplate {
+public class DataTypeSrc implements InitTemplate {
   public String create() {
     String _xblockexpression = null;
     {

@@ -1,10 +1,15 @@
 	/* Includes-------------------------- */
 	#include "../inc/config.h"
 	#include "../inc/datatype_definition.h"
+	
+	#if SINGLECORE==1
 	#include "../inc/circular_fifo_lib.h"
+	#endif
+	
+	#if MULTICORE==1
+	#include <cheap.h>
+	#endif
 	#include "../inc/sdfcomb_getPx.h"
-	
-	
 	
 	/*
 	========================================
@@ -12,13 +17,23 @@
 	========================================
 	*/
 	/* Input FIFO */
-	extern circular_fifo_DoubleType fifo_GrayScaleToGetPx;
-	extern spinlock spinlock_GrayScaleToGetPx;
+	#if SINGLECORE==1
+		extern circular_fifo_DoubleType fifo_GrayScaleToGetPx;
+		extern spinlock spinlock_GrayScaleToGetPx;
+	#endif
+	#if MULTICORE==1
+		
+	#endif
+	
 	/* Output FIFO */
-	extern circular_fifo_DoubleType fifo_gysig;
-	extern spinlock spinlock_gysig;
-	extern circular_fifo_DoubleType fifo_gxsig;
-	extern spinlock spinlock_gxsig;
+	#if SINGLECORE==1
+		extern circular_fifo_DoubleType fifo_gysig;
+		extern spinlock spinlock_gysig;
+	#endif
+	#if SINGLECORE==1
+		extern circular_fifo_DoubleType fifo_gxsig;
+		extern spinlock spinlock_gxsig;
+	#endif
 	/*
 	========================================
 		Declare Extern Global Variables
@@ -33,13 +48,12 @@
 	*/			
 void actor_getPx(){
 				
-/*  initialize me	ory*/
+/*  initialize memory*/
 Array6OfDoubleType gray; 
 Array6OfDoubleType imgBlockY; 
 Array6OfDoubleType imgBlockX; 
 	
 	/* Read From Input Port  */
-	printf("%s\n","read");
 	int ret=0;
 	for(int i=0;i<6;++i){
 		
@@ -56,7 +70,6 @@ Array6OfDoubleType imgBlockX;
 
 	
 	/* Inline Code           */
-	printf("%s\n","inline code");
 	/* in combFunction getPxImpl1 */
 	imgBlockX[0]=gray[0];
 	imgBlockX[1]=gray[1];
@@ -73,7 +86,6 @@ Array6OfDoubleType imgBlockX;
 	imgBlockY[5]=gray[5];
 	
 	/* Write To Output Ports */
-	printf("%s\n","write");
 	for(int i=0;i<6;++i){
 		#if GYSIG_BLOCKING==0
 		write_non_blocking_DoubleType(&fifo_gysig,imgBlockY[i]);

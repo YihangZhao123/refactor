@@ -1,10 +1,15 @@
 	/* Includes-------------------------- */
 	#include "../inc/config.h"
 	#include "../inc/datatype_definition.h"
+	
+	#if SINGLECORE==1
 	#include "../inc/circular_fifo_lib.h"
+	#endif
+	
+	#if MULTICORE==1
+	#include <cheap.h>
+	#endif
 	#include "../inc/sdfcomb_Gy.h"
-	
-	
 	
 	/*
 	========================================
@@ -12,11 +17,19 @@
 	========================================
 	*/
 	/* Input FIFO */
-	extern circular_fifo_DoubleType fifo_gysig;
-	extern spinlock spinlock_gysig;
+	#if SINGLECORE==1
+		extern circular_fifo_DoubleType fifo_gysig;
+		extern spinlock spinlock_gysig;
+	#endif
+	#if MULTICORE==1
+		
+	#endif
+	
 	/* Output FIFO */
-	extern circular_fifo_DoubleType fifo_absysig;
-	extern spinlock spinlock_absysig;
+	#if SINGLECORE==1
+		extern circular_fifo_DoubleType fifo_absysig;
+		extern spinlock spinlock_absysig;
+	#endif
 	/*
 	========================================
 		Declare Extern Global Variables
@@ -30,12 +43,11 @@
 	*/			
 void actor_Gy(){
 				
-/*  initialize me	ory*/
+/*  initialize memory*/
 DoubleType gy; 
 Array6OfDoubleType imgBlockY; 
 	
 	/* Read From Input Port  */
-	printf("%s\n","read");
 	int ret=0;
 	for(int i=0;i<6;++i){
 		
@@ -52,7 +64,6 @@ Array6OfDoubleType imgBlockY;
 
 	
 	/* Inline Code           */
-	printf("%s\n","inline code");
 	/* in combFunction GyImpl */
 	gy=0;
 	gy=gy+imgBlockY[0];
@@ -63,7 +74,6 @@ Array6OfDoubleType imgBlockY;
 	gy=gy-imgBlockY[5];
 	
 	/* Write To Output Ports */
-	printf("%s\n","write");
 	#if ABSYSIG_BLOCKING==0
 	write_non_blocking_DoubleType(&fifo_absysig,gy);
 	#else

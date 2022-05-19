@@ -1,10 +1,15 @@
 	/* Includes-------------------------- */
 	#include "../inc/config.h"
 	#include "../inc/datatype_definition.h"
+	
+	#if SINGLECORE==1
 	#include "../inc/circular_fifo_lib.h"
+	#endif
+	
+	#if MULTICORE==1
+	#include <cheap.h>
+	#endif
 	#include "../inc/sdfcomb_Gx.h"
-	
-	
 	
 	/*
 	========================================
@@ -12,11 +17,19 @@
 	========================================
 	*/
 	/* Input FIFO */
-	extern circular_fifo_DoubleType fifo_gxsig;
-	extern spinlock spinlock_gxsig;
+	#if SINGLECORE==1
+		extern circular_fifo_DoubleType fifo_gxsig;
+		extern spinlock spinlock_gxsig;
+	#endif
+	#if MULTICORE==1
+		
+	#endif
+	
 	/* Output FIFO */
-	extern circular_fifo_DoubleType fifo_absxsig;
-	extern spinlock spinlock_absxsig;
+	#if SINGLECORE==1
+		extern circular_fifo_DoubleType fifo_absxsig;
+		extern spinlock spinlock_absxsig;
+	#endif
 	/*
 	========================================
 		Declare Extern Global Variables
@@ -30,12 +43,11 @@
 	*/			
 void actor_Gx(){
 				
-/*  initialize me	ory*/
+/*  initialize memory*/
 DoubleType gx; 
 Array6OfDoubleType imgBlockX; 
 	
 	/* Read From Input Port  */
-	printf("%s\n","read");
 	int ret=0;
 	for(int i=0;i<6;++i){
 		
@@ -52,7 +64,6 @@ Array6OfDoubleType imgBlockX;
 
 	
 	/* Inline Code           */
-	printf("%s\n","inline code");
 	/* in combFunction GxImpl */
 	gx=0;
 	gx=gx-imgBlockX[0];
@@ -63,7 +74,6 @@ Array6OfDoubleType imgBlockX;
 	gx=gx+imgBlockX[5];
 	
 	/* Write To Output Ports */
-	printf("%s\n","write");
 	#if ABSXSIG_BLOCKING==0
 	write_non_blocking_DoubleType(&fifo_absxsig,gx);
 	#else

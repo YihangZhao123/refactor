@@ -37,6 +37,9 @@ public class Config implements InitTemplate {
       _builder.newLine();
       _builder.append("#endif");
       _builder.newLine();
+      _builder.append("#define MULTICORE  0");
+      _builder.newLine();
+      _builder.append("#define SINGLECORE  1");
       _builder.newLine();
       _builder.append("/*");
       _builder.newLine();

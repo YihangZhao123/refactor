@@ -2,12 +2,15 @@ package utils;
 
 import java.util.ArrayList;
 
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import org.jgrapht.alg.shortestpath.BFSShortestPath;
 
 import forsyde.io.java.core.EdgeInfo;
 import forsyde.io.java.core.EdgeTrait;
@@ -25,6 +28,7 @@ import forsyde.io.java.typed.viewers.moc.sdf.SDFChannel;
 import forsyde.io.java.typed.viewers.moc.sdf.SDFChannelViewer;
 import forsyde.io.java.typed.viewers.moc.sdf.SDFComb;
 import forsyde.io.java.typed.viewers.moc.sdf.SDFCombViewer;
+import forsyde.io.java.typed.viewers.platform.GenericProcessingModule;
 import forsyde.io.java.typed.viewers.typing.TypedOperation;
 import forsyde.io.java.typed.viewers.typing.datatypes.Array;
 import forsyde.io.java.typed.viewers.typing.datatypes.ArrayViewer;
@@ -34,6 +38,35 @@ import java.lang.Math;
 
 public class Query {
 
+	public static boolean isOnOneCoreChannel(ForSyDeSystemGraph model,Vertex channel) {
+		var inputActor=VertexAcessor.getNamedPort(model,channel,"producer" , VertexTrait.MOC_SDF_SDFCOMB).get();
+		var outputActor = VertexAcessor.getNamedPort(model,channel,"consumer" , VertexTrait.MOC_SDF_SDFCOMB).get();
+		Set<Vertex> tiles = model.vertexSet().stream()
+				.filter(v->GenericProcessingModule.conforms(v))
+				.collect(Collectors.toSet());
+		BFSShortestPath<Vertex,EdgeInfo> bfs = new BFSShortestPath<>(model);
+		
+		Vertex tile_input=null;
+		Vertex tile_output=null;
+		for(Vertex tile:tiles) {
+			var a=	bfs.getPath(tile,inputActor);
+			if(a!=null&&a.getLength()==2) {
+				tile_input = tile;
+				break;
+			}
+		}
+		for(Vertex tile:tiles) {
+			var a=	bfs.getPath(tile,outputActor);
+			if(a!=null&&a.getLength()==2) {
+				tile_output = tile;
+				break;
+			}
+		}		
+		if(tile_output==tile_input) {
+			return true;
+		}
+		return false;
+	}
 	public static Set<Vertex> findAllExternalDataBlocks(ForSyDeSystemGraph model) {
 		return model.vertexSet().stream().filter(v -> DataBlock.conforms(v) && !SDFChannel.conforms(v))
 				.collect(Collectors.toSet());

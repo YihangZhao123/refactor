@@ -11,6 +11,7 @@ import template.templateInterface.InitTemplate;
 import utils.Query;
 
 @FileTypeAnno(type = FileType.C_INCLUDE)
+@Deprecated
 @SuppressWarnings("all")
 public class ExternalDataBlockInc implements InitTemplate {
   public String create() {

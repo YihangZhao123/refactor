@@ -1,10 +1,15 @@
 	/* Includes-------------------------- */
 	#include "../inc/config.h"
 	#include "../inc/datatype_definition.h"
+	
+	#if SINGLECORE==1
 	#include "../inc/circular_fifo_lib.h"
+	#endif
+	
+	#if MULTICORE==1
+	#include <cheap.h>
+	#endif
 	#include "../inc/sdfcomb_Abs.h"
-	
-	
 	
 	/*
 	========================================
@@ -12,16 +17,46 @@
 	========================================
 	*/
 	/* Input FIFO */
-	extern circular_fifo_UInt16 fifo_GrayScaleToAbs;
-	extern spinlock spinlock_GrayScaleToAbs;
-	extern circular_fifo_UInt16 fifo_AbsY;
-	extern spinlock spinlock_AbsY;
-	extern circular_fifo_UInt16 fifo_AbsX;
-	extern spinlock spinlock_AbsX;
-	extern circular_fifo_DoubleType fifo_absysig;
-	extern spinlock spinlock_absysig;
-	extern circular_fifo_DoubleType fifo_absxsig;
-	extern spinlock spinlock_absxsig;
+	#if SINGLECORE==1
+		extern circular_fifo_UInt16 fifo_GrayScaleToAbs;
+		extern spinlock spinlock_GrayScaleToAbs;
+	#endif
+	#if MULTICORE==1
+		
+	#endif
+	
+	#if SINGLECORE==1
+		extern circular_fifo_UInt16 fifo_AbsY;
+		extern spinlock spinlock_AbsY;
+	#endif
+	#if MULTICORE==1
+		
+	#endif
+	
+	#if SINGLECORE==1
+		extern circular_fifo_UInt16 fifo_AbsX;
+		extern spinlock spinlock_AbsX;
+	#endif
+	#if MULTICORE==1
+		
+	#endif
+	
+	#if SINGLECORE==1
+		extern circular_fifo_DoubleType fifo_absysig;
+		extern spinlock spinlock_absysig;
+	#endif
+	#if MULTICORE==1
+		
+	#endif
+	
+	#if SINGLECORE==1
+		extern circular_fifo_DoubleType fifo_absxsig;
+		extern spinlock spinlock_absxsig;
+	#endif
+	#if MULTICORE==1
+		
+	#endif
+	
 	/* Output FIFO */
 	/*
 	========================================
@@ -38,7 +73,7 @@
 	*/			
 void actor_Abs(){
 				
-/*  initialize me	ory*/
+/*  initialize memory*/
 UInt16 offsetX; 
 UInt16 offsetY; 
 Array2OfUInt16 dims; 
@@ -47,7 +82,6 @@ DoubleType resy;
 DoubleType resx; 
 	
 	/* Read From Input Port  */
-	printf("%s\n","read");
 	int ret=0;
 	#if ABSXSIG_BLOCKING==0
 	ret=read_non_blocking_DoubleType(&fifo_absxsig,&resx);
@@ -104,7 +138,6 @@ DoubleType resx;
 
 	
 	/* Inline Code           */
-	printf("%s\n","inline code");
 	/* in combFunction AbsImpl */
 	if(resx<0.0)resx=-resx;
 	if(resy<0.0)resy=-resy;
@@ -118,7 +151,6 @@ DoubleType resx;
 	system_img_sink_address[offsetX][offsetY]=resx+resy;
 	
 	/* Write To Output Ports */
-	printf("%s\n","write");
 	#if ABSX_BLOCKING==0
 	write_non_blocking_UInt16(&fifo_AbsX,offsetX);
 	#else

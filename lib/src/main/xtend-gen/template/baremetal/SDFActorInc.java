@@ -12,7 +12,7 @@ import template.templateInterface.ActorTemplate;
 
 @FileTypeAnno(type = FileType.C_INCLUDE)
 @SuppressWarnings("all")
-public class SDFCombTemplateInc implements ActorTemplate {
+public class SDFActorInc implements ActorTemplate {
   private Set<Executable> a;
   
   public String create(final Vertex actor) {
@@ -31,7 +31,6 @@ public class SDFCombTemplateInc implements ActorTemplate {
       _builder.append("#define ");
       _builder.append(tmp);
       _builder.newLineIfNotEmpty();
-      _builder.append("#include \"../inc/datatype_definition.h\"");
       _builder.newLine();
       _builder.append("void actor_");
       _builder.append(name);

@@ -1,10 +1,15 @@
 	/* Includes-------------------------- */
 	#include "../inc/config.h"
 	#include "../inc/datatype_definition.h"
+	
+	#if SINGLECORE==1
 	#include "../inc/circular_fifo_lib.h"
+	#endif
+	
+	#if MULTICORE==1
+	#include <cheap.h>
+	#endif
 	#include "../inc/sdfcomb_GrayScale.h"
-	
-	
 	
 	/*
 	========================================
@@ -12,15 +17,31 @@
 	========================================
 	*/
 	/* Input FIFO */
-	extern circular_fifo_UInt16 fifo_GrayScaleX;
-	extern spinlock spinlock_GrayScaleX;
-	extern circular_fifo_UInt16 fifo_GrayScaleY;
-	extern spinlock spinlock_GrayScaleY;
+	#if SINGLECORE==1
+		extern circular_fifo_UInt16 fifo_GrayScaleX;
+		extern spinlock spinlock_GrayScaleX;
+	#endif
+	#if MULTICORE==1
+		
+	#endif
+	
+	#if SINGLECORE==1
+		extern circular_fifo_UInt16 fifo_GrayScaleY;
+		extern spinlock spinlock_GrayScaleY;
+	#endif
+	#if MULTICORE==1
+		
+	#endif
+	
 	/* Output FIFO */
-	extern circular_fifo_UInt16 fifo_GrayScaleToAbs;
-	extern spinlock spinlock_GrayScaleToAbs;
-	extern circular_fifo_DoubleType fifo_GrayScaleToGetPx;
-	extern spinlock spinlock_GrayScaleToGetPx;
+	#if SINGLECORE==1
+		extern circular_fifo_UInt16 fifo_GrayScaleToAbs;
+		extern spinlock spinlock_GrayScaleToAbs;
+	#endif
+	#if SINGLECORE==1
+		extern circular_fifo_DoubleType fifo_GrayScaleToGetPx;
+		extern spinlock spinlock_GrayScaleToGetPx;
+	#endif
 	/*
 	========================================
 		Declare Extern Global Variables
@@ -37,7 +58,7 @@
 	*/			
 void actor_GrayScale(){
 				
-/*  initialize me	ory*/
+/*  initialize memory*/
 UInt16 offsetX; 
 Array2OfUInt16 dimsOut; 
 UInt16 offsetY; 
@@ -47,7 +68,6 @@ UInt16 dimY = dimY_global;
 UInt16 dimX = dimX_global; 
 	
 	/* Read From Input Port  */
-	printf("%s\n","read");
 	int ret=0;
 	#if GRAYSCALEX_BLOCKING==0
 	ret=read_non_blocking_UInt16(&fifo_GrayScaleX,&offsetX);
@@ -72,7 +92,6 @@ UInt16 dimX = dimX_global;
 
 	
 	/* Inline Code           */
-	printf("%s\n","inline code");
 	/* in combFunction GrayScaleImpl */
 	gray[0]=0.3125*system_img_source_address[offsetY+0][offsetX+0]+0.5625*system_img_source_address[offsetY+0][offsetX+1]+0.125*system_img_source_address[offsetY+0][offsetX+2];
 	gray[1]=0.3125*system_img_source_address[offsetY+0][offsetX+2]+0.5625*system_img_source_address[offsetY+0][offsetX+3]+0.125*system_img_source_address[offsetY+0][offsetX+4];
@@ -91,7 +110,6 @@ UInt16 dimX = dimX_global;
 	dimsOut[1]=dimY;
 	
 	/* Write To Output Ports */
-	printf("%s\n","write");
 	for(int i=0;i<6;++i){
 		#if GRAYSCALETOGETPX_BLOCKING==0
 		write_non_blocking_DoubleType(&fifo_GrayScaleToGetPx,gray[i]);

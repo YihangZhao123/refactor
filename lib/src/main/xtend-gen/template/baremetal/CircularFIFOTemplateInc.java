@@ -50,6 +50,10 @@ public class CircularFIFOTemplateInc implements InitTemplate {
     _builder.newLine();
     _builder.append("#define CIRCULAR_FIFO_LIB_H_");
     _builder.newLine();
+    _builder.append("#include \"config.h\"");
+    _builder.newLine();
+    _builder.append("#if SINGLECORE==1");
+    _builder.newLine();
     _builder.append("/*");
     _builder.newLine();
     _builder.append("************************************************************");
@@ -90,6 +94,9 @@ public class CircularFIFOTemplateInc implements InitTemplate {
         }
       }
     }
+    _builder.append("#endif");
+    _builder.newLine();
+    _builder.newLine();
     _builder.append("#endif");
     _builder.newLine();
     return _builder.toString();

@@ -1,14 +1,7 @@
 	/* Includes-------------------------- */
 	#include "../inc/config.h"
 	#include "../inc/datatype_definition.h"
-	
-	#if SINGLECORE==1
 	#include "../inc/circular_fifo_lib.h"
-	#endif
-	
-	#if MULTICORE==1
-	#include <cheap.h>
-	#endif
 	#include "../inc/sdfcomb_Abs.h"
 	
 	/*
@@ -17,46 +10,16 @@
 	========================================
 	*/
 	/* Input FIFO */
-	#if SINGLECORE==1
-		extern circular_fifo_UInt16 fifo_GrayScaleToAbs;
-		extern spinlock spinlock_GrayScaleToAbs;
-	#endif
-	#if MULTICORE==1
-		
-	#endif
-	
-	#if SINGLECORE==1
-		extern circular_fifo_UInt16 fifo_AbsY;
-		extern spinlock spinlock_AbsY;
-	#endif
-	#if MULTICORE==1
-		
-	#endif
-	
-	#if SINGLECORE==1
-		extern circular_fifo_UInt16 fifo_AbsX;
-		extern spinlock spinlock_AbsX;
-	#endif
-	#if MULTICORE==1
-		
-	#endif
-	
-	#if SINGLECORE==1
-		extern circular_fifo_DoubleType fifo_absysig;
-		extern spinlock spinlock_absysig;
-	#endif
-	#if MULTICORE==1
-		
-	#endif
-	
-	#if SINGLECORE==1
-		extern circular_fifo_DoubleType fifo_absxsig;
-		extern spinlock spinlock_absxsig;
-	#endif
-	#if MULTICORE==1
-		
-	#endif
-	
+	extern circular_fifo_UInt16 fifo_GrayScaleToAbs;
+	extern spinlock spinlock_GrayScaleToAbs;				
+	extern circular_fifo_UInt16 fifo_AbsY;
+	extern spinlock spinlock_AbsY;				
+	extern circular_fifo_UInt16 fifo_AbsX;
+	extern spinlock spinlock_AbsX;				
+	extern circular_fifo_DoubleType fifo_absysig;
+	extern spinlock spinlock_absysig;				
+	extern circular_fifo_DoubleType fifo_absxsig;
+	extern spinlock spinlock_absxsig;				
 	/* Output FIFO */
 	/*
 	========================================
@@ -164,4 +127,4 @@ DoubleType resx;
 	#endif
 							
 
-	}
+}

@@ -1,14 +1,7 @@
 	/* Includes-------------------------- */
 	#include "../inc/config.h"
 	#include "../inc/datatype_definition.h"
-	
-	#if SINGLECORE==1
 	#include "../inc/circular_fifo_lib.h"
-	#endif
-	
-	#if MULTICORE==1
-	#include <cheap.h>
-	#endif
 	#include "../inc/sdfcomb_getPx.h"
 	
 	/*
@@ -17,23 +10,13 @@
 	========================================
 	*/
 	/* Input FIFO */
-	#if SINGLECORE==1
-		extern circular_fifo_DoubleType fifo_GrayScaleToGetPx;
-		extern spinlock spinlock_GrayScaleToGetPx;
-	#endif
-	#if MULTICORE==1
-		
-	#endif
-	
+	extern circular_fifo_DoubleType fifo_GrayScaleToGetPx;
+	extern spinlock spinlock_GrayScaleToGetPx;				
 	/* Output FIFO */
-	#if SINGLECORE==1
-		extern circular_fifo_DoubleType fifo_gysig;
-		extern spinlock spinlock_gysig;
-	#endif
-	#if SINGLECORE==1
-		extern circular_fifo_DoubleType fifo_gxsig;
-		extern spinlock spinlock_gxsig;
-	#endif
+	extern circular_fifo_DoubleType fifo_gysig;
+	extern spinlock spinlock_gysig;
+	extern circular_fifo_DoubleType fifo_gxsig;
+	extern spinlock spinlock_gxsig;
 	/*
 	========================================
 		Declare Extern Global Variables
@@ -103,4 +86,4 @@ Array6OfDoubleType imgBlockX;
 	}
 	
 
-	}
+}

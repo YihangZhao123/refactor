@@ -9,20 +9,20 @@ import generator.SDFCombProcessingModule;
 import generator.SubsystemUniprocessorModule;
 import org.eclipse.xtext.xbase.lib.Exceptions;
 import org.eclipse.xtext.xbase.lib.InputOutput;
-import template.baremetal.CircularFIFOTemplateInc;
-import template.baremetal.CircularFIFOTemplateSrc;
-import template.baremetal.Config;
-import template.baremetal.DataTypeInc;
-import template.baremetal.DataTypeSrc;
-import template.baremetal.SDFActorInc;
-import template.baremetal.SDFActorSrc;
-import template.baremetal.SDFChannelTemplateSrc;
-import template.baremetal.SpinLockTemplateInc;
-import template.baremetal.SpinLockTemplateSrc;
-import template.baremetal.uniprocessor.SubsystemInitInc;
-import template.baremetal.uniprocessor.SubsystemInitSrc;
-import template.baremetal.uniprocessor.SubsystemTemplateInc;
-import template.baremetal.uniprocessor.SubsystemTemplateSrc;
+import template.baremetal_single.CircularFIFOTemplateInc;
+import template.baremetal_single.CircularFIFOTemplateSrc;
+import template.baremetal_single.Config;
+import template.baremetal_single.DataTypeInc;
+import template.baremetal_single.DataTypeSrc;
+import template.baremetal_single.SDFActorInc;
+import template.baremetal_single.SDFActorSrc;
+import template.baremetal_single.SDFChannelTemplateSrc;
+import template.baremetal_single.SpinLockTemplateInc;
+import template.baremetal_single.SpinLockTemplateSrc;
+import template.baremetal_single.SubsystemInitInc;
+import template.baremetal_single.SubsystemInitSrc;
+import template.baremetal_single.SubsystemTemplateInc;
+import template.baremetal_single.SubsystemTemplateSrc;
 
 /**
  * one core

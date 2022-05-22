@@ -1,14 +1,7 @@
 	/* Includes-------------------------- */
 	#include "../inc/config.h"
 	#include "../inc/datatype_definition.h"
-	
-	#if SINGLECORE==1
 	#include "../inc/circular_fifo_lib.h"
-	#endif
-	
-	#if MULTICORE==1
-	#include <cheap.h>
-	#endif
 	#include "../inc/sdfcomb_GrayScale.h"
 	
 	/*
@@ -17,31 +10,15 @@
 	========================================
 	*/
 	/* Input FIFO */
-	#if SINGLECORE==1
-		extern circular_fifo_UInt16 fifo_GrayScaleX;
-		extern spinlock spinlock_GrayScaleX;
-	#endif
-	#if MULTICORE==1
-		
-	#endif
-	
-	#if SINGLECORE==1
-		extern circular_fifo_UInt16 fifo_GrayScaleY;
-		extern spinlock spinlock_GrayScaleY;
-	#endif
-	#if MULTICORE==1
-		
-	#endif
-	
+	extern circular_fifo_UInt16 fifo_GrayScaleX;
+	extern spinlock spinlock_GrayScaleX;				
+	extern circular_fifo_UInt16 fifo_GrayScaleY;
+	extern spinlock spinlock_GrayScaleY;				
 	/* Output FIFO */
-	#if SINGLECORE==1
-		extern circular_fifo_UInt16 fifo_GrayScaleToAbs;
-		extern spinlock spinlock_GrayScaleToAbs;
-	#endif
-	#if SINGLECORE==1
-		extern circular_fifo_DoubleType fifo_GrayScaleToGetPx;
-		extern spinlock spinlock_GrayScaleToGetPx;
-	#endif
+	extern circular_fifo_UInt16 fifo_GrayScaleToAbs;
+	extern spinlock spinlock_GrayScaleToAbs;
+	extern circular_fifo_DoubleType fifo_GrayScaleToGetPx;
+	extern spinlock spinlock_GrayScaleToGetPx;
 	/*
 	========================================
 		Declare Extern Global Variables
@@ -139,4 +116,4 @@ UInt16 dimX = dimX_global;
 	}
 	
 
-	}
+}

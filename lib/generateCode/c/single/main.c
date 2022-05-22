@@ -2,8 +2,8 @@
 #include "./single/inc/config.h"
 #include "./single/inc/subsystem.h"
 #include "./single/inc/subsystem_init.h"
-#define X 10
-#define Y 10
+#define X 5
+#define Y 5
 UInt16 dimX_global=X;
 UInt16 dimY_global=Y;
 double a[Y][X];
@@ -17,7 +17,7 @@ int main(){
     
     for(int i=0;i<Y;++i){
         for(int j=0;j<X;++j){
-            a[i][j]=j;
+            a[i][j]=i+j;
             
             c[i][j]=0;
         }

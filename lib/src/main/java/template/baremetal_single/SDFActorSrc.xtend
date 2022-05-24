@@ -34,90 +34,56 @@ class SDFActorSrc implements ActorTemplate {
 		this.outputSDFChannelSet = Query.findOutputSDFChannels(model, actor)
 		var Set<Vertex> datablock
 		datablock = Query.findAllExternalDataBlocks(model, SDFComb.safeCast(actor).get())
+		var ret1 =new StringBuilder
+		var ret2 =new StringBuilder
+		initMemory(model,actor,ret1,ret2)
 		'''
-				«var name = actor.getIdentifier()»
-				/* Includes-------------------------- */
-				#include "../inc/config.h"
-				#include "../inc/datatype_definition.h"
-				#include "../inc/circular_fifo_lib.h"
-				#include "../inc/sdfcomb_«name».h"
-				
-				/*
-				========================================
-				Declare Extern Channal Variables
-				========================================
-				*/
-				«extern()»
-				/*
-				========================================
-					Declare Extern Global Variables
-				========================================
-				*/			
+			«var name = actor.getIdentifier()»
+			/* Includes */
+			#include "../inc/config.h"
+			#include "../inc/datatype_definition.h"
+			#include "../inc/circular_fifo_lib.h"
+			#include "../inc/sdfcomb_«name».h"
+			
+			/*
+			========================================
+			Declare Extern Channal Variables
+			========================================
+			*/
+			«extern()»
+			/*
+			========================================
+				Declare Extern Global Variables
+			========================================
+			*/			
 				«FOR d : datablock»
-					extern «findType(model,d)» «d.getIdentifier()»;
+			extern «findType(model,d)» «d.getIdentifier()»;
 				«ENDFOR»
 				
-				/*
-				========================================
-					Actor Function
-				========================================
-				*/			
-			void actor_«name»(){
-				«««				#if defined(TESTING)
-«««				«IF name=="GrayScale"»
-«««				HAL_GPIO_WritePin(GPIOA,GPIO_PIN_5,1);
-«««				«ELSEIF name=="getPx" »
-«««				HAL_GPIO_WritePin(GPIOC,GPIO_PIN_9,1);
-«««				«ELSEIF name=="Gx" »
-«««				HAL_GPIO_WritePin(GPIOC,GPIO_PIN_8,1);
-«««				«ELSEIF name=="Gy" »
-«««				HAL_GPIO_WritePin(GPIOC,GPIO_PIN_6,1);
-«««				«ELSEIF name=="Abs" »
-«««				HAL_GPIO_WritePin(GPIOA,GPIO_PIN_5,1);
-«««				«ENDIF»
-«««				#endi	
-			
+			/*
+			========================================
+				Actor Function
+			========================================
+			*/	
 			/*  initialize memory*/
-			«initMemory(model,actor)»
-				
+«««						«initMemory(model,actor)»	
+			«ret1»	
+			void actor_«name»(){
+			
+«««			/*  initialize memory*/
+«««			«initMemory(model,actor)»
+				«ret2»
 				/* Read From Input Port  */
-«««				«IF Generator.TESTING==1&&Generator.PC==1»
-«««					printf("%s\n","read");
-«««				«ENDIF»
 				int ret=0;
 				«read(model,actor)»
 			
 				
 				/* Inline Code           */
-«««				«IF Generator.TESTING==1&&Generator.PC==1»
-«««					printf("%s\n","inline code");
-«««				«ENDIF»
 				«getInlineCode()»
 				
 				/* Write To Output Ports */
-«««				«IF Generator.TESTING==1&&Generator.PC==1»
-«««					printf("%s\n","write");
-«««				«ENDIF»
 				«write(actor)»
 			
-«««				«IF Generator.TESTING==1&&Generator.NUCLEO==1»
-«««					«IF name=="GrayScale"»
-«««						HAL_Delay(1000);
-«««						HAL_GPIO_WritePin(GPIOA,GPIO_PIN_5,0);
-«««					«ELSEIF name=="getPx" »
-«««						HAL_Delay(1000);
-«««						HAL_GPIO_WritePin(GPIOC,GPIO_PIN_9,0);					
-«««					«ELSEIF name=="Gx" »
-«««						HAL_Delay(1000);
-«««						HAL_GPIO_WritePin(GPIOC,GPIO_PIN_8,0);	
-«««					«ELSEIF name=="Gy" »
-«««						HAL_Delay(1000);
-«««						HAL_GPIO_WritePin(GPIOC,GPIO_PIN_6,0);		
-«««					«ELSEIF name=="Abs" »	
-«««						HAL_Delay(1000);
-«««						HAL_GPIO_WritePin(GPIOA,GPIO_PIN_5,0);
-«««					«ENDIF»	
-«««				«ENDIF»
 			}
 		'''
 	}
@@ -128,15 +94,20 @@ class SDFActorSrc implements ActorTemplate {
 			/* Input FIFO */
 			«FOR sdf : this.inputSDFChannelSet SEPARATOR "" AFTER ""»
 				«IF !record.contains(sdf)»
-					extern circular_fifo_«Query.findSDFChannelDataType(Generator.model,sdf)» fifo_«sdf.getIdentifier()»;
-					extern spinlock spinlock_«sdf.getIdentifier()»;				
+«««					extern circular_fifo_«Query.findSDFChannelDataType(Generator.model,sdf)» fifo_«sdf.getIdentifier()»;
+«««					extern spinlock spinlock_«sdf.getIdentifier()»;			
+					
+					extern ref_fifo fifo_«sdf.getIdentifier()»;
+					extern spinlock spinlock_«sdf.getIdentifier()»;	
 					«var tmp=record.add(sdf)»
 				«ENDIF»
 			«ENDFOR»
 			/* Output FIFO */
 			«FOR sdf : this.outputSDFChannelSet SEPARATOR "" AFTER ""»
 				«IF !record.contains(sdf)»
-					extern circular_fifo_«Query.findSDFChannelDataType(Generator.model,sdf)» fifo_«sdf.getIdentifier()»;
+«««					extern circular_fifo_«Query.findSDFChannelDataType(Generator.model,sdf)» fifo_«sdf.getIdentifier()»;
+«««					extern spinlock spinlock_«sdf.getIdentifier()»;
+					extern ref_fifo fifo_«sdf.getIdentifier()»;
 					extern spinlock spinlock_«sdf.getIdentifier()»;
 					«var tmp=record.add(sdf)»
 				«ENDIF»
@@ -144,7 +115,7 @@ class SDFActorSrc implements ActorTemplate {
 		'''
 	}
 
-	def String initMemory(ForSyDeSystemGraph model, Vertex actor) {
+	def String initMemory(ForSyDeSystemGraph model, Vertex actor, StringBuilder ret1, StringBuilder ret2) {
 
 		var impls = Query.findCombFuntionVertex(model, actor)
 
@@ -174,13 +145,14 @@ class SDFActorSrc implements ActorTemplate {
 					var datatype = Query.findImplPortDataType(model, actorimpl, port)
 					if (!variableNameRecord.contains(port)) {
 						if (Query.isSystemChannel(model, actorimpl, port) === null) {
-							ret += '''
-								«datatype» «port»; 
-							'''
+							ret1.append( '''
+							static	«datatype» «port»; 
+							''')
+							
 						} else {
-							ret += '''
+							ret2.append( '''
 								«datatype» «port» = «Query.isSystemChannel(model,actorimpl,port)»; 
-							'''
+							''')
 						}
 						variableNameRecord.add(port)
 					}
@@ -215,29 +187,37 @@ class SDFActorSrc implements ActorTemplate {
 							'''
 						} else if (consumption == 1) {
 							ret += '''
-								#if «sdfchannelName.toUpperCase()»_BLOCKING==0
-								ret=read_non_blocking_«datatype»(&fifo_«sdfchannelName»,&«port»);
-								if(ret==-1){
-									printf("fifo_«sdfchannelName» read error\n");
+«««								#if «sdfchannelName.toUpperCase()»_BLOCKING==0
+«««								ret=read_non_blocking_«datatype»(&fifo_«sdfchannelName»,&«port»);
+«««								if(ret==-1){
+«««									printf("fifo_«sdfchannelName» read error\n");
+«««								}
+«««								
+«««								#else
+«««								read_blocking_«datatype»(&fifo_«sdfchannelName»,&«port»,&spinlock_«sdfchannelName»);
+«««								#endif
+								{
+									void* tmp_addr;
+									read_non_blocking(&fifo_«sdfchannelName»,&tmp_addr);
+									«port»= *((«datatype» *)tmp_addr);
 								}
-								
-								#else
-								read_blocking_«datatype»(&fifo_«sdfchannelName»,&«port»,&spinlock_«sdfchannelName»);
-								#endif
 								
 							'''
 						} else {
 							ret += '''
 								for(int i=0;i<«consumption»;++i){
 									
-									#if «sdfchannelName.toUpperCase()»_BLOCKING==0
-									ret=read_non_blocking_«datatype»(&fifo_«sdfchannelName»,&«port»[i]);
-									if(ret==-1){
-										printf("fifo_«sdfchannelName» read error\n");
-									}
-									#else
-									read_blocking_«datatype»(&fifo_«sdfchannelName»,&«port»[i],&spinlock_«sdfchannelName»);
-									#endif
+«««									#if «sdfchannelName.toUpperCase()»_BLOCKING==0
+«««									ret=read_non_blocking_«datatype»(&fifo_«sdfchannelName»,&«port»[i]);
+«««									if(ret==-1){
+«««										printf("fifo_«sdfchannelName» read error\n");
+«««									}
+«««									#else
+«««									read_blocking_«datatype»(&fifo_«sdfchannelName»,&«port»[i],&spinlock_«sdfchannelName»);
+«««									#endif
+									void* tmp_addr;
+									read_non_blocking(&fifo_«sdfchannelName»,&tmp_addr);
+									«port»[i]= *((«datatype» *)tmp_addr);
 								}
 								
 							'''
@@ -275,27 +255,30 @@ class SDFActorSrc implements ActorTemplate {
 					}
 
 					var production = SDFComb.enforce(actor).getProduction().get(actorPortName)
-					if (production == null) {
+					if (production === null) {
 						ret += '''
 							Production in «actor.getIdentifier()» Is Not Specified!
 						'''
 					} else if (production == 1) {
 						ret += '''
-							#if «sdfchannelName.toUpperCase()»_BLOCKING==0
-							write_non_blocking_«datatype»(&fifo_«sdfchannelName»,«outport»);
-							#else
-							write_blocking_«datatype»(&fifo_«sdfchannelName»,«outport»,&spinlock_«sdfchannelName»);
-							#endif
+«««							#if «sdfchannelName.toUpperCase()»_BLOCKING==0
+«««							write_non_blocking_«datatype»(&fifo_«sdfchannelName»,«outport»);
+«««							#else
+«««							write_blocking_«datatype»(&fifo_«sdfchannelName»,«outport»,&spinlock_«sdfchannelName»);
+«««							#endif
+							write_non_blocking(&fifo_«sdfchannelName»,(void*)&«outport»);
 													
 						'''
 					} else {
 						ret += '''
 							for(int i=0;i<«production»;++i){
-								#if «sdfchannelName.toUpperCase()»_BLOCKING==0
-								write_non_blocking_«datatype»(&fifo_«sdfchannelName»,«outport»[i]);
-								#else
-								write_blocking_«datatype»(&fifo_«sdfchannelName»,«outport»[i],&spinlock_«sdfchannelName»);
-								#endif
+«««								#if «sdfchannelName.toUpperCase()»_BLOCKING==0
+«««								write_non_blocking_«datatype»(&fifo_«sdfchannelName»,«outport»[i]);
+«««								#else
+«««								write_blocking_«datatype»(&fifo_«sdfchannelName»,«outport»[i],&spinlock_«sdfchannelName»);
+«««								#endif
+								write_non_blocking(&fifo_«sdfchannelName»,(void*)&«outport»[i]);		
+														
 							}
 							
 						'''

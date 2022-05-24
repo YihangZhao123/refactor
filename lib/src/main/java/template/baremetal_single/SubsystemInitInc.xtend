@@ -12,6 +12,7 @@ import forsyde.io.java.typed.viewers.values.IntegerValue
 import template.templateInterface.InitTemplate
 
 @FileTypeAnno(type=FileType.C_INCLUDE)
+@Deprecated
 class SubsystemInitInc implements InitTemplate{
 	
 	override create() {

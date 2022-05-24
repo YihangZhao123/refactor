@@ -17,6 +17,7 @@ import template.templateInterface.InitTemplate;
 import utils.Query;
 
 @FileTypeAnno(type = FileType.C_SOURCE)
+@Deprecated
 @SuppressWarnings("all")
 public class SubsystemInitSrc implements InitTemplate {
   public String create() {
@@ -41,16 +42,22 @@ public class SubsystemInitSrc implements InitTemplate {
       _builder.newLine();
       _builder.append("#include \"../inc/circular_fifo_lib.h\"");
       _builder.newLine();
+      _builder.newLine();
       _builder.append("/*");
       _builder.newLine();
-      _builder.append("==============================================");
+      _builder.append("*********************************************************");
       _builder.newLine();
-      _builder.append("\t");
-      _builder.append("Extern Variables ");
+      _builder.append("Initialize All the Channels");
       _builder.newLine();
-      _builder.append("==============================================");
+      _builder.append("Should be called before subsystem_single_uniprocessor()");
       _builder.newLine();
-      _builder.append("*/\t\t");
+      _builder.append("*********************************************************");
+      _builder.newLine();
+      _builder.append("*/");
+      _builder.newLine();
+      _builder.append("void init_subsystem(){");
+      _builder.newLine();
+      _builder.append("/* Extern Variables */");
       _builder.newLine();
       {
         for(final IntegerValue value : integerValues) {
@@ -67,21 +74,7 @@ public class SubsystemInitSrc implements InitTemplate {
       _builder.append("\t\t");
       _builder.newLineIfNotEmpty();
       _builder.newLine();
-      _builder.newLine();
-      _builder.newLine();
-      _builder.append("/*");
-      _builder.newLine();
-      _builder.append("*********************************************************");
-      _builder.newLine();
-      _builder.append("Initialize All the Channels");
-      _builder.newLine();
-      _builder.append("Should be called before subsystem_single_uniprocessor()");
-      _builder.newLine();
-      _builder.append("*********************************************************");
-      _builder.newLine();
-      _builder.append("*/");
-      _builder.newLine();
-      _builder.append("void init_subsystem(){");
+      _builder.append("/* initialize the channels*/");
       _builder.newLine();
       {
         for(final Vertex channel : Generator.sdfchannelSet) {

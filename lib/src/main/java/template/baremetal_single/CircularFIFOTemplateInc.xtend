@@ -45,7 +45,17 @@ class CircularFIFOTemplateInc implements InitTemplate {
 			#include "datatype_definition.h"
 			
 			#include "spinlock.h"	
-			
+				typedef struct{
+					void**  buffer;
+					size_t front;
+					size_t rear;
+					size_t size;
+					
+				}ref_fifo;		
+				
+				void ref_init(ref_fifo* fifo_ptr, void** buffer, size_t size);
+				void read_non_blocking(ref_fifo* fifo_ptr, void** dst);
+				void write_non_blocking(ref_fifo* fifo_ptr, void* src);			
 			«IF typeVertexSet.size()!=0»		
 				«FOR v : typeVertexSet SEPARATOR "" AFTER ""»
 					«foo(v)»
@@ -62,8 +72,8 @@ class CircularFIFOTemplateInc implements InitTemplate {
 	}
 	def String foo(Vertex v){
 		'''
-		«val type=v.getIdentifier()»
-		«»			/*
+			«val type=v.getIdentifier()»
+			/*
 			=============================================================
 						If Token type is «type» 
 			=============================================================
@@ -81,7 +91,9 @@ class CircularFIFOTemplateInc implements InitTemplate {
 			int read_blocking_«type»(circular_fifo_«type»* src,«type»* dst,spinlock *lock);
 			int write_non_blocking_«type»(circular_fifo_«type»* dst,«type» src );
 			int write_blocking_«type»(circular_fifo_«type»* dst,«type» src,spinlock *lock);	
-						
+			
+			
+
 		«««		«ELSE»
 «««			«var maximumElems =getMaximumElems(v)»
 «««				«IF maximumElems>0»

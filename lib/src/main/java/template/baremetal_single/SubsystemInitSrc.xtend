@@ -11,6 +11,7 @@ import forsyde.io.java.typed.viewers.values.IntegerValue
 import java.util.stream.Collectors
 
 @FileTypeAnno(type=FileType.C_SOURCE)
+@Deprecated
 class SubsystemInitSrc implements InitTemplate{
 	
 	override create() {
@@ -23,18 +24,6 @@ class SubsystemInitSrc implements InitTemplate{
 			#include "../inc/subsystem_init.h"
 			#include "../inc/datatype_definition.h"
 			#include "../inc/circular_fifo_lib.h"
-			/*
-			==============================================
-				Extern Variables 
-			==============================================
-			*/		
-			«FOR value:integerValues »
-				extern int «value.getIdentifier()»;
-			«ENDFOR»				
-			
-			«externChannel()»		
-			
-			
 			
 			/*
 			*********************************************************
@@ -43,6 +32,14 @@ class SubsystemInitSrc implements InitTemplate{
 			*********************************************************
 			*/
 			void init_subsystem(){
+			/* Extern Variables */
+			«FOR value:integerValues »
+				extern int «value.getIdentifier()»;
+			«ENDFOR»	
+			
+			«externChannel()»		
+			
+			/* initialize the channels*/
 				«FOR channel : Generator.sdfchannelSet»
 					«var sdfname=channel.getIdentifier()»
 					init_channel_«Query.findSDFChannelDataType(Generator.model,channel)»(&fifo_«sdfname»,buffer_«sdfname»,buffer_«sdfname»_size);

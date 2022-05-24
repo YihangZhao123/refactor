@@ -1,7 +1,7 @@
 #include "./single/inc/circular_fifo_lib.h"
 #include "./single/inc/config.h"
 #include "./single/inc/subsystem.h"
-#include "./single/inc/subsystem_init.h"
+
 #define X 5
 #define Y 5
 UInt16 dimX_global=X;
@@ -17,7 +17,7 @@ int main(){
     
     for(int i=0;i<Y;++i){
         for(int j=0;j<X;++j){
-            a[i][j]=i+j;
+            a[i][j]=j;
             
             c[i][j]=0;
         }
@@ -38,7 +38,7 @@ int main(){
         init_subsystem();
 
         
-        fire_subsystem_single_uniprocessor();
+        subsystem();
     
     printf("\n");
     for(int i=0;i<Y;++i){

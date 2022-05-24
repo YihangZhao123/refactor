@@ -48,8 +48,8 @@ class demo1 {
 		initModule.add(new SpinLockTemplateSrc)
 		initModule.add(new Config)
 		
-		initModule.add(new SubsystemInitInc)
-		initModule.add(new SubsystemInitSrc)
+		//initModule.add(new SubsystemInitInc)
+		//initModule.add(new SubsystemInitSrc)
 		
 		gen.add(initModule)
 

@@ -69,10 +69,6 @@ public class demo1 {
       initModule.add(_spinLockTemplateSrc);
       Config _config = new Config();
       initModule.add(_config);
-      SubsystemInitInc _subsystemInitInc = new SubsystemInitInc();
-      initModule.add(_subsystemInitInc);
-      SubsystemInitSrc _subsystemInitSrc = new SubsystemInitSrc();
-      initModule.add(_subsystemInitSrc);
       gen.add(initModule);
       gen.create();
       InputOutput.<String>println("end!");

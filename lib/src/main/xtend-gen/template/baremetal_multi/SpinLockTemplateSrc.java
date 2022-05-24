@@ -12,7 +12,6 @@ public class SpinLockTemplateSrc implements InitTemplate {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("#include \"../inc/spinlock.h\"");
     _builder.newLine();
-    _builder.append("#if SINGLECORE==1");
     _builder.newLine();
     _builder.append("\t");
     _builder.append("#if defined(WINDOWS)");
@@ -59,7 +58,6 @@ public class SpinLockTemplateSrc implements InitTemplate {
     _builder.append("\t");
     _builder.append("}\t");
     _builder.newLine();
-    _builder.append("#endif");
     _builder.newLine();
     return _builder.toString();
   }

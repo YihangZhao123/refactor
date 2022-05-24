@@ -78,7 +78,7 @@ class SubsystemInitSrc implements InitTemplate{
 						«ENDFOR»
 					«ENDIF»
 				«ENDFOR»
-				#endif
+				
 				
 				
 				return 0;

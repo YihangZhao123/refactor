@@ -51,16 +51,16 @@ class SDFActorSrc implements ActorTemplate {
 				«extern()»
 				/*
 				========================================
-					Declare Extern Global Variables
+				Declare Extern Global Variables
 				========================================
 				*/			
 				«FOR d : datablock»
-					extern «findType(model,d)» «d.getIdentifier()»;
+				extern «findType(model,d)» «d.getIdentifier()»;
 				«ENDFOR»
 				
 				/*
 				========================================
-					Actor Function
+				Actor Function
 				========================================
 				*/			
 			void actor_«name»(){
@@ -69,7 +69,7 @@ class SDFActorSrc implements ActorTemplate {
 			«initMemory(model,actor)»
 				
 				/* Read From Input Port  */
-«««				«IF Generator.TESTING==1&&Generator.PC==1»
+			«««				«IF Generator.TESTING==1&&Generator.PC==1»
 «««					printf("%s\n","read");
 «««				«ENDIF»
 				int ret=0;
@@ -77,46 +77,55 @@ class SDFActorSrc implements ActorTemplate {
 			
 				
 				/* Inline Code           */
-«««				«IF Generator.TESTING==1&&Generator.PC==1»
+			«««				«IF Generator.TESTING==1&&Generator.PC==1»
 «««					printf("%s\n","inline code");
 «««				«ENDIF»
 				«getInlineCode()»
 				
 				/* Write To Output Ports */
-«««				«IF Generator.TESTING==1&&Generator.PC==1»
+			«««				«IF Generator.TESTING==1&&Generator.PC==1»
 «««					printf("%s\n","write");
 «««				«ENDIF»
 				«write(actor)»
-
+			
 				}
 		'''
 	}
 
 	def String extern() {
+		var model = Generator.model
 		var Set<Vertex> record = new HashSet
 		'''
 			/* Input FIFO */
-			«FOR sdf : this.inputSDFChannelSet SEPARATOR "" AFTER ""»
-				«IF !record.contains(sdf)»
-				#if SINGLECORE==1
-					extern circular_fifo_«Query.findSDFChannelDataType(Generator.model,sdf)» fifo_«sdf.getIdentifier()»;
-					extern spinlock spinlock_«sdf.getIdentifier()»;
-				#endif
-				#if MULTICORE==1
-					
-				#endif
-				
-					«var tmp=record.add(sdf)»
+			«FOR sdfchannel : this.inputSDFChannelSet SEPARATOR "" AFTER ""»
+				«IF !record.contains(sdfchannel)»
+					«var type=Query.findSDFChannelDataType(model, sdfchannel)»
+					«IF !Query.isOnOneCoreChannel(model,sdfchannel)»
+						extern volatile cheap const fifo_admin_«sdfchannel.getIdentifier()»;
+						extern volatile «type» * const fifo_data_«sdfchannel.getIdentifier()»;	
+										
+					«ELSE»
+						circular_fifo_«type» fifo_«sdfchannel.getIdentifier()»;
+						spinlock spinlock_«sdfchannel.getIdentifier()»={.flag=0};
+						
+					«ENDIF»
+					«var tmp=record.add(sdfchannel)»
 				«ENDIF»
 			«ENDFOR»
 			/* Output FIFO */
-			«FOR sdf : this.outputSDFChannelSet SEPARATOR "" AFTER ""»
-				«IF !record.contains(sdf)»
-				#if SINGLECORE==1
-					extern circular_fifo_«Query.findSDFChannelDataType(Generator.model,sdf)» fifo_«sdf.getIdentifier()»;
-					extern spinlock spinlock_«sdf.getIdentifier()»;
-				#endif
-					«var tmp=record.add(sdf)»
+			«FOR sdfchannel : this.outputSDFChannelSet SEPARATOR "" AFTER ""»
+				«IF !record.contains(sdfchannel)»
+					«var type=Query.findSDFChannelDataType(model, sdfchannel)»
+					«IF !Query.isOnOneCoreChannel(model,sdfchannel)»
+						extern volatile cheap const fifo_admin_«sdfchannel.getIdentifier()»;
+						extern volatile «type» * const fifo_data_«sdfchannel.getIdentifier()»;	
+										
+					«ELSE»
+						circular_fifo_«type» fifo_«sdfchannel.getIdentifier()»;
+						spinlock spinlock_«sdfchannel.getIdentifier()»={.flag=0};
+						
+					«ENDIF»
+					«var tmp=record.add(sdfchannel)»
 				«ENDIF»
 			«ENDFOR»		
 		'''
@@ -141,14 +150,14 @@ class SDFActorSrc implements ActorTemplate {
 			if (Query.findImplOutputPorts(actorimpl) !== null) {
 				ports.addAll(Query.findImplOutputPorts(actorimpl))
 			}
-			//println("-->" + ports)
+			// println("-->" + ports)
 			if (ports.isEmpty()) {
-				ret+='''
-				The inputPorts or outputPorts Property is not specified in «impl»
+				ret += '''
+					The inputPorts or outputPorts Property is not specified in «impl»
 				'''
 			} else {
 				for (String port : ports) {
-					
+
 					var datatype = Query.findImplPortDataType(model, actorimpl, port)
 					if (!variableNameRecord.contains(port)) {
 						if (Query.isSystemChannel(model, actorimpl, port) === null) {
@@ -193,19 +202,30 @@ class SDFActorSrc implements ActorTemplate {
 							'''
 						} else if (consumption == 1) {
 							ret += '''
-								#if «sdfchannelName.toUpperCase()»_BLOCKING==0
-								ret=read_non_blocking_«datatype»(&fifo_«sdfchannelName»,&«port»);
-								if(ret==-1){
-									printf("fifo_«sdfchannelName» read error\n");
-								}
-								
-								#else
-								read_blocking_«datatype»(&fifo_«sdfchannelName»,&«port»,&spinlock_«sdfchannelName»);
-								#endif
-								
+								«IF Query.isOnOneCoreChannel(model,model.queryVertex(sdfchannelName).get())»
+									#if «sdfchannelName.toUpperCase()»_BLOCKING==0
+									ret=read_non_blocking_«datatype»(&fifo_«sdfchannelName»,&«port»);
+									if(ret==-1){
+										printf("fifo_«sdfchannelName» read error\n");
+									}
+									
+									#else
+									read_blocking_«datatype»(&fifo_«sdfchannelName»,&«port»,&spinlock_«sdfchannelName»);
+									#endif
+								«ELSE»
+									{
+										volatile «datatype» *tmp_ptrs;
+										while ((cheap_claim_tokens (fifo_admin_«sdfchannelName», (volatile void **) tmp_ptrs, 1)) < 1)
+									 		cheap_release_all_claimed_tokens (fifo_admin_«sdfchannelName»);
+									 		 		
+										«port»=fifo_ptrs[0];
+										cheap_release_spaces (fifo_admin_«sdfchannelName», 1);
+									}
+								«ENDIF»
 							'''
 						} else {
 							ret += '''
+							«IF Query.isOnOneCoreChannel(model,model.queryVertex(sdfchannelName).get())»
 								for(int i=0;i<«consumption»;++i){
 									
 									#if «sdfchannelName.toUpperCase()»_BLOCKING==0
@@ -217,7 +237,19 @@ class SDFActorSrc implements ActorTemplate {
 									read_blocking_«datatype»(&fifo_«sdfchannelName»,&«port»[i],&spinlock_«sdfchannelName»);
 									#endif
 								}
+							«ELSE»
+							{
+								volatile «datatype» *tmp_ptrs[«consumption»];
+								while ((cheap_claim_tokens (fifo_admin_«sdfchannelName», (volatile void **) tmp_ptrs, «consumption»)) < «consumption»)
+									 cheap_release_all_claimed_tokens (fifo_admin_«sdfchannelName»);								
 								
+								for(int i=0;i<«consumption»;++i){
+									«port»[i]=tmp_ptrs[i];	
+								}
+								
+								cheap_release_spaces (fifo_admin_«sdfchannelName», 1);
+							}
+							«ENDIF»	
 							'''
 						}
 						variableNameRecord.add(port)
@@ -259,15 +291,27 @@ class SDFActorSrc implements ActorTemplate {
 						'''
 					} else if (production == 1) {
 						ret += '''
+						«IF Query.isOnOneCoreChannel(model,model.queryVertex(sdfchannelName).get())»
 							#if «sdfchannelName.toUpperCase()»_BLOCKING==0
 							write_non_blocking_«datatype»(&fifo_«sdfchannelName»,«outport»);
 							#else
 							write_blocking_«datatype»(&fifo_«sdfchannelName»,«outport»,&spinlock_«sdfchannelName»);
 							#endif
-													
+						«ELSE»
+						{
+							volatile «datatype» *tmp_ptrs[1];
+							while ((cheap_claim_spaces (fifo_admin_«sdfchannelName», (volatile void **) &tmp_ptrs[0], 1)) < 1)
+								cheap_release_all_claimed_spaces (fifo_admin_«sdfchannelName»);
+							
+							*tmp_ptrs[0]=«outport»;
+							
+							cheap_release_tokens (fifo_admin_«sdfchannelName», 1);
+						}
+						«ENDIF»							
 						'''
 					} else {
 						ret += '''
+						«IF Query.isOnOneCoreChannel(model,model.queryVertex(sdfchannelName).get())»
 							for(int i=0;i<«production»;++i){
 								#if «sdfchannelName.toUpperCase()»_BLOCKING==0
 								write_non_blocking_«datatype»(&fifo_«sdfchannelName»,«outport»[i]);
@@ -275,7 +319,19 @@ class SDFActorSrc implements ActorTemplate {
 								write_blocking_«datatype»(&fifo_«sdfchannelName»,«outport»[i],&spinlock_«sdfchannelName»);
 								#endif
 							}
+						«ELSE»	
+						{
+							volatile «datatype» *tmp_ptrs[«production»];
+							while ((cheap_claim_spaces (fifo_admin_«sdfchannelName», (volatile void **) &tmp_ptrs[0], «production»)) < «production»)
+								cheap_release_all_claimed_spaces (fifo_admin_«sdfchannelName»);
 							
+							for(int i=0;i<«production»;++i){
+								*tmp_ptrs[i]=«outport»[i];
+							}
+							
+							cheap_release_tokens (fifo_admin_«sdfchannelName», «production»);
+						}						
+						«ENDIF»	
 						'''
 					}
 

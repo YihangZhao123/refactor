@@ -46,33 +46,47 @@ public class CircularFIFOTemplateInc implements InitTemplate {
   
   public String create() {
     StringConcatenation _builder = new StringConcatenation();
+    _builder.append("\t");
     _builder.append("#ifndef CIRCULAR_FIFO_LIB_H_");
     _builder.newLine();
+    _builder.append("\t");
     _builder.append("#define CIRCULAR_FIFO_LIB_H_");
     _builder.newLine();
+    _builder.append("\t");
     _builder.append("#include \"config.h\"");
     _builder.newLine();
-    _builder.append("#if SINGLECORE==1");
     _builder.newLine();
+    _builder.append("\t");
     _builder.append("/*");
     _builder.newLine();
+    _builder.append("\t");
     _builder.append("************************************************************");
     _builder.newLine();
+    _builder.append("\t");
     _builder.append("This header file defines all the prototype of token types in");
     _builder.newLine();
+    _builder.append("\t");
     _builder.append("SDFChannels");
     _builder.newLine();
+    _builder.append("\t");
     _builder.append("************************************************************");
     _builder.newLine();
+    _builder.append("\t");
     _builder.append("*/");
     _builder.newLine();
+    _builder.append("\t");
     _builder.newLine();
+    _builder.append("\t");
     _builder.newLine();
+    _builder.append("\t");
     _builder.append("#include \"datatype_definition.h\"");
     _builder.newLine();
+    _builder.append("\t");
     _builder.newLine();
+    _builder.append("\t");
     _builder.append("#include \"spinlock.h\"\t");
     _builder.newLine();
+    _builder.append("\t");
     _builder.newLine();
     {
       int _size = this.typeVertexSet.size();
@@ -84,21 +98,23 @@ public class CircularFIFOTemplateInc implements InitTemplate {
             if (!_hasElements) {
               _hasElements = true;
             } else {
-              _builder.appendImmediate("", "");
+              _builder.appendImmediate("", "\t");
             }
+            _builder.append("\t");
             String _foo = this.foo(v);
-            _builder.append(_foo);
+            _builder.append(_foo, "\t");
             _builder.newLineIfNotEmpty();
           }
           if (_hasElements) {
-            _builder.append("");
+            _builder.append("", "\t");
           }
         }
       }
     }
-    _builder.append("#endif");
     _builder.newLine();
+    _builder.append("\t");
     _builder.newLine();
+    _builder.append("\t");
     _builder.append("#endif");
     _builder.newLine();
     return _builder.toString();
@@ -112,42 +128,42 @@ public class CircularFIFOTemplateInc implements InitTemplate {
     StringConcatenation _builder = new StringConcatenation();
     final String type = v.getIdentifier();
     _builder.newLineIfNotEmpty();
-    _builder.append("\t\t\t");
     _builder.append("/*");
     _builder.newLine();
-    _builder.append("\t");
     _builder.append("=============================================================");
     _builder.newLine();
     _builder.append("\t\t");
-    _builder.append("=\tIf Token type is ");
+    _builder.append("If Token type is ");
     _builder.append(type, "\t\t");
     _builder.append(" ");
     _builder.newLineIfNotEmpty();
     _builder.append("==============================================================");
     _builder.newLine();
-    _builder.append("=*/");
+    _builder.append("*/");
     _builder.newLine();
-    _builder.append("=typedef struct ");
+    _builder.append("typedef struct ");
     _builder.newLine();
-    _builder.append("={");
+    _builder.append("{");
     _builder.newLine();
-    _builder.append("=    ");
-    _builder.append(type);
+    _builder.append("    ");
+    _builder.append(type, "    ");
     _builder.append("* buffer;");
     _builder.newLineIfNotEmpty();
-    _builder.append("=    size_t front;");
+    _builder.append("    ");
+    _builder.append("size_t front;");
     _builder.newLine();
-    _builder.append("=    size_t rear;");
+    _builder.append("    ");
+    _builder.append("size_t rear;");
     _builder.newLine();
-    _builder.append("=\tsize_t size;\t    ");
+    _builder.append("\t");
+    _builder.append("size_t size;\t    ");
     _builder.newLine();
-    _builder.append("=}circular_fifo_");
+    _builder.append("}circular_fifo_");
     _builder.append(type);
     _builder.append(";");
     _builder.newLineIfNotEmpty();
-    _builder.append("=");
     _builder.newLine();
-    _builder.append("=void init_channel_");
+    _builder.append("void init_channel_");
     _builder.append(type);
     _builder.append("(circular_fifo_");
     _builder.append(type);
@@ -155,7 +171,7 @@ public class CircularFIFOTemplateInc implements InitTemplate {
     _builder.append(type);
     _builder.append("* buffer, size_t size);");
     _builder.newLineIfNotEmpty();
-    _builder.append("=int read_non_blocking_");
+    _builder.append("int read_non_blocking_");
     _builder.append(type);
     _builder.append("(circular_fifo_");
     _builder.append(type);
@@ -163,7 +179,7 @@ public class CircularFIFOTemplateInc implements InitTemplate {
     _builder.append(type);
     _builder.append("* dst );");
     _builder.newLineIfNotEmpty();
-    _builder.append("=int read_blocking_");
+    _builder.append("int read_blocking_");
     _builder.append(type);
     _builder.append("(circular_fifo_");
     _builder.append(type);
@@ -171,7 +187,7 @@ public class CircularFIFOTemplateInc implements InitTemplate {
     _builder.append(type);
     _builder.append("* dst,spinlock *lock);");
     _builder.newLineIfNotEmpty();
-    _builder.append("=int write_non_blocking_");
+    _builder.append("int write_non_blocking_");
     _builder.append(type);
     _builder.append("(circular_fifo_");
     _builder.append(type);
@@ -179,7 +195,7 @@ public class CircularFIFOTemplateInc implements InitTemplate {
     _builder.append(type);
     _builder.append(" src );");
     _builder.newLineIfNotEmpty();
-    _builder.append("=int write_blocking_");
+    _builder.append("int write_blocking_");
     _builder.append(type);
     _builder.append("(circular_fifo_");
     _builder.append(type);
@@ -187,7 +203,7 @@ public class CircularFIFOTemplateInc implements InitTemplate {
     _builder.append(type);
     _builder.append(" src,spinlock *lock);\t");
     _builder.newLineIfNotEmpty();
-    _builder.append("=\t\t\t");
+    _builder.append("\t\t\t");
     _builder.newLine();
     return _builder.toString();
   }

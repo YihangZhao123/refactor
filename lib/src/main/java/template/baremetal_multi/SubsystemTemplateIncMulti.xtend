@@ -18,7 +18,8 @@ class SubsystemTemplateIncMulti implements SubsystemTemplate{
 			
 			/* Function Prototype----------*/
 			void subsystem_«tile.getIdentifier()»();
-			«»			#endif		
+			int init_«tile.getIdentifier()»();
+			#endif		
 		'''
 	}
 	

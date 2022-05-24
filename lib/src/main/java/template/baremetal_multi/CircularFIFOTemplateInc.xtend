@@ -33,7 +33,7 @@ class CircularFIFOTemplateInc implements InitTemplate {
 			#ifndef CIRCULAR_FIFO_LIB_H_
 			#define CIRCULAR_FIFO_LIB_H_
 			#include "config.h"
-			#if SINGLECORE==1
+		
 			/*
 			************************************************************
 			This header file defines all the prototype of token types in
@@ -51,7 +51,7 @@ class CircularFIFOTemplateInc implements InitTemplate {
 					«foo(v)»
 				«ENDFOR»
 			«ENDIF»
-			#endif
+
 			
 			#endif
 		'''
@@ -63,25 +63,25 @@ class CircularFIFOTemplateInc implements InitTemplate {
 	def String foo(Vertex v){
 		'''
 		«val type=v.getIdentifier()»
-		«»			/*
-			=============================================================
-				=	If Token type is «type» 
+		/*
+		=============================================================
+				If Token type is «type» 
 		==============================================================
-		=*/
-		=typedef struct 
-		={
-		=    «type»* buffer;
-		=    size_t front;
-		=    size_t rear;
-		=	size_t size;	    
-		=}circular_fifo_«type»;
-		=
-		=void init_channel_«type»(circular_fifo_«type» *channel ,«type»* buffer, size_t size);
-		=int read_non_blocking_«type»(circular_fifo_«type»* src,«type»* dst );
-		=int read_blocking_«type»(circular_fifo_«type»* src,«type»* dst,spinlock *lock);
-		=int write_non_blocking_«type»(circular_fifo_«type»* dst,«type» src );
-		=int write_blocking_«type»(circular_fifo_«type»* dst,«type» src,spinlock *lock);	
-		=			
+		*/
+		typedef struct 
+		{
+		    «type»* buffer;
+		    size_t front;
+		    size_t rear;
+			size_t size;	    
+		}circular_fifo_«type»;
+		
+		void init_channel_«type»(circular_fifo_«type» *channel ,«type»* buffer, size_t size);
+		int read_non_blocking_«type»(circular_fifo_«type»* src,«type»* dst );
+		int read_blocking_«type»(circular_fifo_«type»* src,«type»* dst,spinlock *lock);
+		int write_non_blocking_«type»(circular_fifo_«type»* dst,«type» src );
+		int write_blocking_«type»(circular_fifo_«type»* dst,«type» src,spinlock *lock);	
+					
 		«««		«ELSE»
 «««			«var maximumElems =getMaximumElems(v)»
 «««				«IF maximumElems>0»

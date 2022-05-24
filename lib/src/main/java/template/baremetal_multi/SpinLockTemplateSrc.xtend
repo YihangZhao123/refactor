@@ -3,14 +3,18 @@ package template.baremetal_multi
 import fileAnnotation.FileType
 import fileAnnotation.FileTypeAnno
 import template.templateInterface.InitTemplate
+import generator.Generator
+import forsyde.io.java.typed.viewers.values.IntegerValue
+import java.util.stream.Collectors
 
 @FileTypeAnno(type=FileType.C_SOURCE)
 class SpinLockTemplateSrc implements InitTemplate{
 	
 	override create() {
+
 		'''
 			#include "../inc/spinlock.h"
-			#if SINGLECORE==1
+
 				#if defined(WINDOWS)
 				#define ATOMIC_TEST_AND_SET   _InterlockedExchange
 				#endif
@@ -27,7 +31,7 @@ class SpinLockTemplateSrc implements InitTemplate{
 				void spinlock_release(spinlock* lock){
 					ATOMIC_TEST_AND_SET(&lock->flag,0);
 				}	
-			#endif
+
 		'''
 	}
 	

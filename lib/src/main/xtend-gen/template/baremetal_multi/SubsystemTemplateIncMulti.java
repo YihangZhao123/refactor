@@ -38,7 +38,11 @@ public class SubsystemTemplateIncMulti implements SubsystemTemplate {
       _builder.append(_identifier);
       _builder.append("();");
       _builder.newLineIfNotEmpty();
-      _builder.append("\t\t\t");
+      _builder.append("int init_");
+      String _identifier_1 = tile.getIdentifier();
+      _builder.append(_identifier_1);
+      _builder.append("();");
+      _builder.newLineIfNotEmpty();
       _builder.append("#endif\t\t");
       _builder.newLine();
       _xblockexpression = _builder.toString();

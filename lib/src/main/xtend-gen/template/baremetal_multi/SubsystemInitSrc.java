@@ -226,7 +226,6 @@ public class SubsystemInitSrc implements InitTemplate {
         }
       }
       _builder.append("\t");
-      _builder.append("#endif");
       _builder.newLine();
       _builder.append("\t");
       _builder.newLine();

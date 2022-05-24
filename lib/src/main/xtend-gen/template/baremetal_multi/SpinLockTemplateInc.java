@@ -17,7 +17,6 @@ public class SpinLockTemplateInc implements InitTemplate {
     _builder.append("#include \"config.h\"");
     _builder.newLine();
     _builder.newLine();
-    _builder.append("#if SINGLECORE==1");
     _builder.newLine();
     _builder.append("\t");
     _builder.append("#define ARM");
@@ -39,7 +38,6 @@ public class SpinLockTemplateInc implements InitTemplate {
     _builder.append("\t");
     _builder.append("void spinlock_release(spinlock* lock);");
     _builder.newLine();
-    _builder.append("#endif");
     _builder.newLine();
     _builder.newLine();
     _builder.append("#endif");

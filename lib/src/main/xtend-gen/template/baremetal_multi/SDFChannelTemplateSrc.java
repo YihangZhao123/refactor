@@ -28,6 +28,10 @@ public class SDFChannelTemplateSrc implements ChannelTemplate {
       StringConcatenation _builder = new StringConcatenation();
       _builder.append("#include \"../inc/config.h\"");
       _builder.newLine();
+      _builder.append("#include \"../inc/spinlock.h\"");
+      _builder.newLine();
+      _builder.append("#include \"../inc/datatype_definition.h\"");
+      _builder.newLine();
       String channelname = sdfchannel.getIdentifier();
       _builder.newLineIfNotEmpty();
       _builder.append("#include \"../inc/circular_fifo_lib.h\"");
@@ -86,23 +90,43 @@ public class SDFChannelTemplateSrc implements ChannelTemplate {
               _builder.append("\t");
               _builder.append("/* Channel Between Two Processors */");
               _builder.newLine();
-              _builder.append(" \t\t\t\t\t ");
+              _builder.append("\t");
+              _builder.append(" ");
               _builder.append("volatile cheap const fifo_admin_");
-              _builder.append(channelname, " \t\t\t\t\t ");
+              _builder.append(channelname, "\t ");
               _builder.append(";");
               _builder.newLineIfNotEmpty();
-              _builder.append(" \t\t\t\t\t ");
+              _builder.append("\t");
+              _builder.append(" ");
               _builder.append("volatile ");
-              _builder.append(type, " \t\t\t\t\t ");
+              _builder.append(type, "\t ");
               _builder.append(" * const fifo_data_");
-              _builder.append(channelname, " \t\t\t\t\t ");
+              _builder.append(channelname, "\t ");
               _builder.append(";");
               _builder.newLineIfNotEmpty();
-              _builder.append(" \t\t\t\t\t ");
-              _builder.append("volatile token_t *fifo_ptrs[");
+              _builder.append("\t");
+              _builder.append("// volatile token_t *fifo_ptrs[");
               int _bufferSize = Query.getBufferSize(sdfchannel);
-              _builder.append(_bufferSize, " \t\t\t\t\t ");
+              _builder.append(_bufferSize, "\t");
               _builder.append("];\t\t\t\t ");
+              _builder.newLineIfNotEmpty();
+              _builder.append("\t");
+              _builder.append(" ");
+              _builder.append("unsigned int buffer_");
+              _builder.append(channelname, "\t ");
+              _builder.append("_size=");
+              int _bufferSize_1 = Query.getBufferSize(sdfchannel);
+              _builder.append(_bufferSize_1, "\t ");
+              _builder.append(";");
+              _builder.newLineIfNotEmpty();
+              _builder.append("\t");
+              _builder.append(" ");
+              _builder.append("unsigned int token_");
+              _builder.append(channelname, "\t ");
+              _builder.append("_size=");
+              long _tokenSize = Query.getTokenSize(sdfchannel);
+              _builder.append(_tokenSize, "\t ");
+              _builder.append("\t;");
               _builder.newLineIfNotEmpty();
             }
           }
@@ -158,9 +182,22 @@ public class SDFChannelTemplateSrc implements ChannelTemplate {
               _builder.append(channelname, " \t\t\t\t\t ");
               _builder.append(";");
               _builder.newLineIfNotEmpty();
-              _builder.append(" \t\t\t\t\t ");
-              _builder.append("volatile token_t *fifo_ptrs[1];\t");
+              _builder.append(" \t\t\t\t\t");
+              _builder.append("//volatile token_t *fifo_ptrs[1];\t \t\t\t\t\t ");
               _builder.newLine();
+              _builder.append(" \t\t\t\t\t ");
+              _builder.append("unsigned int buffer_");
+              _builder.append(channelname, " \t\t\t\t\t ");
+              _builder.append("_size=1;");
+              _builder.newLineIfNotEmpty();
+              _builder.append(" \t\t\t\t\t ");
+              _builder.append("unsigned int token_");
+              _builder.append(channelname, " \t\t\t\t\t ");
+              _builder.append("_size=");
+              long _tokenSize_1 = Query.getTokenSize(sdfchannel);
+              _builder.append(_tokenSize_1, " \t\t\t\t\t ");
+              _builder.append("\t;");
+              _builder.newLineIfNotEmpty();
             }
           }
         }

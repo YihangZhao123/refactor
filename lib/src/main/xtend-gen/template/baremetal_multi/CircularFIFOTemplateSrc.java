@@ -48,7 +48,6 @@ public class CircularFIFOTemplateSrc implements InitTemplate {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("#include \"../inc/config.h\"");
     _builder.newLine();
-    _builder.append("#if SINGLECORE==1");
     _builder.newLine();
     _builder.append("/*");
     _builder.newLine();
@@ -119,7 +118,6 @@ public class CircularFIFOTemplateSrc implements InitTemplate {
         _builder.append("");
       }
     }
-    _builder.append("#endif");
     _builder.newLine();
     return _builder.toString();
   }

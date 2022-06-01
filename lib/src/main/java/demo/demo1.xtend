@@ -3,31 +3,43 @@ package demo
 
 import forsyde.io.java.drivers.ForSyDeModelHandler
 
+
 import generator.Generator
 import generator.InitProcessingModule
 import generator.SDFChannelProcessingModule
 import generator.SDFCombProcessingModule
 import generator.SubsystemUniprocessorModule
-import template.baremetal_single.*
+import tempate.uniprocessor.SDFChannel.SDFChannelTemplateSrc
+import template.uniprocessor.actor.SDFActorSrc
+import template.uniprocessor.actor.SDFActorInc
+import template.uniprocessor.subsystem.SubsystemTemplateSrc
+import template.uniprocessor.subsystem.SubsystemTemplateInc
+import template.uniprocessor.others.DataTypeInc
+import template.uniprocessor.others.DataTypeSrc
+import template.uniprocessor.fifo.CircularFIFOTemplateInc
+import template.uniprocessor.fifo.CircularFIFOTemplateSrc
+import template.uniprocessor.fifo.SpinLockTemplateInc
+import template.uniprocessor.fifo.SpinLockTemplateSrc
+import template.uniprocessor.others.Config
 
 /**
  * one core
  */
 class demo1 {
 	def static void main(String[] args) {
-//		val path = "forsyde-io/modified1/complete-mapped-sobel-model.forsyde.xmi";
-//		val path2 = "forsyde-io/modified1/sobel-application.fiodl"
-//		val root = "generateCode/c/single/single"
-//
-//		var loader = (new ForSyDeModelHandler)
-//		var model = loader.loadModel(path)
-//		model.mergeInPlace(loader.loadModel(path2))
-		
-		
-		val path = "a.forsyde.xmi"
-		val root = "generateCode/c/single2"
+		val path = "forsyde-io/modified1/complete-mapped-sobel-model.forsyde.xmi";
+		val path2 = "forsyde-io/modified1/sobel-application.fiodl"
+		val root = "generateCode/c/single/single"
+
 		var loader = (new ForSyDeModelHandler)
-		var model = loader.loadModel(path)		
+		var model = loader.loadModel(path)
+		model.mergeInPlace(loader.loadModel(path2))
+		
+		
+//		val path = "a.forsyde.xmi"
+//		val root = "generateCode/c/single2"
+//		var loader = (new ForSyDeModelHandler)
+//		var model = loader.loadModel(path)		
 		
 		
 		var Generator gen = new Generator(model, root)
@@ -103,8 +115,8 @@ class demo1 {
 		initModule.add(new SpinLockTemplateSrc)
 		initModule.add(new Config)
 		
-		initModule.add(new SubsystemInitInc)
-		initModule.add(new SubsystemInitSrc)
+		//initModule.add(new SubsystemInitInc)
+		//initModule.add(new SubsystemInitSrc)
 		
 		gen.add(initModule)
 

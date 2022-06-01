@@ -1,69 +1,279 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <forsyde.io.eclipse.systemgraph:ForSyDeSystemGraph xmlns:forsyde.io.eclipse.systemgraph="forsyde.io.eclipse.systemgraph" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmi:version="2.0" xsi:schemaLocation="forsyde.io.eclipse.systemgraph systemgraph.ecore#//io/eclipse/systemgraph">
-    <nodes identifier="vertex_a">
+    <nodes identifier="p1">
         <traits>decision::sdf::PASSedSDFComb</traits>
         <traits>moc::sdf::SDFComb</traits>
-        <ports>aa</ports>
         <ports>combFunctions</ports>
+        <ports>s6</ports>
+        <ports>s_in</ports>
+        <ports>s1</ports>
         <propertiesValues xsi:type="forsyde.io.eclipse.systemgraph:StringMapVertexProperty">
             <values intValue="1" xsi:type="forsyde.io.eclipse.systemgraph:IntVertexProperty"/>
-            <indexes>aa</indexes>
+            <indexes>s1</indexes>
         </propertiesValues>
         <propertiesNames>production</propertiesNames>
         <propertiesValues xsi:type="forsyde.io.eclipse.systemgraph:ArrayVertexProperty">
             <values intValue="0" xsi:type="forsyde.io.eclipse.systemgraph:IntVertexProperty"/>
-        </propertiesValues>
-        <propertiesNames>firingSlots</propertiesNames>
-    </nodes>
-    <nodes identifier="vertex_b">
-        <traits>decision::sdf::PASSedSDFComb</traits>
-        <traits>moc::sdf::SDFComb</traits>
-        <ports>bb</ports>
-        <ports>combFunctions</ports>
-        <propertiesValues xsi:type="forsyde.io.eclipse.systemgraph:ArrayVertexProperty">
-            <values intValue="1" xsi:type="forsyde.io.eclipse.systemgraph:IntVertexProperty"/>
+            <values intValue="4" xsi:type="forsyde.io.eclipse.systemgraph:IntVertexProperty"/>
         </propertiesValues>
         <propertiesNames>firingSlots</propertiesNames>
         <propertiesValues xsi:type="forsyde.io.eclipse.systemgraph:StringMapVertexProperty">
             <values intValue="1" xsi:type="forsyde.io.eclipse.systemgraph:IntVertexProperty"/>
-            <indexes>bb</indexes>
+            <indexes>s6</indexes>
+            <values intValue="2" xsi:type="forsyde.io.eclipse.systemgraph:IntVertexProperty"/>
+            <indexes>s_in</indexes>
         </propertiesValues>
         <propertiesNames>consumption</propertiesNames>
     </nodes>
-    <nodes identifier="sig">
+    <nodes identifier="p2">
+        <traits>decision::sdf::PASSedSDFComb</traits>
+        <traits>moc::sdf::SDFComb</traits>
+        <ports>s3</ports>
+        <ports>combFunctions</ports>
+        <ports>s1</ports>
+        <ports>s2</ports>
+        <propertiesValues xsi:type="forsyde.io.eclipse.systemgraph:StringMapVertexProperty">
+            <values intValue="1" xsi:type="forsyde.io.eclipse.systemgraph:IntVertexProperty"/>
+            <indexes>s3</indexes>
+            <values intValue="1" xsi:type="forsyde.io.eclipse.systemgraph:IntVertexProperty"/>
+            <indexes>s2</indexes>
+        </propertiesValues>
+        <propertiesNames>production</propertiesNames>
+        <propertiesValues xsi:type="forsyde.io.eclipse.systemgraph:ArrayVertexProperty">
+            <values intValue="1" xsi:type="forsyde.io.eclipse.systemgraph:IntVertexProperty"/>
+            <values intValue="5" xsi:type="forsyde.io.eclipse.systemgraph:IntVertexProperty"/>
+        </propertiesValues>
+        <propertiesNames>firingSlots</propertiesNames>
+        <propertiesValues xsi:type="forsyde.io.eclipse.systemgraph:StringMapVertexProperty">
+            <values intValue="1" xsi:type="forsyde.io.eclipse.systemgraph:IntVertexProperty"/>
+            <indexes>s1</indexes>
+        </propertiesValues>
+        <propertiesNames>consumption</propertiesNames>
+    </nodes>
+    <nodes identifier="p3">
+        <traits>decision::sdf::PASSedSDFComb</traits>
+        <traits>moc::sdf::SDFComb</traits>
+        <ports>s3</ports>
+        <ports>s5</ports>
+        <ports>combFunctions</ports>
+        <ports>s6</ports>
+        <propertiesValues xsi:type="forsyde.io.eclipse.systemgraph:StringMapVertexProperty">
+            <values intValue="2" xsi:type="forsyde.io.eclipse.systemgraph:IntVertexProperty"/>
+            <indexes>s6</indexes>
+        </propertiesValues>
+        <propertiesNames>production</propertiesNames>
+        <propertiesValues xsi:type="forsyde.io.eclipse.systemgraph:ArrayVertexProperty">
+            <values intValue="8" xsi:type="forsyde.io.eclipse.systemgraph:IntVertexProperty"/>
+        </propertiesValues>
+        <propertiesNames>firingSlots</propertiesNames>
+        <propertiesValues xsi:type="forsyde.io.eclipse.systemgraph:StringMapVertexProperty">
+            <values intValue="2" xsi:type="forsyde.io.eclipse.systemgraph:IntVertexProperty"/>
+            <indexes>s3</indexes>
+            <values intValue="2" xsi:type="forsyde.io.eclipse.systemgraph:IntVertexProperty"/>
+            <indexes>s5</indexes>
+        </propertiesValues>
+        <propertiesNames>consumption</propertiesNames>
+    </nodes>
+    <nodes identifier="p4">
+        <traits>decision::sdf::PASSedSDFComb</traits>
+        <traits>moc::sdf::SDFComb</traits>
+        <ports>s4</ports>
+        <ports>combFunctions</ports>
+        <ports>s_out</ports>
+        <ports>s2</ports>
+        <propertiesValues xsi:type="forsyde.io.eclipse.systemgraph:StringMapVertexProperty">
+            <values intValue="1" xsi:type="forsyde.io.eclipse.systemgraph:IntVertexProperty"/>
+            <indexes>s4</indexes>
+            <values intValue="3" xsi:type="forsyde.io.eclipse.systemgraph:IntVertexProperty"/>
+            <indexes>s_out</indexes>
+        </propertiesValues>
+        <propertiesNames>production</propertiesNames>
+        <propertiesValues xsi:type="forsyde.io.eclipse.systemgraph:ArrayVertexProperty">
+            <values intValue="2" xsi:type="forsyde.io.eclipse.systemgraph:IntVertexProperty"/>
+            <values intValue="6" xsi:type="forsyde.io.eclipse.systemgraph:IntVertexProperty"/>
+        </propertiesValues>
+        <propertiesNames>firingSlots</propertiesNames>
+        <propertiesValues xsi:type="forsyde.io.eclipse.systemgraph:StringMapVertexProperty">
+            <values intValue="1" xsi:type="forsyde.io.eclipse.systemgraph:IntVertexProperty"/>
+            <indexes>s2</indexes>
+        </propertiesValues>
+        <propertiesNames>consumption</propertiesNames>
+    </nodes>
+    <nodes identifier="p5">
+        <traits>decision::sdf::PASSedSDFComb</traits>
+        <traits>moc::sdf::SDFComb</traits>
+        <ports>s4</ports>
+        <ports>s5</ports>
+        <ports>combFunctions</ports>
+        <propertiesValues xsi:type="forsyde.io.eclipse.systemgraph:StringMapVertexProperty">
+            <values intValue="1" xsi:type="forsyde.io.eclipse.systemgraph:IntVertexProperty"/>
+            <indexes>s5</indexes>
+        </propertiesValues>
+        <propertiesNames>production</propertiesNames>
+        <propertiesValues xsi:type="forsyde.io.eclipse.systemgraph:ArrayVertexProperty">
+            <values intValue="3" xsi:type="forsyde.io.eclipse.systemgraph:IntVertexProperty"/>
+            <values intValue="7" xsi:type="forsyde.io.eclipse.systemgraph:IntVertexProperty"/>
+        </propertiesValues>
+        <propertiesNames>firingSlots</propertiesNames>
+        <propertiesValues xsi:type="forsyde.io.eclipse.systemgraph:StringMapVertexProperty">
+            <values intValue="1" xsi:type="forsyde.io.eclipse.systemgraph:IntVertexProperty"/>
+            <indexes>s4</indexes>
+        </propertiesValues>
+        <propertiesNames>consumption</propertiesNames>
+    </nodes>
+    <nodes identifier="uint32">
+        <traits>typing::datatypes::Integer</traits>
+        <propertiesValues intValue="32" xsi:type="forsyde.io.eclipse.systemgraph:IntVertexProperty"/>
+        <propertiesNames>numberOfBits</propertiesNames>
+    </nodes>
+    <nodes identifier="p1impl">
+        <traits>impl::ANSICBlackBoxExecutable</traits>
+        <traits>impl::InstrumentedExecutable</traits>
+        <traits>typing::TypedOperation</traits>
+        <ports>portTypes</ports>
+        <ports>s6</ports>
+        <ports>s_in</ports>
+        <ports>s1</ports>
+        <propertiesValues string="s1=s6;" xsi:type="forsyde.io.eclipse.systemgraph:StringVertexProperty"/>
+        <propertiesNames>inlinedCode</propertiesNames>
+
+        
+        <propertiesValues xsi:type="forsyde.io.eclipse.systemgraph:ArrayVertexProperty">
+            <values string="s_in" xsi:type="forsyde.io.eclipse.systemgraph:StringVertexProperty"/>
+            <values string="s6" xsi:type="forsyde.io.eclipse.systemgraph:StringVertexProperty"/>
+        </propertiesValues>
+        <propertiesNames>inputPorts</propertiesNames>
+
+        <propertiesValues xsi:type="forsyde.io.eclipse.systemgraph:ArrayVertexProperty">
+            <values string="s1" xsi:type="forsyde.io.eclipse.systemgraph:StringVertexProperty"/>
+        </propertiesValues>
+        <propertiesNames>outputPorts</propertiesNames>
+    </nodes>
+    <nodes identifier="s_in">
+        <traits>decision::sdf::BoundedSDFChannel</traits>
         <traits>moc::sdf::SDFChannel</traits>
         <traits>impl::TokenizableDataBlock</traits>
+        <ports>producer</ports>
+        <ports>consumer</ports>
+        <propertiesValues intValue="10" xsi:type="forsyde.io.eclipse.systemgraph:IntVertexProperty"/>
+        <propertiesNames>maximumTokens</propertiesNames>
+    </nodes>
+    <nodes identifier="s_out">
         <traits>decision::sdf::BoundedSDFChannel</traits>
+        <traits>moc::sdf::SDFChannel</traits>
+        <traits>impl::TokenizableDataBlock</traits>
+        <ports>producer</ports>
+        <ports>consumer</ports>
+        <propertiesValues intValue="10" xsi:type="forsyde.io.eclipse.systemgraph:IntVertexProperty"/>
+        <propertiesNames>maximumTokens</propertiesNames>
+    </nodes>
+    <nodes identifier="s1">
+        <traits>decision::sdf::BoundedSDFChannel</traits>
+        <traits>moc::sdf::SDFChannel</traits>
+        <traits>impl::TokenizableDataBlock</traits>
         <ports>producer</ports>
         <ports>consumer</ports>
         <propertiesValues intValue="1" xsi:type="forsyde.io.eclipse.systemgraph:IntVertexProperty"/>
         <propertiesNames>maximumTokens</propertiesNames>
     </nodes>
-    <nodes identifier="DoubleType">
-        <traits>typing::datatypes::Double</traits>
+    <nodes identifier="s2">
+        <traits>decision::sdf::BoundedSDFChannel</traits>
+        <traits>moc::sdf::SDFChannel</traits>
+        <traits>impl::TokenizableDataBlock</traits>
+        <ports>producer</ports>
+        <ports>consumer</ports>
+        <propertiesValues intValue="1" xsi:type="forsyde.io.eclipse.systemgraph:IntVertexProperty"/>
+        <propertiesNames>maximumTokens</propertiesNames>
     </nodes>
-    <nodes identifier="vertex_a_impl">
-        <traits>impl::ANSICBlackBoxExecutable</traits>
-        <traits>impl::InstrumentedExecutable</traits>
-        <traits>typing::TypedOperation</traits>
-        <ports>aa</ports>
-        <ports>portTypes</ports>
-        <propertiesValues string="aa=100;" xsi:type="forsyde.io.eclipse.systemgraph:StringVertexProperty"/>
-        <propertiesNames>inlinedCode</propertiesNames>
-        <propertiesValues xsi:type="forsyde.io.eclipse.systemgraph:ArrayVertexProperty">
-            <values string="aa" xsi:type="forsyde.io.eclipse.systemgraph:StringVertexProperty"/>
-        </propertiesValues>
-        <propertiesNames>outputPorts</propertiesNames>
+    <nodes identifier="s3">
+        <traits>decision::sdf::BoundedSDFChannel</traits>
+        <traits>moc::sdf::SDFChannel</traits>
+        <traits>impl::TokenizableDataBlock</traits>
+        <ports>producer</ports>
+        <ports>consumer</ports>
+        <propertiesValues intValue="2" xsi:type="forsyde.io.eclipse.systemgraph:IntVertexProperty"/>
+        <propertiesNames>maximumTokens</propertiesNames>
     </nodes>
-    <edges source="vertex_a" sourceport="aa" target="sig" targetport="producer">
-        <traits>moc::sdf::SDFDataEdge</traits>
-    </edges>
-    <edges source="sig" sourceport="consumer" target="vertex_b" targetport="bb">
-        <traits>moc::sdf::SDFDataEdge</traits>
-    </edges>
-    <edges source="vertex_a_impl" sourceport="aa" target="DoubleType">
+    <nodes identifier="s4">
+        <traits>decision::sdf::BoundedSDFChannel</traits>
+        <traits>moc::sdf::SDFChannel</traits>
+        <traits>impl::TokenizableDataBlock</traits>
+        <ports>producer</ports>
+        <ports>consumer</ports>
+        <propertiesValues intValue="1" xsi:type="forsyde.io.eclipse.systemgraph:IntVertexProperty"/>
+        <propertiesNames>maximumTokens</propertiesNames>
+    </nodes>
+    <nodes identifier="s5">
+        <traits>decision::sdf::BoundedSDFChannel</traits>
+        <traits>moc::sdf::SDFChannel</traits>
+        <traits>impl::TokenizableDataBlock</traits>
+        <ports>producer</ports>
+        <ports>consumer</ports>
+        <propertiesValues intValue="2" xsi:type="forsyde.io.eclipse.systemgraph:IntVertexProperty"/>
+        <propertiesNames>maximumTokens</propertiesNames>
+    </nodes>
+    <nodes identifier="s6">
+        <traits>decision::sdf::BoundedSDFChannel</traits>
+        <traits>moc::sdf::SDFChannel</traits>
+        <traits>impl::TokenizableDataBlock</traits>
+        <ports>producer</ports>
+        <ports>consumer</ports>
+        <propertiesValues intValue="2" xsi:type="forsyde.io.eclipse.systemgraph:IntVertexProperty"/>
+        <propertiesNames>maximumTokens</propertiesNames>
+    </nodes>
+    <edges source="p1" sourceport="combFunctions" target="p1impl"/>
+    <edges source="p1" sourceport="s_in" target="p1impl" targetport="s_in"/>
+    <edges source="p1" sourceport="s6" target="p1impl" targetport="s6"/>
+    <edges source="p1impl" sourceport="s1" target="p1" targetport="s1"/>
+    <edges source="p1impl" sourceport="s_in" target="p1impl">
         <traits>typing::datatypes::DataDefinition</traits>
     </edges>
-    <edges source="vertex_a_impl" sourceport="aa" target="vertex_a" targetport="aa"/>
-    <edges source="vertex_a" sourceport="combFunctions" target="vertex_a_impl"/>
+    <edges source="p1impl" sourceport="s1" target="p1impl">
+        <traits>typing::datatypes::DataDefinition</traits>
+    </edges>
+    <edges source="p1impl" sourceport="s6" target="p1impl">
+        <traits>typing::datatypes::DataDefinition</traits>
+    </edges>
+    <edges source="s_in" sourceport="consumer" target="p1" targetport="s_in">
+        <traits>moc::sdf::SDFDataEdge</traits>
+    </edges>
+    <edges source="s1" sourceport="consumer" target="p2" targetport="s1">
+        <traits>moc::sdf::SDFDataEdge</traits>
+    </edges>
+    <edges source="s2" sourceport="consumer" target="p4" targetport="s4">
+        <traits>moc::sdf::SDFDataEdge</traits>
+    </edges>
+    <edges source="s3" sourceport="consumer" target="p3" targetport="s3">
+        <traits>moc::sdf::SDFDataEdge</traits>
+    </edges>
+    <edges source="s4" sourceport="consumer" target="p5" targetport="s4">
+        <traits>moc::sdf::SDFDataEdge</traits>
+    </edges>
+    <edges source="s5" sourceport="consumer" target="p3" targetport="s5">
+        <traits>moc::sdf::SDFDataEdge</traits>
+    </edges>
+    <edges source="s6" sourceport="consumer" target="p1" targetport="s6">
+        <traits>moc::sdf::SDFDataEdge</traits>
+    </edges>
+    <edges source="p1" sourceport="s1" target="s1" targetport="producer">
+        <traits>moc::sdf::SDFDataEdge</traits>
+    </edges>
+    <edges source="p2" sourceport="s2" target="s2" targetport="producer">
+        <traits>moc::sdf::SDFDataEdge</traits>
+    </edges>
+    <edges source="p2" sourceport="s3" target="s3" targetport="producer">
+        <traits>moc::sdf::SDFDataEdge</traits>
+    </edges>
+    <edges source="p4" sourceport="s4" target="s4" targetport="producer">
+        <traits>moc::sdf::SDFDataEdge</traits>
+    </edges>
+    <edges source="p5" sourceport="s5" target="s5" targetport="producer">
+        <traits>moc::sdf::SDFDataEdge</traits>
+    </edges>
+    <edges source="p3" sourceport="s6" target="s6" targetport="producer">
+        <traits>moc::sdf::SDFDataEdge</traits>
+    </edges>
+    <edges source="p4" sourceport="s_out" target="s_out" targetport="producer">
+        <traits>moc::sdf::SDFDataEdge</traits>
+    </edges>
 </forsyde.io.eclipse.systemgraph:ForSyDeSystemGraph>

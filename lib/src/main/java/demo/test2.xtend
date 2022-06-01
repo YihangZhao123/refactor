@@ -1,6 +1,7 @@
 package demo
 
 import forsyde.io.java.core.ForSyDeSystemGraph
+
 import forsyde.io.java.core.Vertex
 import forsyde.io.java.core.VertexProperty
 import forsyde.io.java.core.VertexTrait

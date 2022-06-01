@@ -2,6 +2,7 @@ package demo
 
 
 import forsyde.io.java.drivers.ForSyDeModelHandler
+
 import generator.Generator
 import generator.InitProcessingModule
 import generator.SDFChannelProcessingModule
@@ -14,13 +15,21 @@ import template.baremetal_single.*
  */
 class demo1 {
 	def static void main(String[] args) {
-		val path = "forsyde-io/modified1/complete-mapped-sobel-model.forsyde.xmi";
-		val path2 = "forsyde-io/modified1/sobel-application.fiodl"
-		val root = "generateCode/c/single/single"
-
+//		val path = "forsyde-io/modified1/complete-mapped-sobel-model.forsyde.xmi";
+//		val path2 = "forsyde-io/modified1/sobel-application.fiodl"
+//		val root = "generateCode/c/single/single"
+//
+//		var loader = (new ForSyDeModelHandler)
+//		var model = loader.loadModel(path)
+//		model.mergeInPlace(loader.loadModel(path2))
+		
+		
+		val path = "a.forsyde.xmi"
+		val root = "generateCode/c/single2"
 		var loader = (new ForSyDeModelHandler)
-		var model = loader.loadModel(path)
-		model.mergeInPlace(loader.loadModel(path2))
+		var model = loader.loadModel(path)		
+		
+		
 		var Generator gen = new Generator(model, root)
 
 		var sdfchannelModule = new SDFChannelProcessingModule

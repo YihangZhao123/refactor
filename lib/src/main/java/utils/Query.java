@@ -233,13 +233,15 @@ public class Query {
 	}
 
 	public static List<String> findImplInputPorts(Vertex impl) {
-		var ret = TypedOperation.safeCast(impl).get().getInputPorts();
-		return ret;
+//		var ret = TypedOperation.safeCast(impl).get().getInputPorts();
+//		return ret;
+		return (ArrayList<String>) impl.getProperties().get("inputPorts").unwrap();
 	}
 
 	public static List<String> findImplOutputPorts(Vertex impl) {
-		var ret = TypedOperation.safeCast(impl).get().getOutputPorts();
-		return ret;
+//		var ret = TypedOperation.safeCast(impl).get().getOutputPorts();
+//		return ret;
+		return (ArrayList<String>) impl.getProperties().get("outputPorts").unwrap();
 	}
 
 	public static Set<String> findCombFuntionVertex(ForSyDeSystemGraph model, Vertex actor) {

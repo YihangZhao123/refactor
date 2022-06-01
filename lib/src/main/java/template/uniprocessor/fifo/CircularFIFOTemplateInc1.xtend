@@ -11,7 +11,7 @@ import template.templateInterface.InitTemplate
 import utils.Query
 
 @FileTypeAnno(type=FileType.C_INCLUDE)
-class CircularFIFOTemplateInc implements InitTemplate {
+class CircularFIFOTemplateInc1 implements InitTemplate {
 
 	Set<Vertex> typeVertexSet
 	new() {		

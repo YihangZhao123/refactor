@@ -1,4 +1,4 @@
-package tempate.uniprocessor.SDFChannel;
+package template.uniprocessor.SDFChannel;
 
 import fileAnnotation.FileType;
 import fileAnnotation.FileTypeAnno;

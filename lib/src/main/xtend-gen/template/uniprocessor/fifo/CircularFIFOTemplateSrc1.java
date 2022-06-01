@@ -17,10 +17,10 @@ import utils.Query;
 
 @FileTypeAnno(type = FileType.C_SOURCE)
 @SuppressWarnings("all")
-public class CircularFIFOTemplateSrc implements InitTemplate {
+public class CircularFIFOTemplateSrc1 implements InitTemplate {
   private Set<Vertex> typeVertexSet;
   
-  public CircularFIFOTemplateSrc() {
+  public CircularFIFOTemplateSrc1() {
     final ForSyDeSystemGraph model = Generator.model;
     final Predicate<Vertex> _function = new Predicate<Vertex>() {
       public boolean test(final Vertex v) {
@@ -191,7 +191,7 @@ public class CircularFIFOTemplateSrc implements InitTemplate {
     _builder.append("fifo_ptr->token_number=token_number;");
     _builder.newLine();
     _builder.append("\t");
-    _builder.append("fifo_ptr->token_size=tokne_size;");
+    _builder.append("fifo_ptr->token_size=token_size;");
     _builder.newLine();
     _builder.append("}");
     _builder.newLine();
@@ -215,7 +215,7 @@ public class CircularFIFOTemplateSrc implements InitTemplate {
     _builder.append("memcpy(dst,fifo_ptr->buffer+fifo_ptr->front*fifo_ptr->token_size,fifo_ptr->token_size);");
     _builder.newLine();
     _builder.append("\t\t");
-    _builder.append("fifo_ptr->front= (fifo_ptr->front+1)%fifo_ptr->size;");
+    _builder.append("fifo_ptr->front= (fifo_ptr->front+1)%fifo_ptr->token_number;");
     _builder.newLine();
     _builder.append("\t\t");
     _builder.newLine();
@@ -224,7 +224,7 @@ public class CircularFIFOTemplateSrc implements InitTemplate {
     _builder.newLine();
     _builder.append("}");
     _builder.newLine();
-    _builder.append("void write_non_blocking2(copy_fifo* chanel,void* src){");
+    _builder.append("void write_non_blocking2(copy_fifo* channel,void* src){");
     _builder.newLine();
     _builder.append("\t");
     _builder.append("if((channel->rear+1)%channel->token_number == channel->front){");

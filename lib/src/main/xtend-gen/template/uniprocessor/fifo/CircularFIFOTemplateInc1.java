@@ -17,10 +17,10 @@ import utils.Query;
 
 @FileTypeAnno(type = FileType.C_INCLUDE)
 @SuppressWarnings("all")
-public class CircularFIFOTemplateInc implements InitTemplate {
+public class CircularFIFOTemplateInc1 implements InitTemplate {
   private Set<Vertex> typeVertexSet;
   
-  public CircularFIFOTemplateInc() {
+  public CircularFIFOTemplateInc1() {
     final ForSyDeSystemGraph model = Generator.model;
     final Predicate<Vertex> _function = new Predicate<Vertex>() {
       public boolean test(final Vertex v) {

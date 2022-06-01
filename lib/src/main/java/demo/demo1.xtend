@@ -4,23 +4,24 @@ package demo
 import forsyde.io.java.drivers.ForSyDeModelHandler
 
 
+
 import generator.Generator
 import generator.InitProcessingModule
 import generator.SDFChannelProcessingModule
 import generator.SDFCombProcessingModule
 import generator.SubsystemUniprocessorModule
-import tempate.uniprocessor.SDFChannel.SDFChannelTemplateSrc
+import template.uniprocessor.SDFChannel.SDFChannelTemplateSrc
 import template.uniprocessor.actor.SDFActorSrc
 import template.uniprocessor.actor.SDFActorInc
 import template.uniprocessor.subsystem.SubsystemTemplateSrc
 import template.uniprocessor.subsystem.SubsystemTemplateInc
 import template.uniprocessor.others.DataTypeInc
 import template.uniprocessor.others.DataTypeSrc
-import template.uniprocessor.fifo.CircularFIFOTemplateInc
-import template.uniprocessor.fifo.CircularFIFOTemplateSrc
 import template.uniprocessor.fifo.SpinLockTemplateInc
 import template.uniprocessor.fifo.SpinLockTemplateSrc
 import template.uniprocessor.others.Config
+import template.uniprocessor.fifo.CircularFIFOTemplateSrc1
+import template.uniprocessor.fifo.CircularFIFOTemplateInc1
 
 /**
  * one core
@@ -63,8 +64,8 @@ class demo1 {
 		initModule.add(new DataTypeInc)
 		initModule.add(new DataTypeSrc)
 
-		initModule.add(new CircularFIFOTemplateInc)
-		initModule.add(new CircularFIFOTemplateSrc)
+		initModule.add(new CircularFIFOTemplateInc1)
+		initModule.add(new CircularFIFOTemplateSrc1)
 		initModule.add(new SpinLockTemplateInc)
 		initModule.add(new SpinLockTemplateSrc)
 		initModule.add(new Config)
@@ -109,8 +110,8 @@ class demo1 {
 		initModule.add(new DataTypeInc)
 		initModule.add(new DataTypeSrc)
 
-		initModule.add(new CircularFIFOTemplateInc)
-		initModule.add(new CircularFIFOTemplateSrc)
+		initModule.add(new CircularFIFOTemplateInc1)
+		initModule.add(new CircularFIFOTemplateSrc1)
 		initModule.add(new SpinLockTemplateInc)
 		initModule.add(new SpinLockTemplateSrc)
 		initModule.add(new Config)

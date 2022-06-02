@@ -2,223 +2,61 @@ package template.baremetal_multi;
 
 import fileAnnotation.FileType;
 import fileAnnotation.FileTypeAnno;
-import forsyde.io.java.core.ForSyDeSystemGraph;
-import forsyde.io.java.core.Vertex;
-import forsyde.io.java.core.VertexProperty;
-import forsyde.io.java.typed.viewers.moc.sdf.SDFChannel;
-import generator.Generator;
 import java.util.Set;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-import org.eclipse.xtend2.lib.StringConcatenation;
 import template.templateInterface.InitTemplate;
-import utils.Query;
 
 @FileTypeAnno(type = FileType.C_INCLUDE)
 @SuppressWarnings("all")
 public class CircularFIFOTemplateInc implements InitTemplate {
-  private Set<Vertex> typeVertexSet;
+  private /* Set<Vertex> */Object typeVertexSet;
   
   public CircularFIFOTemplateInc() {
-    final ForSyDeSystemGraph model = Generator.model;
-    final Predicate<Vertex> _function = new Predicate<Vertex>() {
-      public boolean test(final Vertex v) {
-        return (SDFChannel.conforms(v)).booleanValue();
-      }
-    };
-    final Function<Vertex, String> _function_1 = new Function<Vertex, String>() {
-      public String apply(final Vertex v) {
-        return Query.findSDFChannelDataType(model, v);
-      }
-    };
-    final Function<String, Vertex> _function_2 = new Function<String, Vertex>() {
-      public Vertex apply(final String s) {
-        return Query.findVertexByName(model, s);
-      }
-    };
-    this.typeVertexSet = model.vertexSet().stream().filter(_function).<String>map(_function_1).<Vertex>map(_function_2).collect(Collectors.<Vertex>toSet());
-    boolean _contains = this.typeVertexSet.contains(null);
-    if (_contains) {
-      this.typeVertexSet.remove(null);
-    }
+    throw new Error("Unresolved compilation problems:"
+      + "\nThe method or field SDFChannel is undefined"
+      + "\nThe method findSDFChannelDataType(ForSyDeSystemGraph, Object) is undefined for the type Class<Query>"
+      + "\nThe method findVertexByName(ForSyDeSystemGraph, Object) is undefined for the type Class<Query>"
+      + "\nThe field Generator.model refers to the missing type ForSyDeSystemGraph"
+      + "\nThe field CircularFIFOTemplateInc.typeVertexSet refers to the missing type Vertex"
+      + "\nThere is no context to infer the closure\'s argument types from. Consider typing the arguments or put the closures into a typed context."
+      + "\nThere is no context to infer the closure\'s argument types from. Consider typing the arguments or put the closures into a typed context."
+      + "\nThere is no context to infer the closure\'s argument types from. Consider typing the arguments or put the closures into a typed context."
+      + "\nThe field CircularFIFOTemplateInc.typeVertexSet refers to the missing type Vertex"
+      + "\nThe field CircularFIFOTemplateInc.typeVertexSet refers to the missing type Vertex"
+      + "\nvertexSet cannot be resolved"
+      + "\nstream cannot be resolved"
+      + "\nfilter cannot be resolved"
+      + "\nconforms cannot be resolved"
+      + "\nmap cannot be resolved"
+      + "\nmap cannot be resolved"
+      + "\ncollect cannot be resolved");
   }
   
   public String create() {
-    StringConcatenation _builder = new StringConcatenation();
-    _builder.append("\t");
-    _builder.append("#ifndef CIRCULAR_FIFO_LIB_H_");
-    _builder.newLine();
-    _builder.append("\t");
-    _builder.append("#define CIRCULAR_FIFO_LIB_H_");
-    _builder.newLine();
-    _builder.append("\t");
-    _builder.append("#include \"config.h\"");
-    _builder.newLine();
-    _builder.newLine();
-    _builder.append("\t");
-    _builder.append("/*");
-    _builder.newLine();
-    _builder.append("\t");
-    _builder.append("************************************************************");
-    _builder.newLine();
-    _builder.append("\t");
-    _builder.append("This header file defines all the prototype of token types in");
-    _builder.newLine();
-    _builder.append("\t");
-    _builder.append("SDFChannels");
-    _builder.newLine();
-    _builder.append("\t");
-    _builder.append("************************************************************");
-    _builder.newLine();
-    _builder.append("\t");
-    _builder.append("*/");
-    _builder.newLine();
-    _builder.append("\t");
-    _builder.newLine();
-    _builder.append("\t");
-    _builder.newLine();
-    _builder.append("\t");
-    _builder.append("#include \"datatype_definition.h\"");
-    _builder.newLine();
-    _builder.append("\t");
-    _builder.newLine();
-    _builder.append("\t");
-    _builder.append("#include \"spinlock.h\"\t");
-    _builder.newLine();
-    _builder.append("\t");
-    _builder.newLine();
-    {
-      int _size = this.typeVertexSet.size();
-      boolean _notEquals = (_size != 0);
-      if (_notEquals) {
-        {
-          boolean _hasElements = false;
-          for(final Vertex v : this.typeVertexSet) {
-            if (!_hasElements) {
-              _hasElements = true;
-            } else {
-              _builder.appendImmediate("", "\t");
-            }
-            _builder.append("\t");
-            String _foo = this.foo(v);
-            _builder.append(_foo, "\t");
-            _builder.newLineIfNotEmpty();
-          }
-          if (_hasElements) {
-            _builder.append("", "\t");
-          }
-        }
-      }
-    }
-    _builder.newLine();
-    _builder.append("\t");
-    _builder.newLine();
-    _builder.append("\t");
-    _builder.append("#endif");
-    _builder.newLine();
-    return _builder.toString();
+    throw new Error("Unresolved compilation problems:"
+      + "\nThe field CircularFIFOTemplateInc.typeVertexSet refers to the missing type Vertex"
+      + "\nThe field CircularFIFOTemplateInc.typeVertexSet refers to the missing type Vertex"
+      + "\nThe method foo(Vertex) from the type CircularFIFOTemplateInc refers to the missing type Vertex");
   }
   
   public String getFileName() {
     return "circular_fifo_lib";
   }
   
-  public String foo(final Vertex v) {
-    StringConcatenation _builder = new StringConcatenation();
-    final String type = v.getIdentifier();
-    _builder.newLineIfNotEmpty();
-    _builder.append("/*");
-    _builder.newLine();
-    _builder.append("=============================================================");
-    _builder.newLine();
-    _builder.append("\t\t");
-    _builder.append("If Token type is ");
-    _builder.append(type, "\t\t");
-    _builder.append(" ");
-    _builder.newLineIfNotEmpty();
-    _builder.append("==============================================================");
-    _builder.newLine();
-    _builder.append("*/");
-    _builder.newLine();
-    _builder.append("typedef struct ");
-    _builder.newLine();
-    _builder.append("{");
-    _builder.newLine();
-    _builder.append("    ");
-    _builder.append(type, "    ");
-    _builder.append("* buffer;");
-    _builder.newLineIfNotEmpty();
-    _builder.append("    ");
-    _builder.append("size_t front;");
-    _builder.newLine();
-    _builder.append("    ");
-    _builder.append("size_t rear;");
-    _builder.newLine();
-    _builder.append("\t");
-    _builder.append("size_t size;\t    ");
-    _builder.newLine();
-    _builder.append("}circular_fifo_");
-    _builder.append(type);
-    _builder.append(";");
-    _builder.newLineIfNotEmpty();
-    _builder.newLine();
-    _builder.append("void init_channel_");
-    _builder.append(type);
-    _builder.append("(circular_fifo_");
-    _builder.append(type);
-    _builder.append(" *channel ,");
-    _builder.append(type);
-    _builder.append("* buffer, size_t size);");
-    _builder.newLineIfNotEmpty();
-    _builder.append("int read_non_blocking_");
-    _builder.append(type);
-    _builder.append("(circular_fifo_");
-    _builder.append(type);
-    _builder.append("* src,");
-    _builder.append(type);
-    _builder.append("* dst );");
-    _builder.newLineIfNotEmpty();
-    _builder.append("int read_blocking_");
-    _builder.append(type);
-    _builder.append("(circular_fifo_");
-    _builder.append(type);
-    _builder.append("* src,");
-    _builder.append(type);
-    _builder.append("* dst,spinlock *lock);");
-    _builder.newLineIfNotEmpty();
-    _builder.append("int write_non_blocking_");
-    _builder.append(type);
-    _builder.append("(circular_fifo_");
-    _builder.append(type);
-    _builder.append("* dst,");
-    _builder.append(type);
-    _builder.append(" src );");
-    _builder.newLineIfNotEmpty();
-    _builder.append("int write_blocking_");
-    _builder.append(type);
-    _builder.append("(circular_fifo_");
-    _builder.append(type);
-    _builder.append("* dst,");
-    _builder.append(type);
-    _builder.append(" src,spinlock *lock);\t");
-    _builder.newLineIfNotEmpty();
-    _builder.append("\t\t\t");
-    _builder.newLine();
-    return _builder.toString();
+  public String foo(final /* Vertex */Object v) {
+    throw new Error("Unresolved compilation problems:"
+      + "\ngetIdentifier cannot be resolved");
   }
   
-  private int getMaximumElems(final Vertex typeVertex) {
-    int maximumElems = 0;
-    VertexProperty _get = typeVertex.getProperties().get("maximumElems");
-    boolean _tripleNotEquals = (_get != null);
-    if (_tripleNotEquals) {
-      Object _unwrap = typeVertex.getProperties().get("maximumElems").unwrap();
-      maximumElems = (((Integer) _unwrap)).intValue();
-    } else {
-      Object _unwrap_1 = typeVertex.getProperties().get("production").unwrap();
-      maximumElems = (((Integer) _unwrap_1)).intValue();
-    }
-    return maximumElems;
+  private int getMaximumElems(final /* Vertex */Object typeVertex) {
+    throw new Error("Unresolved compilation problems:"
+      + "\ngetProperties cannot be resolved"
+      + "\nget cannot be resolved"
+      + "\n!== cannot be resolved"
+      + "\ngetProperties cannot be resolved"
+      + "\nget cannot be resolved"
+      + "\nunwrap cannot be resolved"
+      + "\ngetProperties cannot be resolved"
+      + "\nget cannot be resolved"
+      + "\nunwrap cannot be resolved");
   }
 }

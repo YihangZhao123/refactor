@@ -37,6 +37,7 @@ class test4 {
 		connectChannel(model,"p4","s_out","s_out","producer",t)
 		
 		
+		(new ForSyDeModelHandler).writeModel(model, "a.fiodl")
 		(new ForSyDeModelHandler).writeModel(model, "a.forsyde.xmi")
 
 	}

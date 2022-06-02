@@ -1,14 +1,62 @@
 systemgraph {
-   vertex vertex_a
+   vertex p1
    [decision::sdf::PASSedSDFComb,moc::sdf::SDFComb]
-   (aa,combFunctions)
-   {"production": {"aa": 1_i},"firingSlots": [0_i]}
-   vertex vertex_b
+   (combFunctions,s1,s6,s_in)
+   {"production": {"s1": 1_i},"firingSlots": [0_i,4_i],"consumption": {"s6": 1_i,"s_in": 2_i}}
+   vertex p2
    [decision::sdf::PASSedSDFComb,moc::sdf::SDFComb]
-   (bb,combFunctions)
-   {"firingSlots": [1_i],"consumption": {"bb": 1_i}}
-   vertex sig
+   (combFunctions,s1,s2,s3)
+   {"production": {"s3": 1_i,"s2": 1_i},"firingSlots": [1_i,5_i],"consumption": {"s1": 1_i}}
+   vertex p3
+   [decision::sdf::PASSedSDFComb,moc::sdf::SDFComb]
+   (combFunctions,s3,s5,s6)
+   {"production": {"s6": 2_i},"firingSlots": [8_i],"consumption": {"s3": 2_i,"s5": 2_i}}
+   vertex p4
+   [decision::sdf::PASSedSDFComb,moc::sdf::SDFComb]
+   (combFunctions,s2,s4,s_out)
+   {"production": {"s4": 1_i,"s_out": 3_i},"firingSlots": [2_i,6_i],"consumption": {"s2": 1_i}}
+   vertex p5
+   [decision::sdf::PASSedSDFComb,moc::sdf::SDFComb]
+   (combFunctions,s4,s5)
+   {"production": {"s5": 1_i},"firingSlots": [3_i,7_i],"consumption": {"s4": 1_i}}
+   vertex uint32
+   [typing::datatypes::Integer]
+   ()
+   {"numberOfBits": 32_i}
+   vertex p1impl
+   [impl::ANSICBlackBoxExecutable,impl::InstrumentedExecutable,typing::TypedOperation]
+   (portTypes,s1,s6,s_in)
+   {"inputPorts": ["s_in","s6"],"inlinedCode": "s1=s6;","outputPorts": ["s1"]}
+   vertex s_in
+   [decision::sdf::BoundedSDFChannel,impl::TokenizableDataBlock,moc::sdf::SDFChannel]
+   (consumer,producer)
+   {"maximumTokens": 10_i}
+   vertex s_out
+   [decision::sdf::BoundedSDFChannel,impl::TokenizableDataBlock,moc::sdf::SDFChannel]
+   (consumer,producer)
+   {"maximumTokens": 10_i}
+   vertex s1
    [decision::sdf::BoundedSDFChannel,impl::TokenizableDataBlock,moc::sdf::SDFChannel]
    (consumer,producer)
    {"maximumTokens": 1_i}
+   vertex s2
+   [decision::sdf::BoundedSDFChannel,impl::TokenizableDataBlock,moc::sdf::SDFChannel]
+   (consumer,producer)
+   {"maximumTokens": 1_i}
+   vertex s3
+   [decision::sdf::BoundedSDFChannel,impl::TokenizableDataBlock,moc::sdf::SDFChannel]
+   (consumer,producer)
+   {"maximumTokens": 2_i}
+   vertex s4
+   [decision::sdf::BoundedSDFChannel,impl::TokenizableDataBlock,moc::sdf::SDFChannel]
+   (consumer,producer)
+   {"maximumTokens": 1_i}
+   vertex s5
+   [decision::sdf::BoundedSDFChannel,impl::TokenizableDataBlock,moc::sdf::SDFChannel]
+   (consumer,producer)
+   {"maximumTokens": 2_i}
+   vertex s6
+   [decision::sdf::BoundedSDFChannel,impl::TokenizableDataBlock,moc::sdf::SDFChannel]
+   (consumer,producer)
+   {"maximumTokens": 2_i}
 }

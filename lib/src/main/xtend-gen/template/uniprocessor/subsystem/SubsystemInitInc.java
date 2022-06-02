@@ -2,85 +2,35 @@ package template.uniprocessor.subsystem;
 
 import fileAnnotation.FileType;
 import fileAnnotation.FileTypeAnno;
-import forsyde.io.java.core.ForSyDeSystemGraph;
-import forsyde.io.java.core.Vertex;
-import forsyde.io.java.typed.viewers.values.IntegerValue;
-import generator.Generator;
-import java.util.Set;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-import org.eclipse.xtend2.lib.StringConcatenation;
 import template.templateInterface.InitTemplate;
-import utils.Query;
 
 @FileTypeAnno(type = FileType.C_INCLUDE)
 @Deprecated
 @SuppressWarnings("all")
 public class SubsystemInitInc implements InitTemplate {
   public String create() {
-    String _xblockexpression = null;
-    {
-      ForSyDeSystemGraph model = Generator.model;
-      final Predicate<Vertex> _function = new Predicate<Vertex>() {
-        public boolean test(final Vertex v) {
-          return (IntegerValue.conforms(v)).booleanValue();
-        }
-      };
-      final Function<Vertex, IntegerValue> _function_1 = new Function<Vertex, IntegerValue>() {
-        public IntegerValue apply(final Vertex v) {
-          return IntegerValue.safeCast(v).get();
-        }
-      };
-      Set<IntegerValue> integerValues = model.vertexSet().stream().filter(_function).<IntegerValue>map(_function_1).collect(Collectors.<IntegerValue>toSet());
-      StringConcatenation _builder = new StringConcatenation();
-      _builder.append("#ifndef SUBSYSTEM_INIT_H_");
-      _builder.newLine();
-      _builder.append("#define SUBSYSTEM_INIT_H_");
-      _builder.newLine();
-      _builder.append("\t\t\t");
-      _builder.newLine();
-      _builder.append("void init_subsystem();\t\t\t");
-      _builder.newLine();
-      _builder.append("#endif");
-      _builder.newLine();
-      _xblockexpression = _builder.toString();
-    }
-    return _xblockexpression;
+    throw new Error("Unresolved compilation problems:"
+      + "\nThe method or field IntegerValue is undefined"
+      + "\nThe method or field IntegerValue is undefined"
+      + "\nThe field Generator.model refers to the missing type ForSyDeSystemGraph"
+      + "\nThere is no context to infer the closure\'s argument types from. Consider typing the arguments or put the closures into a typed context."
+      + "\nThere is no context to infer the closure\'s argument types from. Consider typing the arguments or put the closures into a typed context."
+      + "\nvertexSet cannot be resolved"
+      + "\nstream cannot be resolved"
+      + "\nfilter cannot be resolved"
+      + "\nconforms cannot be resolved"
+      + "\nmap cannot be resolved"
+      + "\nsafeCast cannot be resolved"
+      + "\nget cannot be resolved"
+      + "\ncollect cannot be resolved");
   }
   
   public String externChannel() {
-    StringConcatenation _builder = new StringConcatenation();
-    {
-      for(final Vertex channel : Generator.sdfchannelSet) {
-        String sdfname = channel.getIdentifier();
-        _builder.newLineIfNotEmpty();
-        String type = Query.findSDFChannelDataType(Generator.model, channel);
-        _builder.newLineIfNotEmpty();
-        _builder.append("/* extern sdfchannel ");
-        _builder.append(sdfname);
-        _builder.append("*/");
-        _builder.newLineIfNotEmpty();
-        _builder.append("extern ");
-        _builder.append(type);
-        _builder.append(" buffer_");
-        _builder.append(sdfname);
-        _builder.append("[];");
-        _builder.newLineIfNotEmpty();
-        _builder.append("extern int buffer_");
-        _builder.append(sdfname);
-        _builder.append("_size;");
-        _builder.newLineIfNotEmpty();
-        _builder.append("extern circular_fifo_");
-        _builder.append(type);
-        _builder.append(" fifo_");
-        _builder.append(sdfname);
-        _builder.append(";");
-        _builder.newLineIfNotEmpty();
-        _builder.newLine();
-      }
-    }
-    return _builder.toString();
+    throw new Error("Unresolved compilation problems:"
+      + "\nThe method findSDFChannelDataType(ForSyDeSystemGraph, Vertex) is undefined for the type Class<Query>"
+      + "\nThe field Generator.sdfchannelSet refers to the missing type Vertex"
+      + "\nThe field Generator.model refers to the missing type ForSyDeSystemGraph"
+      + "\ngetIdentifier cannot be resolved");
   }
   
   public String getFileName() {

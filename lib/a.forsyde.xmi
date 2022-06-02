@@ -134,16 +134,13 @@
         <ports>s6</ports>
         <ports>s_in</ports>
         <ports>s1</ports>
-        <propertiesValues string="s1=s6;" xsi:type="forsyde.io.eclipse.systemgraph:StringVertexProperty"/>
-        <propertiesNames>inlinedCode</propertiesNames>
-
-        
         <propertiesValues xsi:type="forsyde.io.eclipse.systemgraph:ArrayVertexProperty">
             <values string="s_in" xsi:type="forsyde.io.eclipse.systemgraph:StringVertexProperty"/>
             <values string="s6" xsi:type="forsyde.io.eclipse.systemgraph:StringVertexProperty"/>
         </propertiesValues>
         <propertiesNames>inputPorts</propertiesNames>
-
+        <propertiesValues string="s1=s6;" xsi:type="forsyde.io.eclipse.systemgraph:StringVertexProperty"/>
+        <propertiesNames>inlinedCode</propertiesNames>
         <propertiesValues xsi:type="forsyde.io.eclipse.systemgraph:ArrayVertexProperty">
             <values string="s1" xsi:type="forsyde.io.eclipse.systemgraph:StringVertexProperty"/>
         </propertiesValues>

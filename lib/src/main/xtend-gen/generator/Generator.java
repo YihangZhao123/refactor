@@ -1,32 +1,24 @@
 package generator;
 
-import forsyde.io.java.core.ForSyDeSystemGraph;
-import forsyde.io.java.core.Vertex;
-import forsyde.io.java.core.VertexProperty;
-import forsyde.io.java.typed.viewers.moc.sdf.SDFChannel;
-import forsyde.io.java.typed.viewers.moc.sdf.SDFComb;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 @SuppressWarnings("all")
 public class Generator {
   public static String root = null;
   
-  public static ForSyDeSystemGraph model;
+  public static /* ForSyDeSystemGraph */Object model;
   
-  public static Set<Vertex> sdfchannelSet;
+  public static /* Set<Vertex> */Object sdfchannelSet;
   
-  public static Set<Vertex> sdfcombSet;
+  public static /* Set<Vertex> */Object sdfcombSet;
   
   public static Set<Schedule> multiProcessorSchedules;
   
-  public static TreeMap<Integer, Vertex> uniprocessorSchedule;
+  public static /* TreeMap<Integer, Vertex> */Object uniprocessorSchedule;
   
   public static int TESTING = 1;
   
@@ -36,26 +28,27 @@ public class Generator {
   
   private Set<ModuleInterface> modules = new HashSet<ModuleInterface>();
   
-  public Generator(final ForSyDeSystemGraph model, final String root) {
-    Generator.root = root;
-    Generator.model = model;
-    final Predicate<Vertex> _function = new Predicate<Vertex>() {
-      public boolean test(final Vertex v) {
-        return (SDFChannel.conforms(v)).booleanValue();
-      }
-    };
-    Generator.sdfchannelSet = Generator.model.vertexSet().stream().filter(_function).collect(
-      Collectors.<Vertex>toSet());
-    final Predicate<Vertex> _function_1 = new Predicate<Vertex>() {
-      public boolean test(final Vertex v) {
-        return (SDFComb.conforms(v)).booleanValue();
-      }
-    };
-    Generator.sdfcombSet = Generator.model.vertexSet().stream().filter(_function_1).collect(
-      Collectors.<Vertex>toSet());
-    this.createMultiprocessorSchedule();
-    this.createUniprocessorSchedule();
-    int a = 1;
+  public Generator(final /* ForSyDeSystemGraph */Object model, final String root) {
+    throw new Error("Unresolved compilation problems:"
+      + "\nThe method or field SDFChannel is undefined"
+      + "\nThe method or field SDFComb is undefined"
+      + "\nThe field Generator.model refers to the missing type ForSyDeSystemGraph"
+      + "\nThe field Generator.sdfchannelSet refers to the missing type Vertex"
+      + "\nThe field Generator.model refers to the missing type ForSyDeSystemGraph"
+      + "\nThere is no context to infer the closure\'s argument types from. Consider typing the arguments or put the closures into a typed context."
+      + "\nThe field Generator.sdfcombSet refers to the missing type Vertex"
+      + "\nThe field Generator.model refers to the missing type ForSyDeSystemGraph"
+      + "\nThere is no context to infer the closure\'s argument types from. Consider typing the arguments or put the closures into a typed context."
+      + "\nvertexSet cannot be resolved"
+      + "\nstream cannot be resolved"
+      + "\nfilter cannot be resolved"
+      + "\nconforms cannot be resolved"
+      + "\ncollect cannot be resolved"
+      + "\nvertexSet cannot be resolved"
+      + "\nstream cannot be resolved"
+      + "\nfilter cannot be resolved"
+      + "\nconforms cannot be resolved"
+      + "\ncollect cannot be resolved");
   }
   
   public void create() {
@@ -72,44 +65,33 @@ public class Generator {
   }
   
   public Set<Schedule> createMultiprocessorSchedule() {
-    Set<Schedule> _xblockexpression = null;
-    {
-      final Predicate<Vertex> _function = new Predicate<Vertex>() {
-        public boolean test(final Vertex v) {
-          return (v.hasTrait("platform::GenericProcessingModule")).booleanValue();
-        }
-      };
-      final Function<Vertex, Schedule> _function_1 = new Function<Vertex, Schedule>() {
-        public Schedule apply(final Vertex v) {
-          return new Schedule(v);
-        }
-      };
-      Set<Schedule> schedules = Generator.model.vertexSet().stream().filter(_function).<Schedule>map(_function_1).collect(Collectors.<Schedule>toSet());
-      _xblockexpression = Generator.multiProcessorSchedules = schedules;
-    }
-    return _xblockexpression;
+    throw new Error("Unresolved compilation problems:"
+      + "\nThe method hasTrait(String) is undefined for the type Object"
+      + "\nThe field Generator.model refers to the missing type ForSyDeSystemGraph"
+      + "\nThere is no context to infer the closure\'s argument types from. Consider typing the arguments or put the closures into a typed context."
+      + "\nThere is no context to infer the closure\'s argument types from. Consider typing the arguments or put the closures into a typed context."
+      + "\nThe constructor Schedule(Vertex) refers to the missing type Vertex"
+      + "\nvertexSet cannot be resolved"
+      + "\nstream cannot be resolved"
+      + "\nfilter cannot be resolved"
+      + "\nmap cannot be resolved"
+      + "\ncollect cannot be resolved");
   }
   
   public void createUniprocessorSchedule() {
-    TreeMap<Integer, Vertex> _treeMap = new TreeMap<Integer, Vertex>();
-    Generator.uniprocessorSchedule = _treeMap;
-    for (final Vertex actor : Generator.sdfcombSet) {
-      {
-        ArrayList<Integer> tmp = this.getFiringSlot(actor);
-        for (int i = 0; (i < tmp.size()); i = (i + 1)) {
-          Generator.uniprocessorSchedule.put(tmp.get(i), actor);
-        }
-      }
-    }
+    throw new Error("Unresolved compilation problems:"
+      + "\nVertex cannot be resolved to a type."
+      + "\nThe field Generator.uniprocessorSchedule refers to the missing type Vertex"
+      + "\nThe field Generator.sdfcombSet refers to the missing type Vertex"
+      + "\nThe method getFiringSlot(Vertex) from the type Generator refers to the missing type Vertex"
+      + "\nThe field Generator.uniprocessorSchedule refers to the missing type Vertex");
   }
   
-  private ArrayList<Integer> getFiringSlot(final Vertex actor) {
-    VertexProperty firingSlots = actor.getProperties().get("firingSlots");
-    if ((firingSlots != null)) {
-      Object _unwrap = firingSlots.unwrap();
-      ArrayList<Integer> slot = ((ArrayList<Integer>) _unwrap);
-      return slot;
-    }
-    return null;
+  private ArrayList<Integer> getFiringSlot(final /* Vertex */Object actor) {
+    throw new Error("Unresolved compilation problems:"
+      + "\ngetProperties cannot be resolved"
+      + "\nget cannot be resolved"
+      + "\n!== cannot be resolved"
+      + "\nunwrap cannot be resolved");
   }
 }

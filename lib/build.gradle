@@ -35,7 +35,7 @@ implementation group: 'org.eclipse.xtend', name: 'org.eclipse.xtend.lib.macro', 
 
 // https://mvnrepository.com/artifact/io.github.forsyde/forsyde-io-java-core
 // https://mvnrepository.com/artifact/io.github.forsyde/forsyde-io-java-core
-runtimeOnly group: 'io.github.forsyde', name: 'forsyde-io-java-core', version: '0.5.7'
+implementation group: 'io.github.forsyde', name: 'forsyde-io-java-core', version: '0.5.7'
 
 implementation 'io.github.forsyde:forsyde-io-java-sdf3:0.5.7'
 }
